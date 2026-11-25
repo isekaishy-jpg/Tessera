@@ -1,0 +1,7 @@
+# Deny by default: only end-user facing content is tracked.
+# Add a root here only when it is end-user facing.
+/*
+!/.gitignore
+!/.gitattributes
+!/VERSION
+!/README.md
