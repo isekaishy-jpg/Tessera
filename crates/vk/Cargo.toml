@@ -1,0 +1,16 @@
+[package]
+name = "tessera-vk"
+version = "0.1.0"
+description = "Tessera's Vulkan bindings, generated from the pinned Vulkan SDK registry."
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lib]
+name = "tessera_vk"
+
+[dev-dependencies]
+trybuild = "1"
+
+[lints]
+workspace = true

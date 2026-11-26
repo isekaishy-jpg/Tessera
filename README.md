@@ -4,7 +4,7 @@ A 3D game engine and editor in one tool, written in Rust with Vulkan rendering.
 
 ## Status
 
-Alpha. There is no engine code yet.
+Alpha. The first engine crate is `crates/vk` (`tessera-vk`): Vulkan bindings generated from the pinned Vulkan SDK (see `crates/vk/README.md`).
 
 ## Version
 

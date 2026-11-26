@@ -1,0 +1,29 @@
+error[E0277]: the trait bound `PhysicalDeviceFeatures2<'_>: Extends<BufferCreateInfo<'_>>` is not satisfied
+ --> tests/compile_fail/push_next_wrong_parent.rs:7:55
+  |
+7 |     let _ = vk::BufferCreateInfo::default().push_next(&mut features);
+  |                                             --------- ^^^^^^^^^^^^^ the trait `Extends<BufferCreateInfo<'_>>` is not implemented for `PhysicalDeviceFeatures2<'_>`
+  |                                             |
+  |                                             required by a bound introduced by this call
+  |
+help: the trait `Extends<BufferCreateInfo<'_>>` is not implemented for `PhysicalDeviceFeatures2<'_>`
+      but trait `Extends<DeviceCreateInfo<'_>>` is implemented for it
+ --> src/chain.rs
+  |
+  |               unsafe impl $crate::vk::Extends<$parent> for $child {}
+  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+ ::: src/generated/structs.rs
+  |
+  | / extends!(
+  | |     PhysicalDeviceFeatures2<'_> =>
+  | |     DeviceCreateInfo<'_>,
+  | | );
+  | |_- in this macro invocation
+  = help: for that trait implementation, expected `DeviceCreateInfo<'_>`, found `BufferCreateInfo<'_>`
+note: required by a bound in `BufferCreateInfo::<'a>::push_next`
+ --> src/generated/structs.rs
+  |
+  |     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
+  |                         ^^^^^^^^^^^^^ required by this bound in `BufferCreateInfo::<'a>::push_next`
+  = note: this error originates in the macro `extends` (in Nightly builds, run with -Z macro-backtrace for more info)

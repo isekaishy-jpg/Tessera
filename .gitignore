@@ -5,3 +5,6 @@
 !/.gitattributes
 !/VERSION
 !/README.md
+!/Cargo.toml
+!/Cargo.lock
+!/crates/

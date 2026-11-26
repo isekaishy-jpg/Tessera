@@ -1,0 +1,7 @@
+error[E0599]: no method named `api_version` found for struct `PhysicalDeviceProperties` in the current scope
+ --> tests/compile_fail/returned_only_has_no_setters.rs:7:53
+  |
+7 |     let _ = vk::PhysicalDeviceProperties::default().api_version(1);
+  |                                                     ^^^^^^^^^^^--- help: remove the arguments
+  |                                                     |
+  |                                                     field, not a method

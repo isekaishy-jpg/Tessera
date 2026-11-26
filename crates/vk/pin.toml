@@ -1,0 +1,27 @@
+# Written by `vkgen pin`: the Vulkan SDK the generated bindings come from.
+# `vkgen generate` refuses an SDK whose files differ from these hashes.
+# The pin routine is in crates/vk/README.md.
+
+sdk = "1.4.363.0"
+header_version = 363
+
+[selection]
+api = "vulkan"
+platforms = ["win32"]
+exclude = ["_video_"]
+
+[[input]]
+path = "share/vulkan/registry/vk.xml"
+sha256 = "644c562d10ad207317ebeab9c292968eafd3a811f5f17e864b1d694bbc2126e1"
+
+[[input]]
+path = "Include/vulkan/vulkan_core.h"
+sha256 = "944cd8f81d98e94999c7353dd632f73be471f2da95afecbc7d9ffe0ad5295deb"
+
+[[input]]
+path = "Include/vulkan/vulkan_win32.h"
+sha256 = "9dc4d69efa98e5d2b94458c60861b963ab5fe18b7af6be20ec7e6c020086c1d5"
+
+[[input]]
+path = "Include/vulkan/vk_platform.h"
+sha256 = "1fc08c530b46e587295aafb19493eb9d434e963f7e48d3a323adbee06f59976c"
