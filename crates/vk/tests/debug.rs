@@ -1,5 +1,5 @@
 //! `Debug` and `Display` of generated types: enum and flag names, unknown values, structs with
-//! string fields, handles and `vk::Result`.
+//! string fields, handles and `vk::Result`; the text of fixed `char` arrays.
 
 use core::ffi::c_char;
 use tessera_vk::vk;
@@ -54,6 +54,19 @@ fn structs_list_their_fields_with_strings_readable() {
     assert_eq!(
         format!("{props:?}"),
         "ExtensionProperties { extension_name: \"VK_KHR_swapchain\", spec_version: 70 }"
+    );
+}
+
+#[test]
+fn fixed_str_reads_up_to_the_first_nul() {
+    let chars = |bytes: &[u8]| -> Vec<c_char> { bytes.iter().map(|&b| b as c_char).collect() };
+    assert_eq!(tessera_vk::fixed_str(&chars(b"VK_LAYER\0junk")), "VK_LAYER");
+    assert_eq!(tessera_vk::fixed_str(&chars(b"no nul")), "no nul");
+    assert_eq!(tessera_vk::fixed_str(&chars(b"\0")), "");
+    assert_eq!(
+        tessera_vk::fixed_str(&chars(b"\xc3\xa9\xff\0")),
+        "\u{e9}\u{fffd}",
+        "UTF-8 decodes, invalid bytes are replaced"
     );
 }
 

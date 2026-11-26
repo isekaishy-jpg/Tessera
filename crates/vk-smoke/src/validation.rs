@@ -66,7 +66,10 @@ pub fn create_instance(entry: &Entry) -> Outcome<(Instance, vk::DebugUtilsMessen
     let layers = unsafe { entry.enumerate_instance_layer_properties() }
         .ctx("vkEnumerateInstanceLayerProperties")?;
     let layer = LAYER.to_string_lossy();
-    if !layers.iter().any(|l| text::fixed(&l.layer_name) == layer) {
+    if !layers
+        .iter()
+        .any(|l| tessera_vk::fixed_str(&l.layer_name) == layer)
+    {
         return fail(format!("{layer} is not installed: install the Vulkan SDK"));
     }
     // SAFETY: as above; `LAYER` is a listed layer.
@@ -85,15 +88,11 @@ pub fn create_instance(entry: &Entry) -> Outcome<(Instance, vk::DebugUtilsMessen
         vk::EXT_LAYER_SETTINGS_EXTENSION_NAME.as_ptr(),
     ];
     let validate_sync: [vk::Bool32; 1] = [vk::TRUE];
-    let mut setting = vk::LayerSettingEXT::default()
+    let settings = [vk::LayerSettingEXT::default()
         .layer_name(LAYER)
         .setting_name(c"validate_sync")
         .r#type(vk::LayerSettingTypeEXT::BOOL32)
-        .values(&validate_sync);
-    // `valueCount` counts values, but `values` sets the byte length (a vkgen defect carried to
-    // the sprint review): one `Bool32`.
-    setting.value_count = 1;
-    let settings = [setting];
+        .values(&validate_sync)];
     let mut layer_settings = vk::LayerSettingsCreateInfoEXT::default().settings(&settings);
     let mut chained = messenger_info();
     let info = vk::InstanceCreateInfo::default()

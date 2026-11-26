@@ -1,6 +1,6 @@
-//! Struct setters: count groups in their three forms, the `VkWriteDescriptorSet` override,
-//! `bool` for `VkBool32`, strings, byte and expression lengths, `push_next`, packed bitfields
-//! and `Default`.
+//! Struct setters: count groups in their three forms, the `VkWriteDescriptorSet` and
+//! `VkLayerSettingEXT` overrides, `bool` for `VkBool32`, strings, byte and expression lengths,
+//! `push_next`, packed bitfields and `Default`.
 
 use core::ffi::c_void;
 use tessera_vk::vk;
@@ -92,6 +92,19 @@ fn write_descriptor_set_arrays_are_alternatives() {
         inline.descriptor_count, 16,
         "inline uniform blocks set only the count"
     );
+}
+
+#[test]
+fn layer_setting_values_are_counted_in_elements() {
+    let values = [vk::TRUE, vk::FALSE];
+    let setting = vk::LayerSettingEXT::default()
+        .r#type(vk::LayerSettingTypeEXT::BOOL32)
+        .values(&values);
+    assert_eq!(
+        setting.value_count, 2,
+        "valueCount counts values of the setting's type, not bytes"
+    );
+    assert_eq!(setting.p_values, values.as_ptr().cast::<c_void>());
 }
 
 #[test]

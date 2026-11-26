@@ -64,17 +64,11 @@ pub(crate) fn enum_value(
     }
 }
 
-/// A fixed `char` array, printed as the string up to its first NUL.
+/// A fixed `char` array, printed as its text ([`crate::fixed_str`]).
 pub(crate) struct CharArray<'a>(pub(crate) &'a [c_char]);
 
 impl fmt::Debug for CharArray<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes: Vec<u8> = self
-            .0
-            .iter()
-            .take_while(|&&c| c != 0)
-            .map(|&c| c.to_ne_bytes()[0])
-            .collect();
-        fmt::Debug::fmt(&*String::from_utf8_lossy(&bytes), f)
+        fmt::Debug::fmt(&crate::fixed_str(self.0), f)
     }
 }

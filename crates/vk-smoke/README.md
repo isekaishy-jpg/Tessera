@@ -40,9 +40,8 @@ A missing piece fails with its name; nothing is skipped.
 | `src/shader.rs`, `src/smoke.slang` | Shader source and its compilation |
 | `src/pipeline.rs` | Pipelines and the binary round trip |
 | `src/frame.rs` | Buffers, image, commands, readback and pixel check |
-| `src/text.rs` | Fixed-size C name arrays as text |
+| `src/text.rs` | Extension lookup by name in fixed-size C name arrays |
 
 ## Known
 
 - One module per stage is required on the NVIDIA driver (581.57): with one module holding both entry points, which is valid SPIR-V, it refuses to create a pipeline from the captured binaries (`PIPELINE_COMPILE_REQUIRED`).
-- `LayerSettingEXT::values` sets `valueCount` in bytes; the spec counts values. `validation.rs` sets `value_count = 1` itself until vkgen gets the override (carried to the sprint review).

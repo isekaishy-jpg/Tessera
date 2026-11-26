@@ -5,6 +5,7 @@
 //! - [`Entry`], [`Instance`], [`Device`]: loaded dispatch objects; every command is an
 //!   `unsafe fn` on the one its first parameter belongs to.
 //! - [`EntryTable`], [`InstanceTable`], [`DeviceTable`]: the raw function tables.
+//! - [`fixed_str`]: the text in a fixed-size `char` array (`vk::LayerProperties::layer_name`).
 //!
 //! Command wrappers follow fixed rules (see `README.md`): success codes are never dropped,
 //! count+array pairs are slices, size-then-fill commands return a `Vec`, and one trailing output
@@ -25,6 +26,7 @@ mod instance;
 mod len;
 mod loader;
 mod result;
+mod text;
 pub mod vk;
 
 pub use device::Device;
@@ -32,6 +34,7 @@ pub use entry::Entry;
 pub use generated::tables::{DeviceTable, EntryTable, InstanceTable};
 pub use instance::Instance;
 pub use result::{LoadError, Result};
+pub use text::fixed_str;
 
 /// `f`, or a panic naming the command when the table does not hold it.
 #[inline]

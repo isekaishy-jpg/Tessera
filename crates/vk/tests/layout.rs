@@ -106,12 +106,22 @@ fn c_lines(dir: &Path) -> Vec<String> {
         .collect()
 }
 
+/// A temporary directory, removed when dropped (also when the test panics).
+struct TempDir(PathBuf);
+
+impl Drop for TempDir {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
+}
+
 #[test]
 fn layout_matches_msvc() {
-    let dir = std::env::temp_dir().join(format!("tessera-vk-layout-{}", std::process::id()));
-    std::fs::create_dir_all(&dir).expect("create the build directory");
-    let c = c_lines(&dir);
-    let _ = std::fs::remove_dir_all(&dir);
+    let dir =
+        TempDir(std::env::temp_dir().join(format!("tessera-vk-layout-{}", std::process::id())));
+    std::fs::create_dir_all(&dir.0).expect("create the build directory");
+    let c = c_lines(&dir.0);
+    drop(dir);
     let rust = rust_layout::lines();
     let differences: Vec<String> = c
         .iter()

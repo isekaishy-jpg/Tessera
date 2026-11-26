@@ -14403,11 +14403,11 @@ impl<'a> LayerSettingEXT<'a> {
         self
     }
 
-    /// Sets `p_values` and `value_count` from the slice length in bytes.
+    /// Sets `p_values` and `value_count` from the slice length in elements.
     #[inline]
     #[track_caller]
     pub fn values<T: Copy>(mut self, value: &'a [T]) -> Self {
-        let len = core::mem::size_of_val(value);
+        let len = value.len();
         self.p_values = value.as_ptr().cast();
         self.value_count = crate::len::count_u32(len, "valueCount");
         self

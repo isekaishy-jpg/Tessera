@@ -57,7 +57,7 @@ pub fn pick(instance: &Instance) -> Outcome<Gpu> {
 fn qualify(instance: &Instance, physical: vk::PhysicalDevice) -> Outcome<Gpu> {
     // SAFETY: `physical` was enumerated from the live `instance`.
     let properties = unsafe { instance.get_physical_device_properties(physical) };
-    let name = text::fixed(&properties.device_name);
+    let name = tessera_vk::fixed_str(&properties.device_name);
     if properties.api_version < vk::API_VERSION_1_4 {
         return fail(format!("{name}: Vulkan below 1.4"));
     }
