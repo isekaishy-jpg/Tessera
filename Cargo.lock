@@ -145,6 +145,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "tessera-vk-smoke"
+version = "0.1.0"
+dependencies = [
+ "tessera-vk",
+]
+
+[[package]]
 name = "toml"
 version = "1.2.3+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

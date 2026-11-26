@@ -1,0 +1,13 @@
+[package]
+name = "tessera-vk-smoke"
+version = "0.1.0"
+description = "Driver smoke test of tessera-vk under the Vulkan validation layer."
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+tessera-vk = { path = "../vk" }
+
+[lints]
+workspace = true
