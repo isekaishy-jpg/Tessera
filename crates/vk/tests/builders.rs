@@ -1,6 +1,7 @@
-//! Struct setters: count groups in their three forms, the `VkWriteDescriptorSet` and
-//! `VkLayerSettingEXT` overrides, `bool` for `VkBool32`, strings, byte and expression lengths,
-//! `push_next`, packed bitfields and `Default`.
+//! Struct setters: every setter of a group writes the whole group, so setters compose in any order
+//! (groups set together, parallel, alternatives and selected; count-only setters; expression
+//! lengths), `bool` for `VkBool32`, strings, byte lengths, `push_next`, packed bitfields and
+//! `Default`.
 
 use core::ffi::c_void;
 use tessera_vk::vk;
@@ -58,40 +59,111 @@ fn an_optional_array_in_a_group_is_an_option() {
 }
 
 #[test]
-fn optional_alternatives_get_their_own_setters_and_a_count_setter() {
+fn an_alternative_nulls_its_siblings() {
     let geometries = [vk::AccelerationStructureGeometryKHR::default()];
-    let one = vk::AccelerationStructureBuildGeometryInfoKHR::default().geometries(&geometries);
-    assert_eq!(one.geometry_count, 1);
-    assert!(one.pp_geometries.is_null());
     let pointers = [core::ptr::from_ref(&geometries[0]); 2];
-    let two = vk::AccelerationStructureBuildGeometryInfoKHR::default().pp_geometries(&pointers);
-    assert_eq!(two.geometry_count, 2);
-    assert!(two.p_geometries.is_null());
-    let counted = vk::AccelerationStructureBuildGeometryInfoKHR::default().geometry_count(5);
+    let info = vk::AccelerationStructureBuildGeometryInfoKHR::default()
+        .geometries(&geometries)
+        .pp_geometries(&pointers);
+    assert_eq!(info.geometry_count, 2);
+    assert_eq!(info.pp_geometries, pointers.as_ptr());
+    assert!(
+        info.p_geometries.is_null(),
+        "the alternative set first is dropped"
+    );
+    let counted = info.geometry_count(5);
     assert_eq!(counted.geometry_count, 5);
-}
-
-#[test]
-fn a_single_optional_array_also_gets_a_count_setter() {
-    let samplers = [vk::Sampler::from_raw(4); 3];
-    let with = vk::DescriptorSetLayoutBinding::default().immutable_samplers(&samplers);
-    assert_eq!(with.descriptor_count, 3);
-    let without = vk::DescriptorSetLayoutBinding::default().descriptor_count(8);
-    assert_eq!(without.descriptor_count, 8);
-    assert!(without.p_immutable_samplers.is_null());
+    assert!(counted.p_geometries.is_null() && counted.pp_geometries.is_null());
 }
 
 #[test]
 fn write_descriptor_set_arrays_are_alternatives() {
     let images = [vk::DescriptorImageInfo::default(); 2];
-    let write = vk::WriteDescriptorSet::default().image_info(&images);
-    assert_eq!(write.descriptor_count, 2);
-    assert!(write.p_buffer_info.is_null() && write.p_texel_buffer_view.is_null());
-    let inline = vk::WriteDescriptorSet::default().descriptor_count(16);
+    let buffers = [vk::DescriptorBufferInfo::default(); 3];
+    let write = vk::WriteDescriptorSet::default()
+        .image_info(&images)
+        .buffer_info(&buffers);
+    assert_eq!(write.descriptor_count, 3);
+    assert_eq!(write.p_buffer_info, buffers.as_ptr());
+    assert!(write.p_image_info.is_null() && write.p_texel_buffer_view.is_null());
+    let inline = vk::WriteDescriptorSet::default()
+        .image_info(&images)
+        .descriptor_count(16);
     assert_eq!(
         inline.descriptor_count, 16,
-        "inline uniform blocks set only the count"
+        "an inline uniform block sets only the count"
     );
+    assert!(
+        inline.p_image_info.is_null()
+            && inline.p_buffer_info.is_null()
+            && inline.p_texel_buffer_view.is_null()
+    );
+}
+
+#[test]
+fn a_count_setter_nulls_its_array() {
+    let samplers = [vk::Sampler::from_raw(4); 3];
+    let with = vk::DescriptorSetLayoutBinding::default().immutable_samplers(&samplers);
+    assert_eq!(with.descriptor_count, 3);
+    let without = with.descriptor_count(8);
+    assert_eq!(without.descriptor_count, 8);
+    assert!(without.p_immutable_samplers.is_null());
+}
+
+#[test]
+fn parallel_arrays_share_one_count() {
+    let offset = [1u64, 2, 3];
+    let extent = [4u64, 5, 6];
+    let copy = vk::TensorCopyARM::default().src_offset(Some(&offset), None, Some(&extent));
+    assert_eq!(copy.dimension_count, 3);
+    assert_eq!(copy.p_src_offset, offset.as_ptr());
+    assert!(copy.p_dst_offset.is_null());
+    assert_eq!(copy.p_extent, extent.as_ptr());
+    let none = copy.src_offset(None, None, None);
+    assert_eq!(none.dimension_count, 0);
+    assert!(none.p_src_offset.is_null() && none.p_extent.is_null());
+}
+
+#[test]
+#[should_panic(expected = "dimensionCount: arrays differ in length")]
+fn parallel_arrays_must_agree() {
+    let _ = vk::TensorCopyARM::default().src_offset(Some(&[1, 2]), Some(&[1]), None);
+}
+
+#[test]
+fn a_sample_mask_comes_with_its_sample_count() {
+    let mask = [u32::MAX, 1];
+    let ms = vk::PipelineMultisampleStateCreateInfo::default()
+        .sample_mask(vk::SampleCountFlags::COUNT_64, &mask);
+    assert_eq!(ms.rasterization_samples, vk::SampleCountFlags::COUNT_64);
+    assert_eq!(ms.p_sample_mask, mask.as_ptr());
+    let fewer = ms.rasterization_samples(vk::SampleCountFlags::COUNT_4);
+    assert!(
+        fewer.p_sample_mask.is_null(),
+        "the mask's length depends on the sample count"
+    );
+}
+
+#[test]
+#[should_panic(expected = "pSampleMask: slice length is not (rasterizationSamples + 31) / 32")]
+fn a_sample_mask_of_the_wrong_length_panics() {
+    let _ = vk::PipelineMultisampleStateCreateInfo::default()
+        .sample_mask(vk::SampleCountFlags::COUNT_64, &[u32::MAX]);
+}
+
+#[test]
+fn shader_code_sets_its_type_size_and_pointer() {
+    let words = [0x0723_0203u32; 3];
+    let spirv = vk::ShaderCreateInfoEXT::default().code_spirv(&words);
+    assert_eq!(spirv.code_type, vk::ShaderCodeTypeEXT::SPIRV);
+    assert_eq!(spirv.code_size, 12);
+    assert_eq!(spirv.p_code, words.as_ptr().cast::<c_void>());
+    let bytes = tessera_vk::AlignedBytes::from_bytes(&[7; 20]);
+    let binary = spirv.code_binary(&bytes);
+    assert_eq!(binary.code_type, vk::ShaderCodeTypeEXT::BINARY);
+    assert_eq!(binary.code_size, 20);
+    assert_eq!(binary.p_code, bytes.as_bytes().as_ptr().cast::<c_void>());
+    assert!(binary.p_code.addr().is_multiple_of(16));
 }
 
 #[test]
@@ -132,10 +204,6 @@ fn strings_bytes_and_expression_lengths() {
     let version = [0u8; 2 * vk::UUID_SIZE];
     let info = vk::AccelerationStructureVersionInfoKHR::default().version_data(&version);
     assert_eq!(info.p_version_data, version.as_ptr());
-
-    let mask = [u32::MAX];
-    let ms = vk::PipelineMultisampleStateCreateInfo::default().sample_mask(&mask);
-    assert_eq!(ms.p_sample_mask, mask.as_ptr());
 }
 
 #[test]

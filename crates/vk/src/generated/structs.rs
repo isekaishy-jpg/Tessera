@@ -23,8 +23,11 @@ pub struct BaseOutStructure<'a> {
 impl Default for BaseOutStructure<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            s_type: Default::default(),
+            p_next: core::ptr::null_mut(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -53,8 +56,11 @@ pub struct BaseInStructure<'a> {
 impl Default for BaseInStructure<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            s_type: Default::default(),
+            p_next: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -97,8 +103,10 @@ impl Offset2D {
 impl Default for Offset2D {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+        }
     }
 }
 
@@ -157,8 +165,11 @@ impl Offset3D {
 impl Default for Offset3D {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+            z: Default::default(),
+        }
     }
 }
 
@@ -209,8 +220,10 @@ impl Extent2D {
 impl Default for Extent2D {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            width: Default::default(),
+            height: Default::default(),
+        }
     }
 }
 
@@ -269,8 +282,11 @@ impl Extent3D {
 impl Default for Extent3D {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            width: Default::default(),
+            height: Default::default(),
+            depth: Default::default(),
+        }
     }
 }
 
@@ -362,8 +378,14 @@ impl Viewport {
 impl Default for Viewport {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+            width: Default::default(),
+            height: Default::default(),
+            min_depth: Default::default(),
+            max_depth: Default::default(),
+        }
     }
 }
 
@@ -427,8 +449,10 @@ impl Rect2D {
 impl Default for Rect2D {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            offset: Default::default(),
+            extent: Default::default(),
+        }
     }
 }
 
@@ -488,8 +512,11 @@ impl ClearRect {
 impl Default for ClearRect {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            rect: Default::default(),
+            base_array_layer: Default::default(),
+            layer_count: Default::default(),
+        }
     }
 }
 
@@ -565,8 +592,12 @@ impl ComponentMapping {
 impl Default for ComponentMapping {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            r: Default::default(),
+            g: Default::default(),
+            b: Default::default(),
+            a: Default::default(),
+        }
     }
 }
 
@@ -618,8 +649,17 @@ pub struct PhysicalDeviceProperties {
 impl Default for PhysicalDeviceProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            api_version: Default::default(),
+            driver_version: Default::default(),
+            vendor_id: Default::default(),
+            device_id: Default::default(),
+            device_type: Default::default(),
+            device_name: [Default::default(); MAX_PHYSICAL_DEVICE_NAME_SIZE],
+            pipeline_cache_uuid: [Default::default(); UUID_SIZE],
+            limits: Default::default(),
+            sparse_properties: Default::default(),
+        }
     }
 }
 
@@ -674,8 +714,10 @@ pub struct ExtensionProperties {
 impl Default for ExtensionProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            extension_name: [Default::default(); MAX_EXTENSION_NAME_SIZE],
+            spec_version: Default::default(),
+        }
     }
 }
 
@@ -727,8 +769,12 @@ pub struct LayerProperties {
 impl Default for LayerProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            layer_name: [Default::default(); MAX_EXTENSION_NAME_SIZE],
+            spec_version: Default::default(),
+            implementation_version: Default::default(),
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+        }
     }
 }
 
@@ -830,11 +876,15 @@ impl<'a> ApplicationInfo<'a> {
 impl Default for ApplicationInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_application_name: core::ptr::null(),
+            application_version: Default::default(),
+            p_engine_name: core::ptr::null(),
+            engine_version: Default::default(),
+            api_version: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -943,8 +993,15 @@ impl<'a> AllocationCallbacks<'a> {
 impl Default for AllocationCallbacks<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            p_user_data: core::ptr::null_mut(),
+            pfn_allocation: Default::default(),
+            pfn_reallocation: Default::default(),
+            pfn_free: Default::default(),
+            pfn_internal_allocation: Default::default(),
+            pfn_internal_free: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -1032,11 +1089,14 @@ impl<'a> DeviceQueueCreateInfo<'a> {
 impl Default for DeviceQueueCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            queue_family_index: Default::default(),
+            queue_count: Default::default(),
+            p_queue_priorities: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -1160,11 +1220,18 @@ impl<'a> DeviceCreateInfo<'a> {
 impl Default for DeviceCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            queue_create_info_count: Default::default(),
+            p_queue_create_infos: core::ptr::null(),
+            enabled_layer_count: Default::default(),
+            pp_enabled_layer_names: core::ptr::null(),
+            enabled_extension_count: Default::default(),
+            pp_enabled_extension_names: core::ptr::null(),
+            p_enabled_features: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -1284,11 +1351,16 @@ impl<'a> InstanceCreateInfo<'a> {
 impl Default for InstanceCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            p_application_info: core::ptr::null(),
+            enabled_layer_count: Default::default(),
+            pp_enabled_layer_names: core::ptr::null(),
+            enabled_extension_count: Default::default(),
+            pp_enabled_extension_names: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -1350,8 +1422,12 @@ pub struct QueueFamilyProperties {
 impl Default for QueueFamilyProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            queue_flags: Default::default(),
+            queue_count: Default::default(),
+            timestamp_valid_bits: Default::default(),
+            min_image_transfer_granularity: Default::default(),
+        }
     }
 }
 
@@ -1406,8 +1482,12 @@ pub struct PhysicalDeviceMemoryProperties {
 impl Default for PhysicalDeviceMemoryProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            memory_type_count: Default::default(),
+            memory_types: [Default::default(); MAX_MEMORY_TYPES],
+            memory_heap_count: Default::default(),
+            memory_heaps: [Default::default(); MAX_MEMORY_HEAPS],
+        }
     }
 }
 
@@ -1481,11 +1561,12 @@ impl<'a> MemoryAllocateInfo<'a> {
 impl Default for MemoryAllocateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            allocation_size: Default::default(),
+            memory_type_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -1539,8 +1620,11 @@ pub struct MemoryRequirements {
 impl Default for MemoryRequirements {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            size: Default::default(),
+            alignment: Default::default(),
+            memory_type_bits: Default::default(),
+        }
     }
 }
 
@@ -1574,8 +1658,11 @@ pub struct SparseImageFormatProperties {
 impl Default for SparseImageFormatProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            aspect_mask: Default::default(),
+            image_granularity: Default::default(),
+            flags: Default::default(),
+        }
     }
 }
 
@@ -1635,8 +1722,13 @@ pub struct SparseImageMemoryRequirements {
 impl Default for SparseImageMemoryRequirements {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            format_properties: Default::default(),
+            image_mip_tail_first_lod: Default::default(),
+            image_mip_tail_size: Default::default(),
+            image_mip_tail_offset: Default::default(),
+            image_mip_tail_stride: Default::default(),
+        }
     }
 }
 
@@ -1694,8 +1786,10 @@ pub struct MemoryType {
 impl Default for MemoryType {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            property_flags: Default::default(),
+            heap_index: Default::default(),
+        }
     }
 }
 
@@ -1738,8 +1832,10 @@ pub struct MemoryHeap {
 impl Default for MemoryHeap {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            size: Default::default(),
+            flags: Default::default(),
+        }
     }
 }
 
@@ -1803,11 +1899,13 @@ impl<'a> MappedMemoryRange<'a> {
 impl Default for MappedMemoryRange<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            memory: Default::default(),
+            offset: Default::default(),
+            size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -1855,8 +1953,11 @@ pub struct FormatProperties {
 impl Default for FormatProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            linear_tiling_features: Default::default(),
+            optimal_tiling_features: Default::default(),
+            buffer_features: Default::default(),
+        }
     }
 }
 
@@ -1920,8 +2021,13 @@ pub struct ImageFormatProperties {
 impl Default for ImageFormatProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            max_extent: Default::default(),
+            max_mip_levels: Default::default(),
+            max_array_layers: Default::default(),
+            sample_counts: Default::default(),
+            max_resource_size: Default::default(),
+        }
     }
 }
 
@@ -2006,8 +2112,11 @@ impl DescriptorBufferInfo {
 impl Default for DescriptorBufferInfo {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            buffer: Default::default(),
+            offset: Default::default(),
+            range: Default::default(),
+        }
     }
 }
 
@@ -2083,8 +2192,11 @@ impl DescriptorImageInfo {
 impl Default for DescriptorImageInfo {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            sampler: Default::default(),
+            image_view: Default::default(),
+            image_layout: Default::default(),
+        }
     }
 }
 
@@ -2171,10 +2283,14 @@ impl<'a> WriteDescriptorSet<'a> {
         self
     }
 
-    /// Sets `descriptor_count`.
+    /// Sets `descriptor_count` alone and nulls `p_image_info`, `p_buffer_info`,
+    /// `p_texel_buffer_view`: the count without its arrays (an array set before is dropped).
     #[inline]
     pub fn descriptor_count(mut self, value: u32) -> Self {
         self.descriptor_count = value;
+        self.p_image_info = core::ptr::null();
+        self.p_buffer_info = core::ptr::null();
+        self.p_texel_buffer_view = core::ptr::null();
         self
     }
 
@@ -2185,33 +2301,39 @@ impl<'a> WriteDescriptorSet<'a> {
         self
     }
 
-    /// Sets `p_image_info` and `descriptor_count` from the slice length.
+    /// Sets `p_image_info` and `descriptor_count` from the slice length, and nulls `p_buffer_info`,
+    /// `p_texel_buffer_view`: the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn image_info(mut self, value: &'a [DescriptorImageInfo]) -> Self {
-        let len = value.len();
         self.p_image_info = value.as_ptr();
-        self.descriptor_count = crate::len::count_u32(len, "descriptorCount");
+        self.p_buffer_info = core::ptr::null();
+        self.p_texel_buffer_view = core::ptr::null();
+        self.descriptor_count = crate::len::count_u32(value.len(), "descriptorCount");
         self
     }
 
-    /// Sets `p_buffer_info` and `descriptor_count` from the slice length.
+    /// Sets `p_buffer_info` and `descriptor_count` from the slice length, and nulls `p_image_info`,
+    /// `p_texel_buffer_view`: the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn buffer_info(mut self, value: &'a [DescriptorBufferInfo]) -> Self {
-        let len = value.len();
         self.p_buffer_info = value.as_ptr();
-        self.descriptor_count = crate::len::count_u32(len, "descriptorCount");
+        self.p_image_info = core::ptr::null();
+        self.p_texel_buffer_view = core::ptr::null();
+        self.descriptor_count = crate::len::count_u32(value.len(), "descriptorCount");
         self
     }
 
-    /// Sets `p_texel_buffer_view` and `descriptor_count` from the slice length.
+    /// Sets `p_texel_buffer_view` and `descriptor_count` from the slice length, and nulls
+    /// `p_image_info`, `p_buffer_info`: the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn texel_buffer_view(mut self, value: &'a [BufferView]) -> Self {
-        let len = value.len();
         self.p_texel_buffer_view = value.as_ptr();
-        self.descriptor_count = crate::len::count_u32(len, "descriptorCount");
+        self.p_image_info = core::ptr::null();
+        self.p_buffer_info = core::ptr::null();
+        self.descriptor_count = crate::len::count_u32(value.len(), "descriptorCount");
         self
     }
 
@@ -2227,11 +2349,18 @@ impl<'a> WriteDescriptorSet<'a> {
 impl Default for WriteDescriptorSet<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            dst_set: Default::default(),
+            dst_binding: Default::default(),
+            dst_array_element: Default::default(),
+            descriptor_count: Default::default(),
+            descriptor_type: Default::default(),
+            p_image_info: core::ptr::null(),
+            p_buffer_info: core::ptr::null(),
+            p_texel_buffer_view: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -2370,11 +2499,17 @@ impl<'a> CopyDescriptorSet<'a> {
 impl Default for CopyDescriptorSet<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_set: Default::default(),
+            src_binding: Default::default(),
+            src_array_element: Default::default(),
+            dst_set: Default::default(),
+            dst_binding: Default::default(),
+            dst_array_element: Default::default(),
+            descriptor_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -2446,11 +2581,11 @@ impl<'a> BufferUsageFlags2CreateInfo<'a> {
 impl Default for BufferUsageFlags2CreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -2564,11 +2699,16 @@ impl<'a> BufferCreateInfo<'a> {
 impl Default for BufferCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            size: Default::default(),
+            usage: Default::default(),
+            sharing_mode: Default::default(),
+            queue_family_index_count: Default::default(),
+            p_queue_family_indices: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -2685,11 +2825,15 @@ impl<'a> BufferViewCreateInfo<'a> {
 impl Default for BufferViewCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            buffer: Default::default(),
+            format: Default::default(),
+            offset: Default::default(),
+            range: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -2766,8 +2910,11 @@ impl ImageSubresource {
 impl Default for ImageSubresource {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            aspect_mask: Default::default(),
+            mip_level: Default::default(),
+            array_layer: Default::default(),
+        }
     }
 }
 
@@ -2843,8 +2990,12 @@ impl ImageSubresourceLayers {
 impl Default for ImageSubresourceLayers {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            aspect_mask: Default::default(),
+            mip_level: Default::default(),
+            base_array_layer: Default::default(),
+            layer_count: Default::default(),
+        }
     }
 }
 
@@ -2938,8 +3089,13 @@ impl ImageSubresourceRange {
 impl Default for ImageSubresourceRange {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            aspect_mask: Default::default(),
+            base_mip_level: Default::default(),
+            level_count: Default::default(),
+            base_array_layer: Default::default(),
+            layer_count: Default::default(),
+        }
     }
 }
 
@@ -3021,11 +3177,12 @@ impl<'a> MemoryBarrier<'a> {
 impl Default for MemoryBarrier<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_access_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -3162,11 +3319,17 @@ impl<'a> BufferMemoryBarrier<'a> {
 impl Default for BufferMemoryBarrier<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_access_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            src_queue_family_index: Default::default(),
+            dst_queue_family_index: Default::default(),
+            buffer: Default::default(),
+            offset: Default::default(),
+            size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -3324,11 +3487,18 @@ impl<'a> ImageMemoryBarrier<'a> {
 impl Default for ImageMemoryBarrier<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_access_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            old_layout: Default::default(),
+            new_layout: Default::default(),
+            src_queue_family_index: Default::default(),
+            dst_queue_family_index: Default::default(),
+            image: Default::default(),
+            subresource_range: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -3523,11 +3693,23 @@ impl<'a> ImageCreateInfo<'a> {
 impl Default for ImageCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            image_type: Default::default(),
+            format: Default::default(),
+            extent: Default::default(),
+            mip_levels: Default::default(),
+            array_layers: Default::default(),
+            samples: Default::default(),
+            tiling: Default::default(),
+            usage: Default::default(),
+            sharing_mode: Default::default(),
+            queue_family_index_count: Default::default(),
+            p_queue_family_indices: core::ptr::null(),
+            initial_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -3611,11 +3793,11 @@ impl<'a> ImageCreateFlags2CreateInfoKHR<'a> {
 impl Default for ImageCreateFlags2CreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -3677,11 +3859,11 @@ impl<'a> ImageUsageFlags2CreateInfoKHR<'a> {
 impl Default for ImageUsageFlags2CreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -3782,8 +3964,13 @@ impl SubresourceLayout {
 impl Default for SubresourceLayout {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            offset: Default::default(),
+            size: Default::default(),
+            row_pitch: Default::default(),
+            array_pitch: Default::default(),
+            depth_pitch: Default::default(),
+        }
     }
 }
 
@@ -3903,11 +4090,16 @@ impl<'a> ImageViewCreateInfo<'a> {
 impl Default for ImageViewCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            image: Default::default(),
+            view_type: Default::default(),
+            format: Default::default(),
+            components: Default::default(),
+            subresource_range: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -3992,8 +4184,11 @@ impl BufferCopy {
 impl Default for BufferCopy {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_offset: Default::default(),
+            dst_offset: Default::default(),
+            size: Default::default(),
+        }
     }
 }
 
@@ -4084,8 +4279,13 @@ impl SparseMemoryBind {
 impl Default for SparseMemoryBind {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            resource_offset: Default::default(),
+            size: Default::default(),
+            memory: Default::default(),
+            memory_offset: Default::default(),
+            flags: Default::default(),
+        }
     }
 }
 
@@ -4181,8 +4381,14 @@ impl SparseImageMemoryBind {
 impl Default for SparseImageMemoryBind {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            subresource: Default::default(),
+            offset: Default::default(),
+            extent: Default::default(),
+            memory: Default::default(),
+            memory_offset: Default::default(),
+            flags: Default::default(),
+        }
     }
 }
 
@@ -4249,8 +4455,12 @@ impl<'a> SparseBufferMemoryBindInfo<'a> {
 impl Default for SparseBufferMemoryBindInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            buffer: Default::default(),
+            bind_count: Default::default(),
+            p_binds: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -4305,8 +4515,12 @@ impl<'a> SparseImageOpaqueMemoryBindInfo<'a> {
 impl Default for SparseImageOpaqueMemoryBindInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            image: Default::default(),
+            bind_count: Default::default(),
+            p_binds: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -4367,8 +4581,12 @@ impl<'a> SparseImageMemoryBindInfo<'a> {
 impl Default for SparseImageMemoryBindInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            image: Default::default(),
+            bind_count: Default::default(),
+            p_binds: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -4482,11 +4700,20 @@ impl<'a> BindSparseInfo<'a> {
 impl Default for BindSparseInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            wait_semaphore_count: Default::default(),
+            p_wait_semaphores: core::ptr::null(),
+            buffer_bind_count: Default::default(),
+            p_buffer_binds: core::ptr::null(),
+            image_opaque_bind_count: Default::default(),
+            p_image_opaque_binds: core::ptr::null(),
+            image_bind_count: Default::default(),
+            p_image_binds: core::ptr::null(),
+            signal_semaphore_count: Default::default(),
+            p_signal_semaphores: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -4597,8 +4824,13 @@ impl ImageCopy {
 impl Default for ImageCopy {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_subresource: Default::default(),
+            src_offset: Default::default(),
+            dst_subresource: Default::default(),
+            dst_offset: Default::default(),
+            extent: Default::default(),
+        }
     }
 }
 
@@ -4690,8 +4922,12 @@ impl ImageBlit {
 impl Default for ImageBlit {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_subresource: Default::default(),
+            src_offsets: [Default::default(); 2],
+            dst_subresource: Default::default(),
+            dst_offsets: [Default::default(); 2],
+        }
     }
 }
 
@@ -4802,8 +5038,14 @@ impl BufferImageCopy {
 impl Default for BufferImageCopy {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            buffer_offset: Default::default(),
+            buffer_row_length: Default::default(),
+            buffer_image_height: Default::default(),
+            image_subresource: Default::default(),
+            image_offset: Default::default(),
+            image_extent: Default::default(),
+        }
     }
 }
 
@@ -4885,8 +5127,11 @@ impl StridedDeviceAddressRangeKHR {
 impl Default for StridedDeviceAddressRangeKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            address: Default::default(),
+            size: Default::default(),
+            stride: Default::default(),
+        }
     }
 }
 
@@ -4953,8 +5198,11 @@ impl CopyMemoryIndirectCommandKHR {
 impl Default for CopyMemoryIndirectCommandKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_address: Default::default(),
+            dst_address: Default::default(),
+            size: Default::default(),
+        }
     }
 }
 
@@ -5042,11 +5290,14 @@ impl<'a> CopyMemoryIndirectInfoKHR<'a> {
 impl Default for CopyMemoryIndirectInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_copy_flags: Default::default(),
+            dst_copy_flags: Default::default(),
+            copy_count: Default::default(),
+            copy_address_range: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -5148,8 +5399,14 @@ impl CopyMemoryToImageIndirectCommandKHR {
 impl Default for CopyMemoryToImageIndirectCommandKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_address: Default::default(),
+            buffer_row_length: Default::default(),
+            buffer_image_height: Default::default(),
+            image_subresource: Default::default(),
+            image_offset: Default::default(),
+            image_extent: Default::default(),
+        }
     }
 }
 
@@ -5260,11 +5517,16 @@ impl<'a> CopyMemoryToImageIndirectInfoKHR<'a> {
 impl Default for CopyMemoryToImageIndirectInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_copy_flags: Default::default(),
+            copy_count: Default::default(),
+            copy_address_range: Default::default(),
+            dst_image: Default::default(),
+            dst_image_layout: Default::default(),
+            p_image_subresources: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -5361,8 +5623,13 @@ impl ImageResolve {
 impl Default for ImageResolve {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_subresource: Default::default(),
+            src_offset: Default::default(),
+            dst_subresource: Default::default(),
+            dst_offset: Default::default(),
+            extent: Default::default(),
+        }
     }
 }
 
@@ -5459,11 +5726,13 @@ impl<'a> ShaderModuleCreateInfo<'a> {
 impl Default for ShaderModuleCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            code_size: Default::default(),
+            p_code: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -5548,10 +5817,12 @@ impl<'a> DescriptorSetLayoutBinding<'a> {
         self
     }
 
-    /// Sets `descriptor_count`.
+    /// Sets `descriptor_count` alone and nulls `p_immutable_samplers`: the count without its arrays
+    /// (an array set before is dropped).
     #[inline]
     pub fn descriptor_count(mut self, value: u32) -> Self {
         self.descriptor_count = value;
+        self.p_immutable_samplers = core::ptr::null();
         self
     }
 
@@ -5576,8 +5847,14 @@ impl<'a> DescriptorSetLayoutBinding<'a> {
 impl Default for DescriptorSetLayoutBinding<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            binding: Default::default(),
+            descriptor_type: Default::default(),
+            descriptor_count: Default::default(),
+            stage_flags: Default::default(),
+            p_immutable_samplers: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -5658,11 +5935,13 @@ impl<'a> DescriptorSetLayoutCreateInfo<'a> {
 impl Default for DescriptorSetLayoutCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            binding_count: Default::default(),
+            p_bindings: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -5726,8 +6005,10 @@ impl DescriptorPoolSize {
 impl Default for DescriptorPoolSize {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            r#type: Default::default(),
+            descriptor_count: Default::default(),
+        }
     }
 }
 
@@ -5810,11 +6091,14 @@ impl<'a> DescriptorPoolCreateInfo<'a> {
 impl Default for DescriptorPoolCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            max_sets: Default::default(),
+            pool_size_count: Default::default(),
+            p_pool_sizes: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -5899,11 +6183,13 @@ impl<'a> DescriptorSetAllocateInfo<'a> {
 impl Default for DescriptorSetAllocateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            descriptor_pool: Default::default(),
+            descriptor_set_count: Default::default(),
+            p_set_layouts: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -5982,8 +6268,11 @@ impl SpecializationMapEntry {
 impl Default for SpecializationMapEntry {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            constant_id: Default::default(),
+            offset: Default::default(),
+            size: Default::default(),
+        }
     }
 }
 
@@ -6061,8 +6350,13 @@ impl<'a> SpecializationInfo<'a> {
 impl Default for SpecializationInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            map_entry_count: Default::default(),
+            p_map_entries: core::ptr::null(),
+            data_size: Default::default(),
+            p_data: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -6165,11 +6459,15 @@ impl<'a> PipelineShaderStageCreateInfo<'a> {
 impl Default for PipelineShaderStageCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            stage: Default::default(),
+            module: Default::default(),
+            p_name: core::ptr::null(),
+            p_specialization_info: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -6288,11 +6586,15 @@ impl<'a> ComputePipelineCreateInfo<'a> {
 impl Default for ComputePipelineCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            stage: Default::default(),
+            layout: Default::default(),
+            base_pipeline_handle: Default::default(),
+            base_pipeline_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -6377,11 +6679,13 @@ impl<'a> ComputePipelineIndirectBufferInfoNV<'a> {
 impl Default for ComputePipelineIndirectBufferInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            device_address: Default::default(),
+            size: Default::default(),
+            pipeline_device_address_capture_replay: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -6450,11 +6754,11 @@ impl<'a> PipelineCreateFlags2CreateInfo<'a> {
 impl Default for PipelineCreateFlags2CreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -6531,8 +6835,11 @@ impl VertexInputBindingDescription {
 impl Default for VertexInputBindingDescription {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            binding: Default::default(),
+            stride: Default::default(),
+            input_rate: Default::default(),
+        }
     }
 }
 
@@ -6622,8 +6929,12 @@ impl VertexInputAttributeDescription {
 impl Default for VertexInputAttributeDescription {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            location: Default::default(),
+            binding: Default::default(),
+            format: Default::default(),
+            offset: Default::default(),
+        }
     }
 }
 
@@ -6737,11 +7048,15 @@ impl<'a> PipelineVertexInputStateCreateInfo<'a> {
 impl Default for PipelineVertexInputStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            vertex_binding_description_count: Default::default(),
+            p_vertex_binding_descriptions: core::ptr::null(),
+            vertex_attribute_description_count: Default::default(),
+            p_vertex_attribute_descriptions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -6824,11 +7139,13 @@ impl<'a> PipelineInputAssemblyStateCreateInfo<'a> {
 impl Default for PipelineInputAssemblyStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            topology: Default::default(),
+            primitive_restart_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -6906,11 +7223,12 @@ impl<'a> PipelineTessellationStateCreateInfo<'a> {
 impl Default for PipelineTessellationStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            patch_control_points: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -6973,10 +7291,12 @@ impl<'a> PipelineViewportStateCreateInfo<'a> {
         self
     }
 
-    /// Sets `viewport_count`.
+    /// Sets `viewport_count` alone and nulls `p_viewports`: the count without its arrays (an array
+    /// set before is dropped).
     #[inline]
     pub fn viewport_count(mut self, value: u32) -> Self {
         self.viewport_count = value;
+        self.p_viewports = core::ptr::null();
         self
     }
 
@@ -6990,10 +7310,12 @@ impl<'a> PipelineViewportStateCreateInfo<'a> {
         self
     }
 
-    /// Sets `scissor_count`.
+    /// Sets `scissor_count` alone and nulls `p_scissors`: the count without its arrays (an array
+    /// set before is dropped).
     #[inline]
     pub fn scissor_count(mut self, value: u32) -> Self {
         self.scissor_count = value;
+        self.p_scissors = core::ptr::null();
         self
     }
 
@@ -7019,11 +7341,15 @@ impl<'a> PipelineViewportStateCreateInfo<'a> {
 impl Default for PipelineViewportStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            viewport_count: Default::default(),
+            p_viewports: core::ptr::null(),
+            scissor_count: Default::default(),
+            p_scissors: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -7188,11 +7514,21 @@ impl<'a> PipelineRasterizationStateCreateInfo<'a> {
 impl Default for PipelineRasterizationStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            depth_clamp_enable: Default::default(),
+            rasterizer_discard_enable: Default::default(),
+            polygon_mode: Default::default(),
+            cull_mode: Default::default(),
+            front_face: Default::default(),
+            depth_bias_enable: Default::default(),
+            depth_bias_constant_factor: Default::default(),
+            depth_bias_clamp: Default::default(),
+            depth_bias_slope_factor: Default::default(),
+            line_width: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -7285,10 +7621,11 @@ impl<'a> PipelineMultisampleStateCreateInfo<'a> {
         self
     }
 
-    /// Sets `rasterization_samples`.
+    /// Sets `rasterization_samples` and nulls `p_sample_mask`, whose length depends on it.
     #[inline]
     pub fn rasterization_samples(mut self, value: SampleCountFlagBits) -> Self {
         self.rasterization_samples = value;
+        self.p_sample_mask = core::ptr::null();
         self
     }
 
@@ -7306,11 +7643,22 @@ impl<'a> PipelineMultisampleStateCreateInfo<'a> {
         self
     }
 
-    /// Sets `p_sample_mask`; the slice must hold `(rasterizationSamples + 31) / 32` elements (not
-    /// checked here: the length depends on other members).
+    /// Sets `p_sample_mask` and `rasterization_samples`; panics unless the slice holds
+    /// `(rasterizationSamples + 31) / 32` elements.
     #[inline]
-    pub fn sample_mask(mut self, value: &'a [SampleMask]) -> Self {
-        self.p_sample_mask = value.as_ptr();
+    #[track_caller]
+    pub fn sample_mask(
+        mut self,
+        rasterization_samples: SampleCountFlagBits,
+        sample_mask: &'a [SampleMask],
+    ) -> Self {
+        assert_eq!(
+            sample_mask.len(),
+            crate::len::to_usize(rasterization_samples.as_raw()).div_ceil(32),
+            "pSampleMask: slice length is not (rasterizationSamples + 31) / 32"
+        );
+        self.rasterization_samples = rasterization_samples;
+        self.p_sample_mask = sample_mask.as_ptr();
         self
     }
 
@@ -7340,11 +7688,17 @@ impl<'a> PipelineMultisampleStateCreateInfo<'a> {
 impl Default for PipelineMultisampleStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            rasterization_samples: Default::default(),
+            sample_shading_enable: Default::default(),
+            min_sample_shading: Default::default(),
+            p_sample_mask: core::ptr::null(),
+            alpha_to_coverage_enable: Default::default(),
+            alpha_to_one_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -7470,8 +7824,16 @@ impl PipelineColorBlendAttachmentState {
 impl Default for PipelineColorBlendAttachmentState {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            blend_enable: Default::default(),
+            src_color_blend_factor: Default::default(),
+            dst_color_blend_factor: Default::default(),
+            color_blend_op: Default::default(),
+            src_alpha_blend_factor: Default::default(),
+            dst_alpha_blend_factor: Default::default(),
+            alpha_blend_op: Default::default(),
+            color_write_mask: Default::default(),
+        }
     }
 }
 
@@ -7569,10 +7931,12 @@ impl<'a> PipelineColorBlendStateCreateInfo<'a> {
         self
     }
 
-    /// Sets `attachment_count`.
+    /// Sets `attachment_count` alone and nulls `p_attachments`: the count without its arrays (an
+    /// array set before is dropped).
     #[inline]
     pub fn attachment_count(mut self, value: u32) -> Self {
         self.attachment_count = value;
+        self.p_attachments = core::ptr::null();
         self
     }
 
@@ -7605,11 +7969,16 @@ impl<'a> PipelineColorBlendStateCreateInfo<'a> {
 impl Default for PipelineColorBlendStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            logic_op_enable: Default::default(),
+            logic_op: Default::default(),
+            attachment_count: Default::default(),
+            p_attachments: core::ptr::null(),
+            blend_constants: [Default::default(); 4],
+            _marker: PhantomData,
         }
     }
 }
@@ -7690,11 +8059,13 @@ impl<'a> PipelineDynamicStateCreateInfo<'a> {
 impl Default for PipelineDynamicStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            dynamic_state_count: Default::default(),
+            p_dynamic_states: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -7803,8 +8174,15 @@ impl StencilOpState {
 impl Default for StencilOpState {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            fail_op: Default::default(),
+            pass_op: Default::default(),
+            depth_fail_op: Default::default(),
+            compare_op: Default::default(),
+            compare_mask: Default::default(),
+            write_mask: Default::default(),
+            reference: Default::default(),
+        }
     }
 }
 
@@ -7960,11 +8338,20 @@ impl<'a> PipelineDepthStencilStateCreateInfo<'a> {
 impl Default for PipelineDepthStencilStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            depth_test_enable: Default::default(),
+            depth_write_enable: Default::default(),
+            depth_compare_op: Default::default(),
+            depth_bounds_test_enable: Default::default(),
+            stencil_test_enable: Default::default(),
+            front: Default::default(),
+            back: Default::default(),
+            min_depth_bounds: Default::default(),
+            max_depth_bounds: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -8079,10 +8466,12 @@ impl<'a> GraphicsPipelineCreateInfo<'a> {
         self
     }
 
-    /// Sets `stage_count`.
+    /// Sets `stage_count` alone and nulls `p_stages`: the count without its arrays (an array set
+    /// before is dropped).
     #[inline]
     pub fn stage_count(mut self, value: u32) -> Self {
         self.stage_count = value;
+        self.p_stages = core::ptr::null();
         self
     }
 
@@ -8218,11 +8607,27 @@ impl<'a> GraphicsPipelineCreateInfo<'a> {
 impl Default for GraphicsPipelineCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            stage_count: Default::default(),
+            p_stages: core::ptr::null(),
+            p_vertex_input_state: core::ptr::null(),
+            p_input_assembly_state: core::ptr::null(),
+            p_tessellation_state: core::ptr::null(),
+            p_viewport_state: core::ptr::null(),
+            p_rasterization_state: core::ptr::null(),
+            p_multisample_state: core::ptr::null(),
+            p_depth_stencil_state: core::ptr::null(),
+            p_color_blend_state: core::ptr::null(),
+            p_dynamic_state: core::ptr::null(),
+            layout: Default::default(),
+            render_pass: Default::default(),
+            subpass: Default::default(),
+            base_pipeline_handle: Default::default(),
+            base_pipeline_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -8329,11 +8734,13 @@ impl<'a> PipelineCacheCreateInfo<'a> {
 impl Default for PipelineCacheCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            initial_data_size: Default::default(),
+            p_initial_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -8424,8 +8831,13 @@ impl PipelineCacheHeaderVersionOne {
 impl Default for PipelineCacheHeaderVersionOne {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            header_size: Default::default(),
+            header_version: Default::default(),
+            vendor_id: Default::default(),
+            device_id: Default::default(),
+            pipeline_cache_uuid: [Default::default(); UUID_SIZE],
+        }
     }
 }
 
@@ -8525,8 +8937,13 @@ impl PipelineCacheHeaderVersionDataGraphQCOM {
 impl Default for PipelineCacheHeaderVersionDataGraphQCOM {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            header_size: Default::default(),
+            header_version: Default::default(),
+            cache_type: Default::default(),
+            cache_version: Default::default(),
+            toolchain_version: [Default::default(); DATA_GRAPH_MODEL_TOOLCHAIN_VERSION_LENGTH_QCOM],
+        }
     }
 }
 
@@ -8611,8 +9028,11 @@ impl PushConstantRange {
 impl Default for PushConstantRange {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            stage_flags: Default::default(),
+            offset: Default::default(),
+            size: Default::default(),
+        }
     }
 }
 
@@ -8685,11 +9105,13 @@ impl<'a> PipelineBinaryCreateInfoKHR<'a> {
 impl Default for PipelineBinaryCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_keys_and_data_info: core::ptr::null(),
+            pipeline: Default::default(),
+            p_pipeline_create_info: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -8741,10 +9163,12 @@ pub struct PipelineBinaryHandlesInfoKHR<'a> {
 }
 
 impl<'a> PipelineBinaryHandlesInfoKHR<'a> {
-    /// Sets `pipeline_binary_count`.
+    /// Sets `pipeline_binary_count` alone and nulls `p_pipeline_binaries`: the count without its
+    /// arrays (an array set before is dropped).
     #[inline]
     pub fn pipeline_binary_count(mut self, value: u32) -> Self {
         self.pipeline_binary_count = value;
+        self.p_pipeline_binaries = core::ptr::null_mut();
         self
     }
 
@@ -8762,11 +9186,12 @@ impl<'a> PipelineBinaryHandlesInfoKHR<'a> {
 impl Default for PipelineBinaryHandlesInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            pipeline_binary_count: Default::default(),
+            p_pipeline_binaries: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -8826,8 +9251,11 @@ impl<'a> PipelineBinaryDataKHR<'a> {
 impl Default for PipelineBinaryDataKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            data_size: Default::default(),
+            p_data: core::ptr::null_mut(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -8883,8 +9311,12 @@ impl<'a> PipelineBinaryKeysAndDataKHR<'a> {
 impl Default for PipelineBinaryKeysAndDataKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            binary_count: Default::default(),
+            p_pipeline_binary_keys: core::ptr::null(),
+            p_pipeline_binary_data: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -8944,11 +9376,12 @@ impl<'a> PipelineBinaryKeyKHR<'a> {
 impl Default for PipelineBinaryKeyKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            key_size: Default::default(),
+            key: [Default::default(); MAX_PIPELINE_BINARY_KEY_SIZE_KHR],
+            _marker: PhantomData,
         }
     }
 }
@@ -9008,11 +9441,12 @@ impl<'a> PipelineBinaryInfoKHR<'a> {
 impl Default for PipelineBinaryInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            binary_count: Default::default(),
+            p_pipeline_binaries: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -9078,11 +9512,11 @@ impl<'a> ReleaseCapturedPipelineDataInfoKHR<'a> {
 impl Default for ReleaseCapturedPipelineDataInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -9139,11 +9573,11 @@ impl<'a> PipelineBinaryDataInfoKHR<'a> {
 impl Default for PipelineBinaryDataInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_binary: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -9189,11 +9623,10 @@ pub struct PipelineCreateInfoKHR<'a> {
 impl Default for PipelineCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -9280,11 +9713,15 @@ impl<'a> PipelineLayoutCreateInfo<'a> {
 impl Default for PipelineLayoutCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            set_layout_count: Default::default(),
+            p_set_layouts: core::ptr::null(),
+            push_constant_range_count: Default::default(),
+            p_push_constant_ranges: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -9509,11 +9946,26 @@ impl<'a> SamplerCreateInfo<'a> {
 impl Default for SamplerCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            mag_filter: Default::default(),
+            min_filter: Default::default(),
+            mipmap_mode: Default::default(),
+            address_mode_u: Default::default(),
+            address_mode_v: Default::default(),
+            address_mode_w: Default::default(),
+            mip_lod_bias: Default::default(),
+            anisotropy_enable: Default::default(),
+            max_anisotropy: Default::default(),
+            compare_enable: Default::default(),
+            compare_op: Default::default(),
+            min_lod: Default::default(),
+            max_lod: Default::default(),
+            border_color: Default::default(),
+            unnormalized_coordinates: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -9619,11 +10071,12 @@ impl<'a> CommandPoolCreateInfo<'a> {
 impl Default for CommandPoolCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            queue_family_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -9700,11 +10153,13 @@ impl<'a> CommandBufferAllocateInfo<'a> {
 impl Default for CommandBufferAllocateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            command_pool: Default::default(),
+            level: Default::default(),
+            command_buffer_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -9828,11 +10283,16 @@ impl<'a> CommandBufferInheritanceInfo<'a> {
 impl Default for CommandBufferInheritanceInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            render_pass: Default::default(),
+            subpass: Default::default(),
+            framebuffer: Default::default(),
+            occlusion_query_enable: Default::default(),
+            query_flags: Default::default(),
+            pipeline_statistics: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -9920,11 +10380,12 @@ impl<'a> CommandBufferBeginInfo<'a> {
 impl Default for CommandBufferBeginInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            p_inheritance_info: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -10025,11 +10486,15 @@ impl<'a> RenderPassBeginInfo<'a> {
 impl Default for RenderPassBeginInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            render_pass: Default::default(),
+            framebuffer: Default::default(),
+            render_area: Default::default(),
+            clear_value_count: Default::default(),
+            p_clear_values: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -10097,8 +10562,10 @@ impl ClearDepthStencilValue {
 impl Default for ClearDepthStencilValue {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            depth: Default::default(),
+            stencil: Default::default(),
+        }
     }
 }
 
@@ -10158,8 +10625,11 @@ impl ClearAttachment {
 impl Default for ClearAttachment {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            aspect_mask: Default::default(),
+            color_attachment: Default::default(),
+            clear_value: Default::default(),
+        }
     }
 }
 
@@ -10286,8 +10756,17 @@ impl AttachmentDescription {
 impl Default for AttachmentDescription {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            flags: Default::default(),
+            format: Default::default(),
+            samples: Default::default(),
+            load_op: Default::default(),
+            store_op: Default::default(),
+            stencil_load_op: Default::default(),
+            stencil_store_op: Default::default(),
+            initial_layout: Default::default(),
+            final_layout: Default::default(),
+        }
     }
 }
 
@@ -10371,8 +10850,10 @@ impl AttachmentReference {
 impl Default for AttachmentReference {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            attachment: Default::default(),
+            layout: Default::default(),
+        }
     }
 }
 
@@ -10497,8 +10978,19 @@ impl<'a> SubpassDescription<'a> {
 impl Default for SubpassDescription<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            flags: Default::default(),
+            pipeline_bind_point: Default::default(),
+            input_attachment_count: Default::default(),
+            p_input_attachments: core::ptr::null(),
+            color_attachment_count: Default::default(),
+            p_color_attachments: core::ptr::null(),
+            p_resolve_attachments: core::ptr::null(),
+            p_depth_stencil_attachment: core::ptr::null(),
+            preserve_attachment_count: Default::default(),
+            p_preserve_attachments: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -10617,8 +11109,15 @@ impl SubpassDependency {
 impl Default for SubpassDependency {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_subpass: Default::default(),
+            dst_subpass: Default::default(),
+            src_stage_mask: Default::default(),
+            dst_stage_mask: Default::default(),
+            src_access_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            dependency_flags: Default::default(),
+        }
     }
 }
 
@@ -10743,11 +11242,17 @@ impl<'a> RenderPassCreateInfo<'a> {
 impl Default for RenderPassCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            attachment_count: Default::default(),
+            p_attachments: core::ptr::null(),
+            subpass_count: Default::default(),
+            p_subpasses: core::ptr::null(),
+            dependency_count: Default::default(),
+            p_dependencies: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -10818,11 +11323,11 @@ impl<'a> EventCreateInfo<'a> {
 impl Default for EventCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -10883,11 +11388,11 @@ impl<'a> FenceCreateInfo<'a> {
 impl Default for FenceCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -11533,8 +12038,63 @@ impl PhysicalDeviceFeatures {
 impl Default for PhysicalDeviceFeatures {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            robust_buffer_access: Default::default(),
+            full_draw_index_uint32: Default::default(),
+            image_cube_array: Default::default(),
+            independent_blend: Default::default(),
+            geometry_shader: Default::default(),
+            tessellation_shader: Default::default(),
+            sample_rate_shading: Default::default(),
+            dual_src_blend: Default::default(),
+            logic_op: Default::default(),
+            multi_draw_indirect: Default::default(),
+            draw_indirect_first_instance: Default::default(),
+            depth_clamp: Default::default(),
+            depth_bias_clamp: Default::default(),
+            fill_mode_non_solid: Default::default(),
+            depth_bounds: Default::default(),
+            wide_lines: Default::default(),
+            large_points: Default::default(),
+            alpha_to_one: Default::default(),
+            multi_viewport: Default::default(),
+            sampler_anisotropy: Default::default(),
+            texture_compression_etc2: Default::default(),
+            texture_compression_astc_ldr: Default::default(),
+            texture_compression_bc: Default::default(),
+            occlusion_query_precise: Default::default(),
+            pipeline_statistics_query: Default::default(),
+            vertex_pipeline_stores_and_atomics: Default::default(),
+            fragment_stores_and_atomics: Default::default(),
+            shader_tessellation_and_geometry_point_size: Default::default(),
+            shader_image_gather_extended: Default::default(),
+            shader_storage_image_extended_formats: Default::default(),
+            shader_storage_image_multisample: Default::default(),
+            shader_storage_image_read_without_format: Default::default(),
+            shader_storage_image_write_without_format: Default::default(),
+            shader_uniform_buffer_array_dynamic_indexing: Default::default(),
+            shader_sampled_image_array_dynamic_indexing: Default::default(),
+            shader_storage_buffer_array_dynamic_indexing: Default::default(),
+            shader_storage_image_array_dynamic_indexing: Default::default(),
+            shader_clip_distance: Default::default(),
+            shader_cull_distance: Default::default(),
+            shader_float64: Default::default(),
+            shader_int64: Default::default(),
+            shader_int16: Default::default(),
+            shader_resource_residency: Default::default(),
+            shader_resource_min_lod: Default::default(),
+            sparse_binding: Default::default(),
+            sparse_residency_buffer: Default::default(),
+            sparse_residency_image2_d: Default::default(),
+            sparse_residency_image3_d: Default::default(),
+            sparse_residency2_samples: Default::default(),
+            sparse_residency4_samples: Default::default(),
+            sparse_residency8_samples: Default::default(),
+            sparse_residency16_samples: Default::default(),
+            sparse_residency_aliased: Default::default(),
+            variable_multisample_rate: Default::default(),
+            inherited_queries: Default::default(),
+        }
     }
 }
 
@@ -11759,8 +12319,13 @@ pub struct PhysicalDeviceSparseProperties {
 impl Default for PhysicalDeviceSparseProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            residency_standard2_d_block_shape: Default::default(),
+            residency_standard2_d_multisample_block_shape: Default::default(),
+            residency_standard3_d_block_shape: Default::default(),
+            residency_aligned_mip_size: Default::default(),
+            residency_non_resident_strict: Default::default(),
+        }
     }
 }
 
@@ -12235,8 +12800,114 @@ pub struct PhysicalDeviceLimits {
 impl Default for PhysicalDeviceLimits {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            max_image_dimension1_d: Default::default(),
+            max_image_dimension2_d: Default::default(),
+            max_image_dimension3_d: Default::default(),
+            max_image_dimension_cube: Default::default(),
+            max_image_array_layers: Default::default(),
+            max_texel_buffer_elements: Default::default(),
+            max_uniform_buffer_range: Default::default(),
+            max_storage_buffer_range: Default::default(),
+            max_push_constants_size: Default::default(),
+            max_memory_allocation_count: Default::default(),
+            max_sampler_allocation_count: Default::default(),
+            buffer_image_granularity: Default::default(),
+            sparse_address_space_size: Default::default(),
+            max_bound_descriptor_sets: Default::default(),
+            max_per_stage_descriptor_samplers: Default::default(),
+            max_per_stage_descriptor_uniform_buffers: Default::default(),
+            max_per_stage_descriptor_storage_buffers: Default::default(),
+            max_per_stage_descriptor_sampled_images: Default::default(),
+            max_per_stage_descriptor_storage_images: Default::default(),
+            max_per_stage_descriptor_input_attachments: Default::default(),
+            max_per_stage_resources: Default::default(),
+            max_descriptor_set_samplers: Default::default(),
+            max_descriptor_set_uniform_buffers: Default::default(),
+            max_descriptor_set_uniform_buffers_dynamic: Default::default(),
+            max_descriptor_set_storage_buffers: Default::default(),
+            max_descriptor_set_storage_buffers_dynamic: Default::default(),
+            max_descriptor_set_sampled_images: Default::default(),
+            max_descriptor_set_storage_images: Default::default(),
+            max_descriptor_set_input_attachments: Default::default(),
+            max_vertex_input_attributes: Default::default(),
+            max_vertex_input_bindings: Default::default(),
+            max_vertex_input_attribute_offset: Default::default(),
+            max_vertex_input_binding_stride: Default::default(),
+            max_vertex_output_components: Default::default(),
+            max_tessellation_generation_level: Default::default(),
+            max_tessellation_patch_size: Default::default(),
+            max_tessellation_control_per_vertex_input_components: Default::default(),
+            max_tessellation_control_per_vertex_output_components: Default::default(),
+            max_tessellation_control_per_patch_output_components: Default::default(),
+            max_tessellation_control_total_output_components: Default::default(),
+            max_tessellation_evaluation_input_components: Default::default(),
+            max_tessellation_evaluation_output_components: Default::default(),
+            max_geometry_shader_invocations: Default::default(),
+            max_geometry_input_components: Default::default(),
+            max_geometry_output_components: Default::default(),
+            max_geometry_output_vertices: Default::default(),
+            max_geometry_total_output_components: Default::default(),
+            max_fragment_input_components: Default::default(),
+            max_fragment_output_attachments: Default::default(),
+            max_fragment_dual_src_attachments: Default::default(),
+            max_fragment_combined_output_resources: Default::default(),
+            max_compute_shared_memory_size: Default::default(),
+            max_compute_work_group_count: [Default::default(); 3],
+            max_compute_work_group_invocations: Default::default(),
+            max_compute_work_group_size: [Default::default(); 3],
+            sub_pixel_precision_bits: Default::default(),
+            sub_texel_precision_bits: Default::default(),
+            mipmap_precision_bits: Default::default(),
+            max_draw_indexed_index_value: Default::default(),
+            max_draw_indirect_count: Default::default(),
+            max_sampler_lod_bias: Default::default(),
+            max_sampler_anisotropy: Default::default(),
+            max_viewports: Default::default(),
+            max_viewport_dimensions: [Default::default(); 2],
+            viewport_bounds_range: [Default::default(); 2],
+            viewport_sub_pixel_bits: Default::default(),
+            min_memory_map_alignment: Default::default(),
+            min_texel_buffer_offset_alignment: Default::default(),
+            min_uniform_buffer_offset_alignment: Default::default(),
+            min_storage_buffer_offset_alignment: Default::default(),
+            min_texel_offset: Default::default(),
+            max_texel_offset: Default::default(),
+            min_texel_gather_offset: Default::default(),
+            max_texel_gather_offset: Default::default(),
+            min_interpolation_offset: Default::default(),
+            max_interpolation_offset: Default::default(),
+            sub_pixel_interpolation_offset_bits: Default::default(),
+            max_framebuffer_width: Default::default(),
+            max_framebuffer_height: Default::default(),
+            max_framebuffer_layers: Default::default(),
+            framebuffer_color_sample_counts: Default::default(),
+            framebuffer_depth_sample_counts: Default::default(),
+            framebuffer_stencil_sample_counts: Default::default(),
+            framebuffer_no_attachments_sample_counts: Default::default(),
+            max_color_attachments: Default::default(),
+            sampled_image_color_sample_counts: Default::default(),
+            sampled_image_integer_sample_counts: Default::default(),
+            sampled_image_depth_sample_counts: Default::default(),
+            sampled_image_stencil_sample_counts: Default::default(),
+            storage_image_sample_counts: Default::default(),
+            max_sample_mask_words: Default::default(),
+            timestamp_compute_and_graphics: Default::default(),
+            timestamp_period: Default::default(),
+            max_clip_distances: Default::default(),
+            max_cull_distances: Default::default(),
+            max_combined_clip_and_cull_distances: Default::default(),
+            discrete_queue_priorities: Default::default(),
+            point_size_range: [Default::default(); 2],
+            line_width_range: [Default::default(); 2],
+            point_size_granularity: Default::default(),
+            line_width_granularity: Default::default(),
+            strict_lines: Default::default(),
+            standard_sample_locations: Default::default(),
+            optimal_buffer_copy_offset_alignment: Default::default(),
+            optimal_buffer_copy_row_pitch_alignment: Default::default(),
+            non_coherent_atom_size: Default::default(),
+        }
     }
 }
 
@@ -12503,11 +13174,11 @@ impl<'a> SemaphoreCreateInfo<'a> {
 impl Default for SemaphoreCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -12595,11 +13266,14 @@ impl<'a> QueryPoolCreateInfo<'a> {
 impl Default for QueryPoolCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            query_type: Default::default(),
+            query_count: Default::default(),
+            pipeline_statistics: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -12722,11 +13396,17 @@ impl<'a> FramebufferCreateInfo<'a> {
 impl Default for FramebufferCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            render_pass: Default::default(),
+            attachment_count: Default::default(),
+            p_attachments: core::ptr::null(),
+            width: Default::default(),
+            height: Default::default(),
+            layers: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -12816,8 +13496,12 @@ impl DrawIndirectCommand {
 impl Default for DrawIndirectCommand {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            vertex_count: Default::default(),
+            instance_count: Default::default(),
+            first_vertex: Default::default(),
+            first_instance: Default::default(),
+        }
     }
 }
 
@@ -12911,8 +13595,13 @@ impl DrawIndexedIndirectCommand {
 impl Default for DrawIndexedIndirectCommand {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            index_count: Default::default(),
+            instance_count: Default::default(),
+            first_index: Default::default(),
+            vertex_offset: Default::default(),
+            first_instance: Default::default(),
+        }
     }
 }
 
@@ -12991,8 +13680,11 @@ impl DispatchIndirectCommand {
 impl Default for DispatchIndirectCommand {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+            z: Default::default(),
+        }
     }
 }
 
@@ -13043,8 +13735,10 @@ impl MultiDrawInfoEXT {
 impl Default for MultiDrawInfoEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            first_vertex: Default::default(),
+            vertex_count: Default::default(),
+        }
     }
 }
 
@@ -13108,8 +13802,11 @@ impl MultiDrawIndexedInfoEXT {
 impl Default for MultiDrawIndexedInfoEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            first_index: Default::default(),
+            index_count: Default::default(),
+            vertex_offset: Default::default(),
+        }
     }
 }
 
@@ -13224,11 +13921,17 @@ impl<'a> SubmitInfo<'a> {
 impl Default for SubmitInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            wait_semaphore_count: Default::default(),
+            p_wait_semaphores: core::ptr::null(),
+            p_wait_dst_stage_mask: core::ptr::null(),
+            command_buffer_count: Default::default(),
+            p_command_buffers: core::ptr::null(),
+            signal_semaphore_count: Default::default(),
+            p_signal_semaphores: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -13310,8 +14013,16 @@ pub struct DisplayPropertiesKHR<'a> {
 impl Default for DisplayPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            display: Default::default(),
+            display_name: core::ptr::null(),
+            physical_dimensions: Default::default(),
+            physical_resolution: Default::default(),
+            supported_transforms: Default::default(),
+            plane_reorder_possible: Default::default(),
+            persistent_content: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -13362,8 +14073,10 @@ pub struct DisplayPlanePropertiesKHR {
 impl Default for DisplayPlanePropertiesKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            current_display: Default::default(),
+            current_stack_index: Default::default(),
+        }
     }
 }
 
@@ -13419,8 +14132,10 @@ impl DisplayModeParametersKHR {
 impl Default for DisplayModeParametersKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            visible_region: Default::default(),
+            refresh_rate: Default::default(),
+        }
     }
 }
 
@@ -13463,8 +14178,10 @@ pub struct DisplayModePropertiesKHR {
 impl Default for DisplayModePropertiesKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            display_mode: Default::default(),
+            parameters: Default::default(),
+        }
     }
 }
 
@@ -13519,11 +14236,12 @@ impl<'a> DisplayModeCreateInfoKHR<'a> {
 impl Default for DisplayModeCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            parameters: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -13587,8 +14305,17 @@ pub struct DisplayPlaneCapabilitiesKHR {
 impl Default for DisplayPlaneCapabilitiesKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            supported_alpha: Default::default(),
+            min_src_position: Default::default(),
+            max_src_position: Default::default(),
+            min_src_extent: Default::default(),
+            max_src_extent: Default::default(),
+            min_dst_position: Default::default(),
+            max_dst_position: Default::default(),
+            min_dst_extent: Default::default(),
+            max_dst_extent: Default::default(),
+        }
     }
 }
 
@@ -13755,11 +14482,18 @@ impl<'a> DisplaySurfaceCreateInfoKHR<'a> {
 impl Default for DisplaySurfaceCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            display_mode: Default::default(),
+            plane_index: Default::default(),
+            plane_stack_index: Default::default(),
+            transform: Default::default(),
+            global_alpha: Default::default(),
+            alpha_mode: Default::default(),
+            image_extent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -13834,11 +14568,11 @@ impl<'a> DisplaySurfaceStereoCreateInfoNV<'a> {
 impl Default for DisplaySurfaceStereoCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stereo_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -13928,11 +14662,13 @@ impl<'a> DisplayPresentInfoKHR<'a> {
 impl Default for DisplayPresentInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_rect: Default::default(),
+            dst_rect: Default::default(),
+            persistent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -14021,8 +14757,18 @@ pub struct SurfaceCapabilitiesKHR {
 impl Default for SurfaceCapabilitiesKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            min_image_count: Default::default(),
+            max_image_count: Default::default(),
+            current_extent: Default::default(),
+            min_image_extent: Default::default(),
+            max_image_extent: Default::default(),
+            max_image_array_layers: Default::default(),
+            supported_transforms: Default::default(),
+            current_transform: Default::default(),
+            supported_composite_alpha: Default::default(),
+            supported_usage_flags: Default::default(),
+        }
     }
 }
 
@@ -14122,11 +14868,13 @@ impl<'a> Win32SurfaceCreateInfoKHR<'a> {
 impl Default for Win32SurfaceCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            hinstance: core::ptr::null_mut(),
+            hwnd: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -14178,8 +14926,10 @@ pub struct SurfaceFormatKHR {
 impl Default for SurfaceFormatKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            format: Default::default(),
+            color_space: Default::default(),
+        }
     }
 }
 
@@ -14402,11 +15152,26 @@ impl<'a> SwapchainCreateInfoKHR<'a> {
 impl Default for SwapchainCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            surface: Default::default(),
+            min_image_count: Default::default(),
+            image_format: Default::default(),
+            image_color_space: Default::default(),
+            image_extent: Default::default(),
+            image_array_layers: Default::default(),
+            image_usage: Default::default(),
+            image_sharing_mode: Default::default(),
+            queue_family_index_count: Default::default(),
+            p_queue_family_indices: core::ptr::null(),
+            pre_transform: Default::default(),
+            composite_alpha: Default::default(),
+            present_mode: Default::default(),
+            clipped: Default::default(),
+            old_swapchain: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -14552,11 +15317,16 @@ impl<'a> PresentInfoKHR<'a> {
 impl Default for PresentInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            wait_semaphore_count: Default::default(),
+            p_wait_semaphores: core::ptr::null(),
+            swapchain_count: Default::default(),
+            p_swapchains: core::ptr::null(),
+            p_image_indices: core::ptr::null(),
+            p_results: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -14649,11 +15419,13 @@ impl<'a> DebugReportCallbackCreateInfoEXT<'a> {
 impl Default for DebugReportCallbackCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            pfn_callback: Default::default(),
+            p_user_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -14734,11 +15506,12 @@ impl<'a> ValidationFlagsEXT<'a> {
 impl Default for ValidationFlagsEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            disabled_validation_check_count: Default::default(),
+            p_disabled_validation_checks: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -14842,11 +15615,14 @@ impl<'a> ValidationFeaturesEXT<'a> {
 impl Default for ValidationFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            enabled_validation_feature_count: Default::default(),
+            p_enabled_validation_features: core::ptr::null(),
+            disabled_validation_feature_count: Default::default(),
+            p_disabled_validation_features: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -14933,11 +15709,12 @@ impl<'a> LayerSettingsCreateInfoEXT<'a> {
 impl Default for LayerSettingsCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            setting_count: Default::default(),
+            p_settings: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15035,8 +15812,14 @@ impl<'a> LayerSettingEXT<'a> {
 impl Default for LayerSettingEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            p_layer_name: core::ptr::null(),
+            p_setting_name: core::ptr::null(),
+            r#type: Default::default(),
+            value_count: Default::default(),
+            p_values: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -15095,11 +15878,11 @@ impl<'a> PipelineRasterizationStateRasterizationOrderAMD<'a> {
 impl Default for PipelineRasterizationStateRasterizationOrderAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            rasterization_order: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15185,11 +15968,13 @@ impl<'a> DebugMarkerObjectNameInfoEXT<'a> {
 impl Default for DebugMarkerObjectNameInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            object_type: Default::default(),
+            object: Default::default(),
+            p_object_name: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15292,11 +16077,15 @@ impl<'a> DebugMarkerObjectTagInfoEXT<'a> {
 impl Default for DebugMarkerObjectTagInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            object_type: Default::default(),
+            object: Default::default(),
+            tag_name: Default::default(),
+            tag_size: Default::default(),
+            p_tag: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15374,11 +16163,12 @@ impl<'a> DebugMarkerMarkerInfoEXT<'a> {
 impl Default for DebugMarkerMarkerInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_marker_name: core::ptr::null(),
+            color: [Default::default(); 4],
+            _marker: PhantomData,
         }
     }
 }
@@ -15441,11 +16231,11 @@ impl<'a> DedicatedAllocationImageCreateInfoNV<'a> {
 impl Default for DedicatedAllocationImageCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            dedicated_allocation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15511,11 +16301,11 @@ impl<'a> DedicatedAllocationBufferCreateInfoNV<'a> {
 impl Default for DedicatedAllocationBufferCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            dedicated_allocation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15592,11 +16382,12 @@ impl<'a> DedicatedAllocationMemoryAllocateInfoNV<'a> {
 impl Default for DedicatedAllocationMemoryAllocateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image: Default::default(),
+            buffer: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15651,8 +16442,12 @@ pub struct ExternalImageFormatPropertiesNV {
 impl Default for ExternalImageFormatPropertiesNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            image_format_properties: Default::default(),
+            external_memory_features: Default::default(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
+        }
     }
 }
 
@@ -15707,11 +16502,11 @@ impl<'a> ExternalMemoryImageCreateInfoNV<'a> {
 impl Default for ExternalMemoryImageCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15775,11 +16570,11 @@ impl<'a> ExportMemoryAllocateInfoNV<'a> {
 impl Default for ExportMemoryAllocateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15852,11 +16647,12 @@ impl<'a> ImportMemoryWin32HandleInfoNV<'a> {
 impl Default for ImportMemoryWin32HandleInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_type: Default::default(),
+            handle: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -15931,11 +16727,12 @@ impl<'a> ExportMemoryWin32HandleInfoNV<'a> {
 impl Default for ExportMemoryWin32HandleInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_attributes: core::ptr::null(),
+            dw_access: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16054,11 +16851,17 @@ impl<'a> Win32KeyedMutexAcquireReleaseInfoNV<'a> {
 impl Default for Win32KeyedMutexAcquireReleaseInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            acquire_count: Default::default(),
+            p_acquire_syncs: core::ptr::null(),
+            p_acquire_keys: core::ptr::null(),
+            p_acquire_timeout_milliseconds: core::ptr::null(),
+            release_count: Default::default(),
+            p_release_syncs: core::ptr::null(),
+            p_release_keys: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16135,11 +16938,11 @@ impl<'a> PhysicalDeviceDeviceGeneratedCommandsFeaturesNV<'a> {
 impl Default for PhysicalDeviceDeviceGeneratedCommandsFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_generated_commands: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16205,11 +17008,11 @@ impl<'a> PushConstantBankInfoNV<'a> {
 impl Default for PushConstantBankInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            bank: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16270,11 +17073,11 @@ impl<'a> PhysicalDevicePushConstantBankFeaturesNV<'a> {
 impl Default for PhysicalDevicePushConstantBankFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            push_constant_bank: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16336,11 +17139,14 @@ pub struct PhysicalDevicePushConstantBankPropertiesNV<'a> {
 impl Default for PhysicalDevicePushConstantBankPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_graphics_push_constant_banks: Default::default(),
+            max_compute_push_constant_banks: Default::default(),
+            max_graphics_push_data_banks: Default::default(),
+            max_compute_push_data_banks: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16428,11 +17234,13 @@ impl<'a> PhysicalDeviceDeviceGeneratedCommandsComputeFeaturesNV<'a> {
 impl Default for PhysicalDeviceDeviceGeneratedCommandsComputeFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_generated_compute: Default::default(),
+            device_generated_compute_pipelines: Default::default(),
+            device_generated_compute_capture_replay: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16501,11 +17309,11 @@ impl<'a> DevicePrivateDataCreateInfo<'a> {
 impl Default for DevicePrivateDataCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            private_data_slot_request_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16567,11 +17375,11 @@ impl<'a> PrivateDataSlotCreateInfo<'a> {
 impl Default for PrivateDataSlotCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16624,11 +17432,11 @@ impl<'a> PhysicalDevicePrivateDataFeatures<'a> {
 impl Default for PhysicalDevicePrivateDataFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            private_data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16693,11 +17501,11 @@ impl<'a> PhysicalDevicePrivateDataBaseHandleFeaturesNV<'a> {
 impl Default for PhysicalDevicePrivateDataBaseHandleFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            private_data_base_handle: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16769,11 +17577,19 @@ pub struct PhysicalDeviceDeviceGeneratedCommandsPropertiesNV<'a> {
 impl Default for PhysicalDeviceDeviceGeneratedCommandsPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_graphics_shader_group_count: Default::default(),
+            max_indirect_sequence_count: Default::default(),
+            max_indirect_commands_token_count: Default::default(),
+            max_indirect_commands_stream_count: Default::default(),
+            max_indirect_commands_token_offset: Default::default(),
+            max_indirect_commands_stream_stride: Default::default(),
+            min_sequences_count_buffer_offset_alignment: Default::default(),
+            min_sequences_index_buffer_offset_alignment: Default::default(),
+            min_indirect_commands_buffer_offset_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16853,11 +17669,11 @@ impl<'a> PhysicalDeviceClusterAccelerationStructureFeaturesNV<'a> {
 impl Default for PhysicalDeviceClusterAccelerationStructureFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cluster_acceleration_structure: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -16927,11 +17743,18 @@ pub struct PhysicalDeviceClusterAccelerationStructurePropertiesNV<'a> {
 impl Default for PhysicalDeviceClusterAccelerationStructurePropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_vertices_per_cluster: Default::default(),
+            max_triangles_per_cluster: Default::default(),
+            cluster_scratch_byte_alignment: Default::default(),
+            cluster_byte_alignment: Default::default(),
+            cluster_template_byte_alignment: Default::default(),
+            cluster_bottom_level_byte_alignment: Default::default(),
+            cluster_template_bounds_byte_alignment: Default::default(),
+            max_cluster_geometry_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -17012,8 +17835,10 @@ impl StridedDeviceAddressNV {
 impl Default for StridedDeviceAddressNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            start_address: Default::default(),
+            stride_in_bytes: Default::default(),
+        }
     }
 }
 
@@ -17067,11 +17892,11 @@ impl<'a> RayTracingPipelineClusterAccelerationStructureCreateInfoNV<'a> {
 impl Default for RayTracingPipelineClusterAccelerationStructureCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            allow_cluster_acceleration_structure: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -17166,8 +17991,9 @@ impl ClusterAccelerationStructureGeometryIndexAndGeometryFlagsNV {
 impl Default for ClusterAccelerationStructureGeometryIndexAndGeometryFlagsNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            geometry_index_bits: 0,
+        }
     }
 }
 
@@ -17217,8 +18043,9 @@ impl ClusterAccelerationStructureMoveObjectsInfoNV {
 impl Default for ClusterAccelerationStructureMoveObjectsInfoNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_acceleration_structure: Default::default(),
+        }
     }
 }
 
@@ -17285,8 +18112,11 @@ impl ClusterAccelerationStructureBuildClustersBottomLevelInfoNV {
 impl Default for ClusterAccelerationStructureBuildClustersBottomLevelInfoNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            cluster_references_count: Default::default(),
+            cluster_references_stride: Default::default(),
+            cluster_references: Default::default(),
+        }
     }
 }
 
@@ -17341,8 +18171,9 @@ impl ClusterAccelerationStructureGetTemplateIndicesInfoNV {
 impl Default for ClusterAccelerationStructureGetTemplateIndicesInfoNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            cluster_template_address: Default::default(),
+        }
     }
 }
 
@@ -17579,8 +18410,21 @@ impl ClusterAccelerationStructureBuildTriangleClusterInfoNV {
 impl Default for ClusterAccelerationStructureBuildTriangleClusterInfoNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            cluster_id: Default::default(),
+            cluster_flags: Default::default(),
+            triangle_count_bits: 0,
+            base_geometry_index_and_geometry_flags: Default::default(),
+            index_buffer_stride: Default::default(),
+            vertex_buffer_stride: Default::default(),
+            geometry_index_and_flags_buffer_stride: Default::default(),
+            opacity_micromap_index_buffer_stride: Default::default(),
+            index_buffer: Default::default(),
+            vertex_buffer: Default::default(),
+            geometry_index_and_flags_buffer: Default::default(),
+            opacity_micromap_array: Default::default(),
+            opacity_micromap_index_buffer: Default::default(),
+        }
     }
 }
 
@@ -17870,8 +18714,22 @@ impl ClusterAccelerationStructureBuildTriangleClusterTemplateInfoNV {
 impl Default for ClusterAccelerationStructureBuildTriangleClusterTemplateInfoNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            cluster_id: Default::default(),
+            cluster_flags: Default::default(),
+            triangle_count_bits: 0,
+            base_geometry_index_and_geometry_flags: Default::default(),
+            index_buffer_stride: Default::default(),
+            vertex_buffer_stride: Default::default(),
+            geometry_index_and_flags_buffer_stride: Default::default(),
+            opacity_micromap_index_buffer_stride: Default::default(),
+            index_buffer: Default::default(),
+            vertex_buffer: Default::default(),
+            geometry_index_and_flags_buffer: Default::default(),
+            opacity_micromap_array: Default::default(),
+            opacity_micromap_index_buffer: Default::default(),
+            instantiation_bounding_box_limit: Default::default(),
+        }
     }
 }
 
@@ -18022,8 +18880,12 @@ impl ClusterAccelerationStructureInstantiateClusterInfoNV {
 impl Default for ClusterAccelerationStructureInstantiateClusterInfoNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            cluster_id_offset: Default::default(),
+            geometry_index_offset_bits: 0,
+            cluster_template_address: Default::default(),
+            vertex_buffer: Default::default(),
+        }
     }
 }
 
@@ -18098,11 +18960,12 @@ impl<'a> ClusterAccelerationStructureClustersBottomLevelInputNV<'a> {
 impl Default for ClusterAccelerationStructureClustersBottomLevelInputNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_total_cluster_count: Default::default(),
+            max_cluster_count_per_acceleration_structure: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -18224,11 +19087,18 @@ impl<'a> ClusterAccelerationStructureTriangleClusterInputNV<'a> {
 impl Default for ClusterAccelerationStructureTriangleClusterInputNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            vertex_format: Default::default(),
+            max_geometry_index_value: Default::default(),
+            max_cluster_unique_geometry_count: Default::default(),
+            max_cluster_triangle_count: Default::default(),
+            max_cluster_vertex_count: Default::default(),
+            max_total_triangle_count: Default::default(),
+            max_total_vertex_count: Default::default(),
+            min_position_truncate_bit_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -18317,11 +19187,13 @@ impl<'a> ClusterAccelerationStructureMoveObjectsInputNV<'a> {
 impl Default for ClusterAccelerationStructureMoveObjectsInputNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            r#type: Default::default(),
+            no_move_overlap: Default::default(),
+            max_moved_bytes: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -18418,11 +19290,15 @@ impl<'a> ClusterAccelerationStructureInputInfoNV<'a> {
 impl Default for ClusterAccelerationStructureInputInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_acceleration_structure_count: Default::default(),
+            flags: Default::default(),
+            op_type: Default::default(),
+            op_mode: Default::default(),
+            op_input: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -18553,11 +19429,18 @@ impl<'a> ClusterAccelerationStructureCommandsInfoNV<'a> {
 impl Default for ClusterAccelerationStructureCommandsInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            input: Default::default(),
+            dst_implicit_data: Default::default(),
+            scratch_data: Default::default(),
+            dst_addresses_array: Default::default(),
+            dst_sizes_array: Default::default(),
+            src_infos_array: Default::default(),
+            src_infos_count: Default::default(),
+            address_resolution_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -18621,11 +19504,11 @@ pub struct PhysicalDeviceMultiDrawPropertiesEXT<'a> {
 impl Default for PhysicalDeviceMultiDrawPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_multi_draw_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -18713,11 +19596,14 @@ impl<'a> GraphicsShaderGroupCreateInfoNV<'a> {
 impl Default for GraphicsShaderGroupCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stage_count: Default::default(),
+            p_stages: core::ptr::null(),
+            p_vertex_input_state: core::ptr::null(),
+            p_tessellation_state: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -18801,11 +19687,14 @@ impl<'a> GraphicsPipelineShaderGroupsCreateInfoNV<'a> {
 impl Default for GraphicsPipelineShaderGroupsCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            group_count: Default::default(),
+            p_groups: core::ptr::null(),
+            pipeline_count: Default::default(),
+            p_pipelines: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -18867,8 +19756,9 @@ impl BindShaderGroupIndirectCommandNV {
 impl Default for BindShaderGroupIndirectCommandNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            group_index: Default::default(),
+        }
     }
 }
 
@@ -18927,8 +19817,11 @@ impl BindIndexBufferIndirectCommandNV {
 impl Default for BindIndexBufferIndirectCommandNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            buffer_address: Default::default(),
+            size: Default::default(),
+            index_type: Default::default(),
+        }
     }
 }
 
@@ -19001,8 +19894,11 @@ impl BindVertexBufferIndirectCommandNV {
 impl Default for BindVertexBufferIndirectCommandNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            buffer_address: Default::default(),
+            size: Default::default(),
+            stride: Default::default(),
+        }
     }
 }
 
@@ -19057,8 +19953,9 @@ impl SetStateFlagsIndirectCommandNV {
 impl Default for SetStateFlagsIndirectCommandNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            data: Default::default(),
+        }
     }
 }
 
@@ -19107,8 +20004,10 @@ impl IndirectCommandsStreamNV {
 impl Default for IndirectCommandsStreamNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            buffer: Default::default(),
+            offset: Default::default(),
+        }
     }
 }
 
@@ -19271,11 +20170,23 @@ impl<'a> IndirectCommandsLayoutTokenNV<'a> {
 impl Default for IndirectCommandsLayoutTokenNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            token_type: Default::default(),
+            stream: Default::default(),
+            offset: Default::default(),
+            vertex_binding_unit: Default::default(),
+            vertex_dynamic_stride: Default::default(),
+            pushconstant_pipeline_layout: Default::default(),
+            pushconstant_shader_stage_flags: Default::default(),
+            pushconstant_offset: Default::default(),
+            pushconstant_size: Default::default(),
+            indirect_state_flags: Default::default(),
+            index_type_count: Default::default(),
+            p_index_types: core::ptr::null(),
+            p_index_type_values: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -19393,11 +20304,16 @@ impl<'a> IndirectCommandsLayoutCreateInfoNV<'a> {
 impl Default for IndirectCommandsLayoutCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            pipeline_bind_point: Default::default(),
+            token_count: Default::default(),
+            p_tokens: core::ptr::null(),
+            stream_count: Default::default(),
+            p_stream_strides: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -19568,11 +20484,23 @@ impl<'a> GeneratedCommandsInfoNV<'a> {
 impl Default for GeneratedCommandsInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            pipeline_bind_point: Default::default(),
+            pipeline: Default::default(),
+            indirect_commands_layout: Default::default(),
+            stream_count: Default::default(),
+            p_streams: core::ptr::null(),
+            sequences_count: Default::default(),
+            preprocess_buffer: Default::default(),
+            preprocess_offset: Default::default(),
+            preprocess_size: Default::default(),
+            sequences_count_buffer: Default::default(),
+            sequences_count_offset: Default::default(),
+            sequences_index_buffer: Default::default(),
+            sequences_index_offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -19680,11 +20608,14 @@ impl<'a> GeneratedCommandsMemoryRequirementsInfoNV<'a> {
 impl Default for GeneratedCommandsMemoryRequirementsInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            pipeline_bind_point: Default::default(),
+            pipeline: Default::default(),
+            indirect_commands_layout: Default::default(),
+            max_sequences_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -19756,11 +20687,12 @@ impl<'a> PipelineIndirectDeviceAddressInfoNV<'a> {
 impl Default for PipelineIndirectDeviceAddressInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            pipeline_bind_point: Default::default(),
+            pipeline: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -19813,8 +20745,9 @@ impl BindPipelineIndirectCommandNV {
 impl Default for BindPipelineIndirectCommandNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            pipeline_address: Default::default(),
+        }
     }
 }
 
@@ -19873,11 +20806,11 @@ impl<'a> PhysicalDeviceFeatures2<'a> {
 impl Default for PhysicalDeviceFeatures2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            features: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -19934,11 +20867,11 @@ impl<'a> PhysicalDeviceProperties2<'a> {
 impl Default for PhysicalDeviceProperties2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -19990,11 +20923,11 @@ impl<'a> FormatProperties2<'a> {
 impl Default for FormatProperties2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            format_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20046,11 +20979,11 @@ impl<'a> ImageFormatProperties2<'a> {
 impl Default for ImageFormatProperties2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_format_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20151,11 +21084,15 @@ impl<'a> PhysicalDeviceImageFormatInfo2<'a> {
 impl Default for PhysicalDeviceImageFormatInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            format: Default::default(),
+            r#type: Default::default(),
+            tiling: Default::default(),
+            usage: Default::default(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20221,11 +21158,11 @@ impl<'a> QueueFamilyProperties2<'a> {
 impl Default for QueueFamilyProperties2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            queue_family_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20283,11 +21220,11 @@ impl<'a> PhysicalDeviceMemoryProperties2<'a> {
 impl Default for PhysicalDeviceMemoryProperties2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20335,11 +21272,11 @@ pub struct SparseImageFormatProperties2<'a> {
 impl Default for SparseImageFormatProperties2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20440,11 +21377,15 @@ impl<'a> PhysicalDeviceSparseImageFormatInfo2<'a> {
 impl Default for PhysicalDeviceSparseImageFormatInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            format: Default::default(),
+            r#type: Default::default(),
+            samples: Default::default(),
+            usage: Default::default(),
+            tiling: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20502,11 +21443,11 @@ pub struct PhysicalDevicePushDescriptorProperties<'a> {
 impl Default for PhysicalDevicePushDescriptorProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_push_descriptors: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20589,8 +21530,12 @@ impl ConformanceVersion {
 impl Default for ConformanceVersion {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            major: Default::default(),
+            minor: Default::default(),
+            subminor: Default::default(),
+            patch: Default::default(),
+        }
     }
 }
 
@@ -20646,11 +21591,14 @@ pub struct PhysicalDeviceDriverProperties<'a> {
 impl Default for PhysicalDeviceDriverProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            driver_id: Default::default(),
+            driver_name: [Default::default(); MAX_DRIVER_NAME_SIZE],
+            driver_info: [Default::default(); MAX_DRIVER_INFO_SIZE],
+            conformance_version: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20717,10 +21665,12 @@ pub struct PresentRegionsKHR<'a> {
 }
 
 impl<'a> PresentRegionsKHR<'a> {
-    /// Sets `swapchain_count`.
+    /// Sets `swapchain_count` alone and nulls `p_regions`: the count without its arrays (an array
+    /// set before is dropped).
     #[inline]
     pub fn swapchain_count(mut self, value: u32) -> Self {
         self.swapchain_count = value;
+        self.p_regions = core::ptr::null();
         self
     }
 
@@ -20738,11 +21688,12 @@ impl<'a> PresentRegionsKHR<'a> {
 impl Default for PresentRegionsKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -20797,10 +21748,12 @@ pub struct PresentRegionKHR<'a> {
 }
 
 impl<'a> PresentRegionKHR<'a> {
-    /// Sets `rectangle_count`.
+    /// Sets `rectangle_count` alone and nulls `p_rectangles`: the count without its arrays (an
+    /// array set before is dropped).
     #[inline]
     pub fn rectangle_count(mut self, value: u32) -> Self {
         self.rectangle_count = value;
+        self.p_rectangles = core::ptr::null();
         self
     }
 
@@ -20818,8 +21771,11 @@ impl<'a> PresentRegionKHR<'a> {
 impl Default for PresentRegionKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            rectangle_count: Default::default(),
+            p_rectangles: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -20881,8 +21837,11 @@ impl RectLayerKHR {
 impl Default for RectLayerKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            offset: Default::default(),
+            extent: Default::default(),
+            layer: Default::default(),
+        }
     }
 }
 
@@ -20948,11 +21907,12 @@ impl<'a> PhysicalDeviceVariablePointersFeatures<'a> {
 impl Default for PhysicalDeviceVariablePointersFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            variable_pointers_storage_buffer: Default::default(),
+            variable_pointers: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21006,8 +21966,11 @@ pub struct ExternalMemoryProperties {
 impl Default for ExternalMemoryProperties {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            external_memory_features: Default::default(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
+        }
     }
 }
 
@@ -21070,11 +22033,11 @@ impl<'a> PhysicalDeviceExternalImageFormatInfo<'a> {
 impl Default for PhysicalDeviceExternalImageFormatInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21129,11 +22092,11 @@ pub struct ExternalImageFormatProperties<'a> {
 impl Default for ExternalImageFormatProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            external_memory_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21221,11 +22184,13 @@ impl<'a> PhysicalDeviceExternalBufferInfo<'a> {
 impl Default for PhysicalDeviceExternalBufferInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            usage: Default::default(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21277,11 +22242,11 @@ pub struct ExternalBufferProperties<'a> {
 impl Default for ExternalBufferProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            external_memory_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21339,11 +22304,15 @@ pub struct PhysicalDeviceIDProperties<'a> {
 impl Default for PhysicalDeviceIDProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_uuid: [Default::default(); UUID_SIZE],
+            driver_uuid: [Default::default(); UUID_SIZE],
+            device_luid: [Default::default(); LUID_SIZE],
+            device_node_mask: Default::default(),
+            device_luid_valid: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21415,11 +22384,11 @@ impl<'a> ExternalMemoryImageCreateInfo<'a> {
 impl Default for ExternalMemoryImageCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21483,11 +22452,11 @@ impl<'a> ExternalMemoryBufferCreateInfo<'a> {
 impl Default for ExternalMemoryBufferCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21551,11 +22520,11 @@ impl<'a> ExportMemoryAllocateInfo<'a> {
 impl Default for ExportMemoryAllocateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21631,11 +22600,13 @@ impl<'a> ImportMemoryWin32HandleInfoKHR<'a> {
 impl Default for ImportMemoryWin32HandleInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_type: Default::default(),
+            handle: core::ptr::null_mut(),
+            name: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21721,11 +22692,13 @@ impl<'a> ExportMemoryWin32HandleInfoKHR<'a> {
 impl Default for ExportMemoryWin32HandleInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_attributes: core::ptr::null(),
+            dw_access: Default::default(),
+            name: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21782,11 +22755,11 @@ pub struct MemoryWin32HandlePropertiesKHR<'a> {
 impl Default for MemoryWin32HandlePropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_type_bits: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21852,11 +22825,12 @@ impl<'a> MemoryGetWin32HandleInfoKHR<'a> {
 impl Default for MemoryGetWin32HandleInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            memory: Default::default(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21926,11 +22900,12 @@ impl<'a> ImportMemoryFdInfoKHR<'a> {
 impl Default for ImportMemoryFdInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_type: Default::default(),
+            fd: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -21978,11 +22953,11 @@ pub struct MemoryFdPropertiesKHR<'a> {
 impl Default for MemoryFdPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_type_bits: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22042,11 +23017,12 @@ impl<'a> MemoryGetFdInfoKHR<'a> {
 impl Default for MemoryGetFdInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            memory: Default::default(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22153,11 +23129,17 @@ impl<'a> Win32KeyedMutexAcquireReleaseInfoKHR<'a> {
 impl Default for Win32KeyedMutexAcquireReleaseInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            acquire_count: Default::default(),
+            p_acquire_syncs: core::ptr::null(),
+            p_acquire_keys: core::ptr::null(),
+            p_acquire_timeouts: core::ptr::null(),
+            release_count: Default::default(),
+            p_release_syncs: core::ptr::null(),
+            p_release_keys: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22240,11 +23222,11 @@ impl<'a> PhysicalDeviceExternalSemaphoreInfo<'a> {
 impl Default for PhysicalDeviceExternalSemaphoreInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22296,11 +23278,13 @@ pub struct ExternalSemaphoreProperties<'a> {
 impl Default for ExternalSemaphoreProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
+            external_semaphore_features: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22363,11 +23347,11 @@ impl<'a> ExportSemaphoreCreateInfo<'a> {
 impl Default for ExportSemaphoreCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22459,11 +23443,15 @@ impl<'a> ImportSemaphoreWin32HandleInfoKHR<'a> {
 impl Default for ImportSemaphoreWin32HandleInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            semaphore: Default::default(),
+            flags: Default::default(),
+            handle_type: Default::default(),
+            handle: core::ptr::null_mut(),
+            name: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22548,11 +23536,13 @@ impl<'a> ExportSemaphoreWin32HandleInfoKHR<'a> {
 impl Default for ExportSemaphoreWin32HandleInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_attributes: core::ptr::null(),
+            dw_access: Default::default(),
+            name: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22615,10 +23605,12 @@ pub struct D3D12FenceSubmitInfoKHR<'a> {
 }
 
 impl<'a> D3D12FenceSubmitInfoKHR<'a> {
-    /// Sets `wait_semaphore_values_count`.
+    /// Sets `wait_semaphore_values_count` alone and nulls `p_wait_semaphore_values`: the count
+    /// without its arrays (an array set before is dropped).
     #[inline]
     pub fn wait_semaphore_values_count(mut self, value: u32) -> Self {
         self.wait_semaphore_values_count = value;
+        self.p_wait_semaphore_values = core::ptr::null();
         self
     }
 
@@ -22632,10 +23624,12 @@ impl<'a> D3D12FenceSubmitInfoKHR<'a> {
         self
     }
 
-    /// Sets `signal_semaphore_values_count`.
+    /// Sets `signal_semaphore_values_count` alone and nulls `p_signal_semaphore_values`: the count
+    /// without its arrays (an array set before is dropped).
     #[inline]
     pub fn signal_semaphore_values_count(mut self, value: u32) -> Self {
         self.signal_semaphore_values_count = value;
+        self.p_signal_semaphore_values = core::ptr::null();
         self
     }
 
@@ -22654,11 +23648,14 @@ impl<'a> D3D12FenceSubmitInfoKHR<'a> {
 impl Default for D3D12FenceSubmitInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            wait_semaphore_values_count: Default::default(),
+            p_wait_semaphore_values: core::ptr::null(),
+            signal_semaphore_values_count: Default::default(),
+            p_signal_semaphore_values: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22735,11 +23732,12 @@ impl<'a> SemaphoreGetWin32HandleInfoKHR<'a> {
 impl Default for SemaphoreGetWin32HandleInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            semaphore: Default::default(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22825,11 +23823,14 @@ impl<'a> ImportSemaphoreFdInfoKHR<'a> {
 impl Default for ImportSemaphoreFdInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            semaphore: Default::default(),
+            flags: Default::default(),
+            handle_type: Default::default(),
+            fd: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22901,11 +23902,12 @@ impl<'a> SemaphoreGetFdInfoKHR<'a> {
 impl Default for SemaphoreGetFdInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            semaphore: Default::default(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -22964,11 +23966,11 @@ impl<'a> PhysicalDeviceExternalFenceInfo<'a> {
 impl Default for PhysicalDeviceExternalFenceInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23020,11 +24022,13 @@ pub struct ExternalFenceProperties<'a> {
 impl Default for ExternalFenceProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            export_from_imported_handle_types: Default::default(),
+            compatible_handle_types: Default::default(),
+            external_fence_features: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23087,11 +24091,11 @@ impl<'a> ExportFenceCreateInfo<'a> {
 impl Default for ExportFenceCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23183,11 +24187,15 @@ impl<'a> ImportFenceWin32HandleInfoKHR<'a> {
 impl Default for ImportFenceWin32HandleInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            fence: Default::default(),
+            flags: Default::default(),
+            handle_type: Default::default(),
+            handle: core::ptr::null_mut(),
+            name: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23272,11 +24280,13 @@ impl<'a> ExportFenceWin32HandleInfoKHR<'a> {
 impl Default for ExportFenceWin32HandleInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_attributes: core::ptr::null(),
+            dw_access: Default::default(),
+            name: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23351,11 +24361,12 @@ impl<'a> FenceGetWin32HandleInfoKHR<'a> {
 impl Default for FenceGetWin32HandleInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            fence: Default::default(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23441,11 +24452,14 @@ impl<'a> ImportFenceFdInfoKHR<'a> {
 impl Default for ImportFenceFdInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            fence: Default::default(),
+            flags: Default::default(),
+            handle_type: Default::default(),
+            fd: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23517,11 +24531,12 @@ impl<'a> FenceGetFdInfoKHR<'a> {
 impl Default for FenceGetFdInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            fence: Default::default(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23599,11 +24614,13 @@ impl<'a> PhysicalDeviceMultiviewFeatures<'a> {
 impl Default for PhysicalDeviceMultiviewFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            multiview: Default::default(),
+            multiview_geometry_shader: Default::default(),
+            multiview_tessellation_shader: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23669,11 +24686,12 @@ pub struct PhysicalDeviceMultiviewProperties<'a> {
 impl Default for PhysicalDeviceMultiviewProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_multiview_view_count: Default::default(),
+            max_multiview_instance_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23774,11 +24792,16 @@ impl<'a> RenderPassMultiviewCreateInfo<'a> {
 impl Default for RenderPassMultiviewCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            subpass_count: Default::default(),
+            p_view_masks: core::ptr::null(),
+            dependency_count: Default::default(),
+            p_view_offsets: core::ptr::null(),
+            correlation_mask_count: Default::default(),
+            p_correlation_masks: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23881,11 +24904,21 @@ pub struct SurfaceCapabilities2EXT<'a> {
 impl Default for SurfaceCapabilities2EXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            min_image_count: Default::default(),
+            max_image_count: Default::default(),
+            current_extent: Default::default(),
+            min_image_extent: Default::default(),
+            max_image_extent: Default::default(),
+            max_image_array_layers: Default::default(),
+            supported_transforms: Default::default(),
+            current_transform: Default::default(),
+            supported_composite_alpha: Default::default(),
+            supported_usage_flags: Default::default(),
+            supported_surface_counters: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -23962,11 +24995,11 @@ impl<'a> DisplayPowerInfoEXT<'a> {
 impl Default for DisplayPowerInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            power_state: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24017,11 +25050,11 @@ impl<'a> DeviceEventInfoEXT<'a> {
 impl Default for DeviceEventInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            device_event: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24072,11 +25105,11 @@ impl<'a> DisplayEventInfoEXT<'a> {
 impl Default for DisplayEventInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            display_event: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24129,11 +25162,11 @@ impl<'a> SwapchainCounterCreateInfoEXT<'a> {
 impl Default for SwapchainCounterCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            surface_counters: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24190,11 +25223,13 @@ pub struct PhysicalDeviceGroupProperties<'a> {
 impl Default for PhysicalDeviceGroupProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            physical_device_count: Default::default(),
+            physical_devices: [Default::default(); MAX_DEVICE_GROUP_SIZE],
+            subset_allocation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24266,11 +25301,12 @@ impl<'a> MemoryAllocateFlagsInfo<'a> {
 impl Default for MemoryAllocateFlagsInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            device_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24360,11 +25396,13 @@ impl<'a> BindBufferMemoryInfo<'a> {
 impl Default for BindBufferMemoryInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            buffer: Default::default(),
+            memory: Default::default(),
+            memory_offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24432,11 +25470,12 @@ impl<'a> BindBufferMemoryDeviceGroupInfo<'a> {
 impl Default for BindBufferMemoryDeviceGroupInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            device_index_count: Default::default(),
+            p_device_indices: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24526,11 +25565,13 @@ impl<'a> BindImageMemoryInfo<'a> {
 impl Default for BindImageMemoryInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image: Default::default(),
+            memory: Default::default(),
+            memory_offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24614,11 +25655,14 @@ impl<'a> BindImageMemoryDeviceGroupInfo<'a> {
 impl Default for BindImageMemoryDeviceGroupInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            device_index_count: Default::default(),
+            p_device_indices: core::ptr::null(),
+            split_instance_bind_region_count: Default::default(),
+            p_split_instance_bind_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24702,11 +25746,13 @@ impl<'a> DeviceGroupRenderPassBeginInfo<'a> {
 impl Default for DeviceGroupRenderPassBeginInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            device_mask: Default::default(),
+            device_render_area_count: Default::default(),
+            p_device_render_areas: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24775,11 +25821,11 @@ impl<'a> DeviceGroupCommandBufferBeginInfo<'a> {
 impl Default for DeviceGroupCommandBufferBeginInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            device_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24876,11 +25922,16 @@ impl<'a> DeviceGroupSubmitInfo<'a> {
 impl Default for DeviceGroupSubmitInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            wait_semaphore_count: Default::default(),
+            p_wait_semaphore_device_indices: core::ptr::null(),
+            command_buffer_count: Default::default(),
+            p_command_buffer_device_masks: core::ptr::null(),
+            signal_semaphore_count: Default::default(),
+            p_signal_semaphore_device_indices: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -24963,11 +26014,12 @@ impl<'a> DeviceGroupBindSparseInfo<'a> {
 impl Default for DeviceGroupBindSparseInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            resource_device_index: Default::default(),
+            memory_device_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25024,11 +26076,12 @@ pub struct DeviceGroupPresentCapabilitiesKHR<'a> {
 impl Default for DeviceGroupPresentCapabilitiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_mask: [Default::default(); MAX_DEVICE_GROUP_SIZE],
+            modes: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25089,11 +26142,11 @@ impl<'a> ImageSwapchainCreateInfoKHR<'a> {
 impl Default for ImageSwapchainCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25160,11 +26213,12 @@ impl<'a> BindImageMemorySwapchainInfoKHR<'a> {
 impl Default for BindImageMemorySwapchainInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain: Default::default(),
+            image_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25264,11 +26318,15 @@ impl<'a> AcquireNextImageInfoKHR<'a> {
 impl Default for AcquireNextImageInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain: Default::default(),
+            timeout: Default::default(),
+            semaphore: Default::default(),
+            fence: Default::default(),
+            device_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25349,11 +26407,13 @@ impl<'a> DeviceGroupPresentInfoKHR<'a> {
 impl Default for DeviceGroupPresentInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain_count: Default::default(),
+            p_device_masks: core::ptr::null(),
+            mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25426,11 +26486,12 @@ impl<'a> DeviceGroupDeviceCreateInfo<'a> {
 impl Default for DeviceGroupDeviceCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            physical_device_count: Default::default(),
+            p_physical_devices: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25496,11 +26557,11 @@ impl<'a> DeviceGroupSwapchainCreateInfoKHR<'a> {
 impl Default for DeviceGroupSwapchainCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            modes: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25613,8 +26674,14 @@ impl DescriptorUpdateTemplateEntry {
 impl Default for DescriptorUpdateTemplateEntry {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            dst_binding: Default::default(),
+            dst_array_element: Default::default(),
+            descriptor_count: Default::default(),
+            descriptor_type: Default::default(),
+            offset: Default::default(),
+            stride: Default::default(),
+        }
     }
 }
 
@@ -25751,11 +26818,18 @@ impl<'a> DescriptorUpdateTemplateCreateInfo<'a> {
 impl Default for DescriptorUpdateTemplateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            descriptor_update_entry_count: Default::default(),
+            p_descriptor_update_entries: core::ptr::null(),
+            template_type: Default::default(),
+            descriptor_set_layout: Default::default(),
+            pipeline_bind_point: Default::default(),
+            pipeline_layout: Default::default(),
+            set: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25829,8 +26903,10 @@ impl XYColorEXT {
 impl Default for XYColorEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+        }
     }
 }
 
@@ -25881,11 +26957,11 @@ impl<'a> PhysicalDevicePresentIdFeaturesKHR<'a> {
 impl Default for PhysicalDevicePresentIdFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_id: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -25945,10 +27021,12 @@ pub struct PresentIdKHR<'a> {
 }
 
 impl<'a> PresentIdKHR<'a> {
-    /// Sets `swapchain_count`.
+    /// Sets `swapchain_count` alone and nulls `p_present_ids`: the count without its arrays (an
+    /// array set before is dropped).
     #[inline]
     pub fn swapchain_count(mut self, value: u32) -> Self {
         self.swapchain_count = value;
+        self.p_present_ids = core::ptr::null();
         self
     }
 
@@ -25966,11 +27044,12 @@ impl<'a> PresentIdKHR<'a> {
 impl Default for PresentIdKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain_count: Default::default(),
+            p_present_ids: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26038,11 +27117,11 @@ impl<'a> PhysicalDevicePresentId2FeaturesKHR<'a> {
 impl Default for PhysicalDevicePresentId2FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_id2: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26102,10 +27181,12 @@ pub struct PresentId2KHR<'a> {
 }
 
 impl<'a> PresentId2KHR<'a> {
-    /// Sets `swapchain_count`.
+    /// Sets `swapchain_count` alone and nulls `p_present_ids`: the count without its arrays (an
+    /// array set before is dropped).
     #[inline]
     pub fn swapchain_count(mut self, value: u32) -> Self {
         self.swapchain_count = value;
+        self.p_present_ids = core::ptr::null();
         self
     }
 
@@ -26123,11 +27204,12 @@ impl<'a> PresentId2KHR<'a> {
 impl Default for PresentId2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain_count: Default::default(),
+            p_present_ids: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26200,11 +27282,12 @@ impl<'a> PresentWait2InfoKHR<'a> {
 impl Default for PresentWait2InfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            present_id: Default::default(),
+            timeout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26267,11 +27350,11 @@ impl<'a> PhysicalDevicePresentWaitFeaturesKHR<'a> {
 impl Default for PhysicalDevicePresentWaitFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_wait: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26338,11 +27421,11 @@ impl<'a> PhysicalDevicePresentWait2FeaturesKHR<'a> {
 impl Default for PhysicalDevicePresentWait2FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_wait2: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26431,11 +27514,13 @@ impl<'a> PhysicalDevicePresentTimingFeaturesEXT<'a> {
 impl Default for PhysicalDevicePresentTimingFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_timing: Default::default(),
+            present_at_absolute_time: Default::default(),
+            present_at_relative_time: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26509,11 +27594,14 @@ pub struct PresentTimingSurfaceCapabilitiesEXT<'a> {
 impl Default for PresentTimingSurfaceCapabilitiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_timing_supported: Default::default(),
+            present_at_absolute_time_supported: Default::default(),
+            present_at_relative_time_supported: Default::default(),
+            present_stage_queries: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26578,11 +27666,12 @@ pub struct SwapchainTimingPropertiesEXT<'a> {
 impl Default for SwapchainTimingPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            refresh_duration: Default::default(),
+            refresh_interval: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26640,11 +27729,13 @@ pub struct SwapchainTimeDomainPropertiesEXT<'a> {
 impl Default for SwapchainTimeDomainPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            time_domain_count: Default::default(),
+            p_time_domains: core::ptr::null_mut(),
+            p_time_domain_ids: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26694,8 +27785,10 @@ pub struct PresentStageTimeEXT {
 impl Default for PresentStageTimeEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            stage: Default::default(),
+            time: Default::default(),
+        }
     }
 }
 
@@ -26744,11 +27837,12 @@ impl<'a> PastPresentationTimingInfoEXT<'a> {
 impl Default for PastPresentationTimingInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            swapchain: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26804,11 +27898,14 @@ pub struct PastPresentationTimingPropertiesEXT<'a> {
 impl Default for PastPresentationTimingPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            timing_properties_counter: Default::default(),
+            time_domains_counter: Default::default(),
+            presentation_timing_count: Default::default(),
+            p_presentation_timings: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26888,11 +27985,17 @@ pub struct PastPresentationTimingEXT<'a> {
 impl Default for PastPresentationTimingEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_id: Default::default(),
+            target_time: Default::default(),
+            present_stage_count: Default::default(),
+            p_present_stages: core::ptr::null_mut(),
+            time_domain: Default::default(),
+            time_domain_id: Default::default(),
+            report_complete: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -26958,10 +28061,12 @@ pub struct PresentTimingsInfoEXT<'a> {
 }
 
 impl<'a> PresentTimingsInfoEXT<'a> {
-    /// Sets `swapchain_count`.
+    /// Sets `swapchain_count` alone and nulls `p_timing_infos`: the count without its arrays (an
+    /// array set before is dropped).
     #[inline]
     pub fn swapchain_count(mut self, value: u32) -> Self {
         self.swapchain_count = value;
+        self.p_timing_infos = core::ptr::null();
         self
     }
 
@@ -26979,11 +28084,12 @@ impl<'a> PresentTimingsInfoEXT<'a> {
 impl Default for PresentTimingsInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain_count: Default::default(),
+            p_timing_infos: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -27089,11 +28195,15 @@ impl<'a> PresentTimingInfoEXT<'a> {
 impl Default for PresentTimingInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            target_time: Default::default(),
+            time_domain_id: Default::default(),
+            present_stage_queries: Default::default(),
+            target_time_domain_present_stage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -27178,11 +28288,13 @@ impl<'a> SwapchainCalibratedTimestampInfoEXT<'a> {
 impl Default for SwapchainCalibratedTimestampInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain: Default::default(),
+            present_stage: Default::default(),
+            time_domain_id: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -27333,11 +28445,18 @@ impl<'a> HdrMetadataEXT<'a> {
 impl Default for HdrMetadataEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            display_primary_red: Default::default(),
+            display_primary_green: Default::default(),
+            display_primary_blue: Default::default(),
+            white_point: Default::default(),
+            max_luminance: Default::default(),
+            min_luminance: Default::default(),
+            max_content_light_level: Default::default(),
+            max_frame_average_light_level: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -27419,11 +28538,12 @@ impl<'a> HdrVividDynamicMetadataHUAWEI<'a> {
 impl Default for HdrVividDynamicMetadataHUAWEI<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            dynamic_metadata_size: Default::default(),
+            p_dynamic_metadata: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -27480,11 +28600,11 @@ pub struct DisplayNativeHdrSurfaceCapabilitiesAMD<'a> {
 impl Default for DisplayNativeHdrSurfaceCapabilitiesAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            local_dimming_support: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -27548,11 +28668,11 @@ impl<'a> SwapchainDisplayNativeHdrCreateInfoAMD<'a> {
 impl Default for SwapchainDisplayNativeHdrCreateInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            local_dimming_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -27601,8 +28721,9 @@ pub struct RefreshCycleDurationGOOGLE {
 impl Default for RefreshCycleDurationGOOGLE {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            refresh_duration: Default::default(),
+        }
     }
 }
 
@@ -27654,8 +28775,13 @@ pub struct PastPresentationTimingGOOGLE {
 impl Default for PastPresentationTimingGOOGLE {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            present_id: Default::default(),
+            desired_present_time: Default::default(),
+            actual_present_time: Default::default(),
+            earliest_present_time: Default::default(),
+            present_margin: Default::default(),
+        }
     }
 }
 
@@ -27707,10 +28833,12 @@ pub struct PresentTimesInfoGOOGLE<'a> {
 }
 
 impl<'a> PresentTimesInfoGOOGLE<'a> {
-    /// Sets `swapchain_count`.
+    /// Sets `swapchain_count` alone and nulls `p_times`: the count without its arrays (an array set
+    /// before is dropped).
     #[inline]
     pub fn swapchain_count(mut self, value: u32) -> Self {
         self.swapchain_count = value;
+        self.p_times = core::ptr::null();
         self
     }
 
@@ -27728,11 +28856,12 @@ impl<'a> PresentTimesInfoGOOGLE<'a> {
 impl Default for PresentTimesInfoGOOGLE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain_count: Default::default(),
+            p_times: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -27803,8 +28932,10 @@ impl PresentTimeGOOGLE {
 impl Default for PresentTimeGOOGLE {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            present_id: Default::default(),
+            desired_present_time: Default::default(),
+        }
     }
 }
 
@@ -27851,8 +28982,10 @@ impl ViewportWScalingNV {
 impl Default for ViewportWScalingNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            xcoeff: Default::default(),
+            ycoeff: Default::default(),
+        }
     }
 }
 
@@ -27902,10 +29035,12 @@ impl<'a> PipelineViewportWScalingStateCreateInfoNV<'a> {
         self
     }
 
-    /// Sets `viewport_count`.
+    /// Sets `viewport_count` alone and nulls `p_viewport_w_scalings`: the count without its arrays
+    /// (an array set before is dropped).
     #[inline]
     pub fn viewport_count(mut self, value: u32) -> Self {
         self.viewport_count = value;
+        self.p_viewport_w_scalings = core::ptr::null();
         self
     }
 
@@ -27923,11 +29058,13 @@ impl<'a> PipelineViewportWScalingStateCreateInfoNV<'a> {
 impl Default for PipelineViewportWScalingStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            viewport_w_scaling_enable: Default::default(),
+            viewport_count: Default::default(),
+            p_viewport_w_scalings: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28014,8 +29151,12 @@ impl ViewportSwizzleNV {
 impl Default for ViewportSwizzleNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+            z: Default::default(),
+            w: Default::default(),
+        }
     }
 }
 
@@ -28082,11 +29223,13 @@ impl<'a> PipelineViewportSwizzleStateCreateInfoNV<'a> {
 impl Default for PipelineViewportSwizzleStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            viewport_count: Default::default(),
+            p_viewport_swizzles: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28147,11 +29290,11 @@ pub struct PhysicalDeviceDiscardRectanglePropertiesEXT<'a> {
 impl Default for PhysicalDeviceDiscardRectanglePropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_discard_rectangles: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28238,11 +29381,14 @@ impl<'a> PipelineDiscardRectangleStateCreateInfoEXT<'a> {
 impl Default for PipelineDiscardRectangleStateCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            discard_rectangle_mode: Default::default(),
+            discard_rectangle_count: Default::default(),
+            p_discard_rectangles: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28303,11 +29449,11 @@ pub struct PhysicalDeviceMultiviewPerViewAttributesPropertiesNVX<'a> {
 impl Default for PhysicalDeviceMultiviewPerViewAttributesPropertiesNVX<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            per_view_position_all_components: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28383,8 +29529,11 @@ impl InputAttachmentAspectReference {
 impl Default for InputAttachmentAspectReference {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            subpass: Default::default(),
+            input_attachment_index: Default::default(),
+            aspect_mask: Default::default(),
+        }
     }
 }
 
@@ -28454,11 +29603,12 @@ impl<'a> RenderPassInputAttachmentAspectCreateInfo<'a> {
 impl Default for RenderPassInputAttachmentAspectCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            aspect_reference_count: Default::default(),
+            p_aspect_references: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28530,11 +29680,11 @@ impl<'a> PhysicalDeviceSurfaceInfo2KHR<'a> {
 impl Default for PhysicalDeviceSurfaceInfo2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            surface: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28586,11 +29736,11 @@ impl<'a> SurfaceCapabilities2KHR<'a> {
 impl Default for SurfaceCapabilities2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            surface_capabilities: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28648,11 +29798,11 @@ impl<'a> SurfaceFormat2KHR<'a> {
 impl Default for SurfaceFormat2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            surface_format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28694,11 +29844,11 @@ pub struct DisplayProperties2KHR<'a> {
 impl Default for DisplayProperties2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            display_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28746,11 +29896,11 @@ pub struct DisplayPlaneProperties2KHR<'a> {
 impl Default for DisplayPlaneProperties2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            display_plane_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28808,11 +29958,11 @@ impl<'a> DisplayModeProperties2KHR<'a> {
 impl Default for DisplayModeProperties2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            display_mode_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28864,11 +30014,11 @@ pub struct DisplayModeStereoPropertiesNV<'a> {
 impl Default for DisplayModeStereoPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            hdmi3_d_supported: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28939,11 +30089,12 @@ impl<'a> DisplayPlaneInfo2KHR<'a> {
 impl Default for DisplayPlaneInfo2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            mode: Default::default(),
+            plane_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -28986,11 +30137,11 @@ pub struct DisplayPlaneCapabilities2KHR<'a> {
 impl Default for DisplayPlaneCapabilities2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            capabilities: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29042,11 +30193,11 @@ pub struct SharedPresentSurfaceCapabilitiesKHR<'a> {
 impl Default for SharedPresentSurfaceCapabilitiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shared_present_supported_usage_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29104,11 +30255,11 @@ pub struct SwapchainFlagsSurfaceCapabilitiesEXT<'a> {
 impl Default for SwapchainFlagsSurfaceCapabilitiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            swapchain_supported_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29163,11 +30314,11 @@ pub struct SharedPresentSurfaceCapabilities2KHR<'a> {
 impl Default for SharedPresentSurfaceCapabilities2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shared_present_supported_usage_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29266,11 +30417,14 @@ impl<'a> PhysicalDevice16BitStorageFeatures<'a> {
 impl Default for PhysicalDevice16BitStorageFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            storage_buffer16_bit_access: Default::default(),
+            uniform_and_storage_buffer16_bit_access: Default::default(),
+            storage_push_constant16: Default::default(),
+            storage_input_output16: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29346,11 +30500,14 @@ pub struct PhysicalDeviceSubgroupProperties<'a> {
 impl Default for PhysicalDeviceSubgroupProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            subgroup_size: Default::default(),
+            supported_stages: Default::default(),
+            supported_operations: Default::default(),
+            quad_operations_in_all_stages: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29422,11 +30579,11 @@ impl<'a> PhysicalDeviceShaderSubgroupExtendedTypesFeatures<'a> {
 impl Default for PhysicalDeviceShaderSubgroupExtendedTypesFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_subgroup_extended_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29489,11 +30646,11 @@ impl<'a> BufferMemoryRequirementsInfo2<'a> {
 impl Default for BufferMemoryRequirementsInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            buffer: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29544,11 +30701,11 @@ impl<'a> DeviceBufferMemoryRequirements<'a> {
 impl Default for DeviceBufferMemoryRequirements<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_create_info: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29613,11 +30770,11 @@ impl<'a> ImageMemoryRequirementsInfo2<'a> {
 impl Default for ImageMemoryRequirementsInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29668,11 +30825,11 @@ impl<'a> ImageSparseMemoryRequirementsInfo2<'a> {
 impl Default for ImageSparseMemoryRequirementsInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29738,11 +30895,12 @@ impl<'a> DeviceImageMemoryRequirements<'a> {
 impl Default for DeviceImageMemoryRequirements<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_create_info: core::ptr::null(),
+            plane_aspect: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29802,11 +30960,11 @@ impl<'a> MemoryRequirements2<'a> {
 impl Default for MemoryRequirements2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_requirements: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29854,11 +31012,11 @@ pub struct SparseImageMemoryRequirements2<'a> {
 impl Default for SparseImageMemoryRequirements2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_requirements: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29908,11 +31066,11 @@ pub struct PhysicalDevicePointClippingProperties<'a> {
 impl Default for PhysicalDevicePointClippingProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            point_clipping_behavior: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -29969,11 +31127,12 @@ pub struct MemoryDedicatedRequirements<'a> {
 impl Default for MemoryDedicatedRequirements<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            prefers_dedicated_allocation: Default::default(),
+            requires_dedicated_allocation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30052,11 +31211,12 @@ impl<'a> MemoryDedicatedAllocateInfo<'a> {
 impl Default for MemoryDedicatedAllocateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image: Default::default(),
+            buffer: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30122,11 +31282,11 @@ impl<'a> ImageViewUsageCreateInfo<'a> {
 impl Default for ImageViewUsageCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30184,11 +31344,11 @@ impl<'a> ImageViewUsage2CreateInfoKHR<'a> {
 impl Default for ImageViewUsage2CreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30255,11 +31415,12 @@ impl<'a> ImageViewSlicedCreateInfoEXT<'a> {
 impl Default for ImageViewSlicedCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            slice_offset: Default::default(),
+            slice_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30325,11 +31486,11 @@ impl<'a> PipelineTessellationDomainOriginStateCreateInfo<'a> {
 impl Default for PipelineTessellationDomainOriginStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            domain_origin: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30393,11 +31554,11 @@ impl<'a> SamplerYcbcrConversionInfo<'a> {
 impl Default for SamplerYcbcrConversionInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            conversion: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30525,11 +31686,18 @@ impl<'a> SamplerYcbcrConversionCreateInfo<'a> {
 impl Default for SamplerYcbcrConversionCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            format: Default::default(),
+            ycbcr_model: Default::default(),
+            ycbcr_range: Default::default(),
+            components: Default::default(),
+            x_chroma_offset: Default::default(),
+            y_chroma_offset: Default::default(),
+            chroma_filter: Default::default(),
+            force_explicit_reconstruction: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30602,11 +31770,11 @@ impl<'a> BindImagePlaneMemoryInfo<'a> {
 impl Default for BindImagePlaneMemoryInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            plane_aspect: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30664,11 +31832,11 @@ impl<'a> ImagePlaneMemoryRequirementsInfo<'a> {
 impl Default for ImagePlaneMemoryRequirementsInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            plane_aspect: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30734,11 +31902,11 @@ impl<'a> PhysicalDeviceSamplerYcbcrConversionFeatures<'a> {
 impl Default for PhysicalDeviceSamplerYcbcrConversionFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            sampler_ycbcr_conversion: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30794,11 +31962,11 @@ pub struct SamplerYcbcrConversionImageFormatProperties<'a> {
 impl Default for SamplerYcbcrConversionImageFormatProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            combined_image_sampler_descriptor_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30853,11 +32021,11 @@ pub struct TextureLODGatherFormatPropertiesAMD<'a> {
 impl Default for TextureLODGatherFormatPropertiesAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supports_texture_gather_lod_bias_amd: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -30937,11 +32105,13 @@ impl<'a> ConditionalRenderingBeginInfoEXT<'a> {
 impl Default for ConditionalRenderingBeginInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            buffer: Default::default(),
+            offset: Default::default(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31006,11 +32176,11 @@ impl<'a> ProtectedSubmitInfo<'a> {
 impl Default for ProtectedSubmitInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            protected_submit: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31068,11 +32238,11 @@ impl<'a> PhysicalDeviceProtectedMemoryFeatures<'a> {
 impl Default for PhysicalDeviceProtectedMemoryFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            protected_memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31128,11 +32298,11 @@ pub struct PhysicalDeviceProtectedMemoryProperties<'a> {
 impl Default for PhysicalDeviceProtectedMemoryProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            protected_no_fault: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31212,11 +32382,13 @@ impl<'a> DeviceQueueInfo2<'a> {
 impl Default for DeviceQueueInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            queue_family_index: Default::default(),
+            queue_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31297,11 +32469,13 @@ impl<'a> PipelineCoverageToColorStateCreateInfoNV<'a> {
 impl Default for PipelineCoverageToColorStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            coverage_to_color_enable: Default::default(),
+            coverage_to_color_location: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31362,11 +32536,12 @@ pub struct PhysicalDeviceSamplerFilterMinmaxProperties<'a> {
 impl Default for PhysicalDeviceSamplerFilterMinmaxProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            filter_minmax_single_component_formats: Default::default(),
+            filter_minmax_image_component_mapping: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31433,8 +32608,10 @@ impl SampleLocationEXT {
 impl Default for SampleLocationEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+        }
     }
 }
 
@@ -31507,11 +32684,14 @@ impl<'a> SampleLocationsInfoEXT<'a> {
 impl Default for SampleLocationsInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            sample_locations_per_pixel: Default::default(),
+            sample_location_grid_size: Default::default(),
+            sample_locations_count: Default::default(),
+            p_sample_locations: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31587,8 +32767,11 @@ impl<'a> AttachmentSampleLocationsEXT<'a> {
 impl Default for AttachmentSampleLocationsEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            attachment_index: Default::default(),
+            sample_locations_info: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -31644,8 +32827,11 @@ impl<'a> SubpassSampleLocationsEXT<'a> {
 impl Default for SubpassSampleLocationsEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            subpass_index: Default::default(),
+            sample_locations_info: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -31727,11 +32913,14 @@ impl<'a> RenderPassSampleLocationsBeginInfoEXT<'a> {
 impl Default for RenderPassSampleLocationsBeginInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            attachment_initial_sample_locations_count: Default::default(),
+            p_attachment_initial_sample_locations: core::ptr::null(),
+            post_subpass_sample_locations_count: Default::default(),
+            p_post_subpass_sample_locations: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31810,11 +32999,12 @@ impl<'a> PipelineSampleLocationsStateCreateInfoEXT<'a> {
 impl Default for PipelineSampleLocationsStateCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            sample_locations_enable: Default::default(),
+            sample_locations_info: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31879,11 +33069,15 @@ pub struct PhysicalDeviceSampleLocationsPropertiesEXT<'a> {
 impl Default for PhysicalDeviceSampleLocationsPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            sample_location_sample_counts: Default::default(),
+            max_sample_location_grid_size: Default::default(),
+            sample_location_coordinate_range: [Default::default(); 2],
+            sample_location_sub_pixel_bits: Default::default(),
+            variable_sample_locations: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -31944,11 +33138,11 @@ pub struct MultisamplePropertiesEXT<'a> {
 impl Default for MultisamplePropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_sample_location_grid_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32007,11 +33201,11 @@ impl<'a> SamplerReductionModeCreateInfo<'a> {
 impl Default for SamplerReductionModeCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            reduction_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32075,11 +33269,11 @@ impl<'a> PhysicalDeviceBlendOperationAdvancedFeaturesEXT<'a> {
 impl Default for PhysicalDeviceBlendOperationAdvancedFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            advanced_blend_coherent_operations: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32144,11 +33338,11 @@ impl<'a> PhysicalDeviceMultiDrawFeaturesEXT<'a> {
 impl Default for PhysicalDeviceMultiDrawFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            multi_draw: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32214,11 +33408,16 @@ pub struct PhysicalDeviceBlendOperationAdvancedPropertiesEXT<'a> {
 impl Default for PhysicalDeviceBlendOperationAdvancedPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            advanced_blend_max_color_attachments: Default::default(),
+            advanced_blend_independent_blend: Default::default(),
+            advanced_blend_non_premultiplied_src_color: Default::default(),
+            advanced_blend_non_premultiplied_dst_color: Default::default(),
+            advanced_blend_correlated_overlap: Default::default(),
+            advanced_blend_all_operations: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32310,11 +33509,13 @@ impl<'a> PipelineColorBlendAdvancedStateCreateInfoEXT<'a> {
 impl Default for PipelineColorBlendAdvancedStateCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_premultiplied: Default::default(),
+            dst_premultiplied: Default::default(),
+            blend_overlap: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32394,11 +33595,12 @@ impl<'a> PhysicalDeviceInlineUniformBlockFeatures<'a> {
 impl Default for PhysicalDeviceInlineUniformBlockFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            inline_uniform_block: Default::default(),
+            descriptor_binding_inline_uniform_block_update_after_bind: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32464,11 +33666,15 @@ pub struct PhysicalDeviceInlineUniformBlockProperties<'a> {
 impl Default for PhysicalDeviceInlineUniformBlockProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_inline_uniform_block_size: Default::default(),
+            max_per_stage_descriptor_inline_uniform_blocks: Default::default(),
+            max_per_stage_descriptor_update_after_bind_inline_uniform_blocks: Default::default(),
+            max_descriptor_set_inline_uniform_blocks: Default::default(),
+            max_descriptor_set_update_after_bind_inline_uniform_blocks: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32545,11 +33751,12 @@ impl<'a> WriteDescriptorSetInlineUniformBlock<'a> {
 impl Default for WriteDescriptorSetInlineUniformBlock<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            data_size: Default::default(),
+            p_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32615,11 +33822,11 @@ impl<'a> DescriptorPoolInlineUniformBlockCreateInfo<'a> {
 impl Default for DescriptorPoolInlineUniformBlockCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            max_inline_uniform_block_bindings: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32701,10 +33908,12 @@ impl<'a> PipelineCoverageModulationStateCreateInfoNV<'a> {
         self
     }
 
-    /// Sets `coverage_modulation_table_count`.
+    /// Sets `coverage_modulation_table_count` alone and nulls `p_coverage_modulation_table`: the
+    /// count without its arrays (an array set before is dropped).
     #[inline]
     pub fn coverage_modulation_table_count(mut self, value: u32) -> Self {
         self.coverage_modulation_table_count = value;
+        self.p_coverage_modulation_table = core::ptr::null();
         self
     }
 
@@ -32724,11 +33933,15 @@ impl<'a> PipelineCoverageModulationStateCreateInfoNV<'a> {
 impl Default for PipelineCoverageModulationStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            coverage_modulation_mode: Default::default(),
+            coverage_modulation_table_enable: Default::default(),
+            coverage_modulation_table_count: Default::default(),
+            p_coverage_modulation_table: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32806,11 +34019,12 @@ impl<'a> ImageFormatListCreateInfo<'a> {
 impl Default for ImageFormatListCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            view_format_count: Default::default(),
+            p_view_formats: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32890,11 +34104,13 @@ impl<'a> ValidationCacheCreateInfoEXT<'a> {
 impl Default for ValidationCacheCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            initial_data_size: Default::default(),
+            p_initial_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -32957,11 +34173,11 @@ impl<'a> ShaderModuleValidationCacheCreateInfoEXT<'a> {
 impl Default for ShaderModuleValidationCacheCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            validation_cache: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33019,11 +34235,12 @@ pub struct PhysicalDeviceMaintenance3Properties<'a> {
 impl Default for PhysicalDeviceMaintenance3Properties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_per_set_descriptors: Default::default(),
+            max_memory_allocation_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33089,11 +34306,11 @@ impl<'a> PhysicalDeviceMaintenance4Features<'a> {
 impl Default for PhysicalDeviceMaintenance4Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            maintenance4: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33149,11 +34366,11 @@ pub struct PhysicalDeviceMaintenance4Properties<'a> {
 impl Default for PhysicalDeviceMaintenance4Properties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_buffer_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33217,11 +34434,11 @@ impl<'a> PhysicalDeviceMaintenance5Features<'a> {
 impl Default for PhysicalDeviceMaintenance5Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            maintenance5: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33287,11 +34504,16 @@ pub struct PhysicalDeviceMaintenance5Properties<'a> {
 impl Default for PhysicalDeviceMaintenance5Properties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            early_fragment_multisample_coverage_after_sample_counting: Default::default(),
+            early_fragment_sample_mask_test_before_sample_counting: Default::default(),
+            depth_stencil_swizzle_one_support: Default::default(),
+            polygon_mode_point_size: Default::default(),
+            non_strict_single_pixel_wide_lines_use_parallelogram: Default::default(),
+            non_strict_wide_lines_use_parallelogram: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33365,11 +34587,11 @@ impl<'a> PhysicalDeviceMaintenance6Features<'a> {
 impl Default for PhysicalDeviceMaintenance6Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            maintenance6: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33429,11 +34651,13 @@ pub struct PhysicalDeviceMaintenance6Properties<'a> {
 impl Default for PhysicalDeviceMaintenance6Properties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            block_texel_view_compatible_multiple_layers: Default::default(),
+            max_combined_image_sampler_descriptor_count: Default::default(),
+            fragment_shading_rate_clamp_combiner_inputs: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33501,11 +34725,11 @@ impl<'a> PhysicalDeviceMaintenance7FeaturesKHR<'a> {
 impl Default for PhysicalDeviceMaintenance7FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            maintenance7: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33575,11 +34799,18 @@ pub struct PhysicalDeviceMaintenance7PropertiesKHR<'a> {
 impl Default for PhysicalDeviceMaintenance7PropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            robust_fragment_shading_rate_attachment_access: Default::default(),
+            separate_depth_stencil_attachment_access: Default::default(),
+            max_descriptor_set_total_uniform_buffers_dynamic: Default::default(),
+            max_descriptor_set_total_storage_buffers_dynamic: Default::default(),
+            max_descriptor_set_total_buffers_dynamic: Default::default(),
+            max_descriptor_set_update_after_bind_total_uniform_buffers_dynamic: Default::default(),
+            max_descriptor_set_update_after_bind_total_storage_buffers_dynamic: Default::default(),
+            max_descriptor_set_update_after_bind_total_buffers_dynamic: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33650,10 +34881,12 @@ pub struct PhysicalDeviceLayeredApiPropertiesListKHR<'a> {
 }
 
 impl<'a> PhysicalDeviceLayeredApiPropertiesListKHR<'a> {
-    /// Sets `layered_api_count`.
+    /// Sets `layered_api_count` alone and nulls `p_layered_apis`: the count without its arrays (an
+    /// array set before is dropped).
     #[inline]
     pub fn layered_api_count(mut self, value: u32) -> Self {
         self.layered_api_count = value;
+        self.p_layered_apis = core::ptr::null_mut();
         self
     }
 
@@ -33674,11 +34907,12 @@ impl<'a> PhysicalDeviceLayeredApiPropertiesListKHR<'a> {
 impl Default for PhysicalDeviceLayeredApiPropertiesListKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            layered_api_count: Default::default(),
+            p_layered_apis: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33749,11 +34983,14 @@ impl<'a> PhysicalDeviceLayeredApiPropertiesKHR<'a> {
 impl Default for PhysicalDeviceLayeredApiPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            vendor_id: Default::default(),
+            device_id: Default::default(),
+            layered_api: Default::default(),
+            device_name: [Default::default(); MAX_PHYSICAL_DEVICE_NAME_SIZE],
+            _marker: PhantomData,
         }
     }
 }
@@ -33810,11 +35047,11 @@ pub struct PhysicalDeviceLayeredApiVulkanPropertiesKHR<'a> {
 impl Default for PhysicalDeviceLayeredApiVulkanPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33878,11 +35115,11 @@ impl<'a> PhysicalDeviceMaintenance8FeaturesKHR<'a> {
 impl Default for PhysicalDeviceMaintenance8FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            maintenance8: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -33947,11 +35184,11 @@ impl<'a> PhysicalDeviceMaintenance9FeaturesKHR<'a> {
 impl Default for PhysicalDeviceMaintenance9FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            maintenance9: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34009,11 +35246,12 @@ pub struct PhysicalDeviceMaintenance9PropertiesKHR<'a> {
 impl Default for PhysicalDeviceMaintenance9PropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image2_d_view_of3_d_sparse: Default::default(),
+            default_vertex_attribute_value: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34079,11 +35317,11 @@ impl<'a> PhysicalDeviceMaintenance11FeaturesKHR<'a> {
 impl Default for PhysicalDeviceMaintenance11FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            maintenance11: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34143,11 +35381,13 @@ pub struct PhysicalDeviceMaintenance10PropertiesKHR<'a> {
 impl Default for PhysicalDeviceMaintenance10PropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            rgba4_opaque_black_swizzled: Default::default(),
+            resolve_srgb_format_applies_transfer_function: Default::default(),
+            resolve_srgb_format_supports_transfer_function_control: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34215,11 +35455,11 @@ impl<'a> PhysicalDeviceMaintenance10FeaturesKHR<'a> {
 impl Default for PhysicalDeviceMaintenance10FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            maintenance10: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34275,11 +35515,11 @@ pub struct QueueFamilyOwnershipTransferPropertiesKHR<'a> {
 impl Default for QueueFamilyOwnershipTransferPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            optimal_image_transfer_to_queue_families: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34334,11 +35574,11 @@ pub struct QueueFamilyOptimalImageTransferGranularityPropertiesKHR<'a> {
 impl Default for QueueFamilyOptimalImageTransferGranularityPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            optimal_image_transfer_granularity: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34432,11 +35672,15 @@ impl<'a> RenderingAreaInfo<'a> {
 impl Default for RenderingAreaInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            view_mask: Default::default(),
+            color_attachment_count: Default::default(),
+            p_color_attachment_formats: core::ptr::null(),
+            depth_attachment_format: Default::default(),
+            stencil_attachment_format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34502,11 +35746,11 @@ impl<'a> DescriptorSetLayoutSupport<'a> {
 impl Default for DescriptorSetLayoutSupport<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supported: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34559,11 +35803,11 @@ impl<'a> PhysicalDeviceShaderDrawParametersFeatures<'a> {
 impl Default for PhysicalDeviceShaderDrawParametersFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_draw_parameters: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34641,11 +35885,12 @@ impl<'a> PhysicalDeviceShaderFloat16Int8Features<'a> {
 impl Default for PhysicalDeviceShaderFloat16Int8Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_float16: Default::default(),
+            shader_int8: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34765,11 +36010,27 @@ pub struct PhysicalDeviceFloatControlsProperties<'a> {
 impl Default for PhysicalDeviceFloatControlsProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            denorm_behavior_independence: Default::default(),
+            rounding_mode_independence: Default::default(),
+            shader_signed_zero_inf_nan_preserve_float16: Default::default(),
+            shader_signed_zero_inf_nan_preserve_float32: Default::default(),
+            shader_signed_zero_inf_nan_preserve_float64: Default::default(),
+            shader_denorm_preserve_float16: Default::default(),
+            shader_denorm_preserve_float32: Default::default(),
+            shader_denorm_preserve_float64: Default::default(),
+            shader_denorm_flush_to_zero_float16: Default::default(),
+            shader_denorm_flush_to_zero_float32: Default::default(),
+            shader_denorm_flush_to_zero_float64: Default::default(),
+            shader_rounding_mode_rte_float16: Default::default(),
+            shader_rounding_mode_rte_float32: Default::default(),
+            shader_rounding_mode_rte_float64: Default::default(),
+            shader_rounding_mode_rtz_float16: Default::default(),
+            shader_rounding_mode_rtz_float32: Default::default(),
+            shader_rounding_mode_rtz_float64: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34865,11 +36126,11 @@ impl<'a> PhysicalDeviceHostQueryResetFeatures<'a> {
 impl Default for PhysicalDeviceHostQueryResetFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            host_query_reset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -34925,8 +36186,13 @@ pub struct ShaderResourceUsageAMD {
 impl Default for ShaderResourceUsageAMD {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            num_used_vgprs: Default::default(),
+            num_used_sgprs: Default::default(),
+            lds_size_per_local_work_group: Default::default(),
+            lds_usage_size_in_bytes: Default::default(),
+            scratch_mem_usage_in_bytes: Default::default(),
+        }
     }
 }
 
@@ -34978,8 +36244,15 @@ pub struct ShaderStatisticsInfoAMD {
 impl Default for ShaderStatisticsInfoAMD {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            shader_stage_mask: Default::default(),
+            resource_usage: Default::default(),
+            num_physical_vgprs: Default::default(),
+            num_physical_sgprs: Default::default(),
+            num_available_vgprs: Default::default(),
+            num_available_sgprs: Default::default(),
+            compute_work_group_size: [Default::default(); 3],
+        }
     }
 }
 
@@ -35040,11 +36313,11 @@ impl<'a> PhysicalDeviceElapsedTimerQueryFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceElapsedTimerQueryFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            elapsed_timer_query: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -35109,11 +36382,11 @@ impl<'a> DeviceQueueGlobalPriorityCreateInfo<'a> {
 impl Default for DeviceQueueGlobalPriorityCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            global_priority: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -35177,11 +36450,11 @@ impl<'a> PhysicalDeviceGlobalPriorityQueryFeatures<'a> {
 impl Default for PhysicalDeviceGlobalPriorityQueryFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            global_priority_query: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -35239,11 +36512,12 @@ pub struct QueueFamilyGlobalPriorityProperties<'a> {
 impl Default for QueueFamilyGlobalPriorityProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            priority_count: Default::default(),
+            priorities: [Default::default(); MAX_GLOBAL_PRIORITY_SIZE],
+            _marker: PhantomData,
         }
     }
 }
@@ -35328,11 +36602,13 @@ impl<'a> DebugUtilsObjectNameInfoEXT<'a> {
 impl Default for DebugUtilsObjectNameInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            object_type: Default::default(),
+            object_handle: Default::default(),
+            p_object_name: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -35432,11 +36708,15 @@ impl<'a> DebugUtilsObjectTagInfoEXT<'a> {
 impl Default for DebugUtilsObjectTagInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            object_type: Default::default(),
+            object_handle: Default::default(),
+            tag_name: Default::default(),
+            tag_size: Default::default(),
+            p_tag: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -35510,11 +36790,12 @@ impl<'a> DebugUtilsLabelEXT<'a> {
 impl Default for DebugUtilsLabelEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_label_name: core::ptr::null(),
+            color: [Default::default(); 4],
+            _marker: PhantomData,
         }
     }
 }
@@ -35604,11 +36885,15 @@ impl<'a> DebugUtilsMessengerCreateInfoEXT<'a> {
 impl Default for DebugUtilsMessengerCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            message_severity: Default::default(),
+            message_type: Default::default(),
+            pfn_user_callback: Default::default(),
+            p_user_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -35755,11 +37040,20 @@ impl<'a> DebugUtilsMessengerCallbackDataEXT<'a> {
 impl Default for DebugUtilsMessengerCallbackDataEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            p_message_id_name: core::ptr::null(),
+            message_id_number: Default::default(),
+            p_message: core::ptr::null(),
+            queue_label_count: Default::default(),
+            p_queue_labels: core::ptr::null(),
+            cmd_buf_label_count: Default::default(),
+            p_cmd_buf_labels: core::ptr::null(),
+            object_count: Default::default(),
+            p_objects: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -35836,11 +37130,11 @@ impl<'a> PhysicalDeviceDeviceMemoryReportFeaturesEXT<'a> {
 impl Default for PhysicalDeviceDeviceMemoryReportFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_memory_report: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -35923,11 +37217,13 @@ impl<'a> DeviceDeviceMemoryReportCreateInfoEXT<'a> {
 impl Default for DeviceDeviceMemoryReportCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            pfn_user_callback: Default::default(),
+            p_user_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -35996,11 +37292,17 @@ pub struct DeviceMemoryReportCallbackDataEXT<'a> {
 impl Default for DeviceMemoryReportCallbackDataEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            r#type: Default::default(),
+            memory_object_id: Default::default(),
+            size: Default::default(),
+            object_type: Default::default(),
+            object_handle: Default::default(),
+            heap_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -36080,11 +37382,12 @@ impl<'a> ImportMemoryHostPointerInfoEXT<'a> {
 impl Default for ImportMemoryHostPointerInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_type: Default::default(),
+            p_host_pointer: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -36139,11 +37442,11 @@ pub struct MemoryHostPointerPropertiesEXT<'a> {
 impl Default for MemoryHostPointerPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_type_bits: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -36193,11 +37496,11 @@ pub struct PhysicalDeviceExternalMemoryHostPropertiesEXT<'a> {
 impl Default for PhysicalDeviceExternalMemoryHostPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            min_imported_host_pointer_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -36289,11 +37592,19 @@ pub struct PhysicalDeviceConservativeRasterizationPropertiesEXT<'a> {
 impl Default for PhysicalDeviceConservativeRasterizationPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            primitive_overestimation_size: Default::default(),
+            max_extra_primitive_overestimation_size: Default::default(),
+            extra_primitive_overestimation_size_granularity: Default::default(),
+            primitive_underestimation: Default::default(),
+            conservative_point_and_line_rasterization: Default::default(),
+            degenerate_triangles_rasterized: Default::default(),
+            degenerate_lines_rasterized: Default::default(),
+            fully_covered_fragment_shader_input_variable: Default::default(),
+            conservative_rasterization_post_depth_coverage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -36379,11 +37690,11 @@ impl<'a> CalibratedTimestampInfoKHR<'a> {
 impl Default for CalibratedTimestampInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            time_domain: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -36481,11 +37792,24 @@ pub struct PhysicalDeviceShaderCorePropertiesAMD<'a> {
 impl Default for PhysicalDeviceShaderCorePropertiesAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_engine_count: Default::default(),
+            shader_arrays_per_engine_count: Default::default(),
+            compute_units_per_shader_array: Default::default(),
+            simd_per_compute_unit: Default::default(),
+            wavefronts_per_simd: Default::default(),
+            wavefront_size: Default::default(),
+            sgprs_per_simd: Default::default(),
+            min_sgpr_allocation: Default::default(),
+            max_sgpr_allocation: Default::default(),
+            sgpr_allocation_granularity: Default::default(),
+            vgprs_per_simd: Default::default(),
+            min_vgpr_allocation: Default::default(),
+            max_vgpr_allocation: Default::default(),
+            vgpr_allocation_granularity: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -36574,11 +37898,12 @@ pub struct PhysicalDeviceShaderCoreProperties2AMD<'a> {
 impl Default for PhysicalDeviceShaderCoreProperties2AMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_core_features: Default::default(),
+            active_compute_unit_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -36671,11 +37996,13 @@ impl<'a> PipelineRasterizationConservativeStateCreateInfoEXT<'a> {
 impl Default for PipelineRasterizationConservativeStateCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            conservative_rasterization_mode: Default::default(),
+            extra_primitive_overestimation_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -36920,11 +38247,30 @@ impl<'a> PhysicalDeviceDescriptorIndexingFeatures<'a> {
 impl Default for PhysicalDeviceDescriptorIndexingFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_input_attachment_array_dynamic_indexing: Default::default(),
+            shader_uniform_texel_buffer_array_dynamic_indexing: Default::default(),
+            shader_storage_texel_buffer_array_dynamic_indexing: Default::default(),
+            shader_uniform_buffer_array_non_uniform_indexing: Default::default(),
+            shader_sampled_image_array_non_uniform_indexing: Default::default(),
+            shader_storage_buffer_array_non_uniform_indexing: Default::default(),
+            shader_storage_image_array_non_uniform_indexing: Default::default(),
+            shader_input_attachment_array_non_uniform_indexing: Default::default(),
+            shader_uniform_texel_buffer_array_non_uniform_indexing: Default::default(),
+            shader_storage_texel_buffer_array_non_uniform_indexing: Default::default(),
+            descriptor_binding_uniform_buffer_update_after_bind: Default::default(),
+            descriptor_binding_sampled_image_update_after_bind: Default::default(),
+            descriptor_binding_storage_image_update_after_bind: Default::default(),
+            descriptor_binding_storage_buffer_update_after_bind: Default::default(),
+            descriptor_binding_uniform_texel_buffer_update_after_bind: Default::default(),
+            descriptor_binding_storage_texel_buffer_update_after_bind: Default::default(),
+            descriptor_binding_update_unused_while_pending: Default::default(),
+            descriptor_binding_partially_bound: Default::default(),
+            descriptor_binding_variable_descriptor_count: Default::default(),
+            runtime_descriptor_array: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -37062,11 +38408,33 @@ pub struct PhysicalDeviceDescriptorIndexingProperties<'a> {
 impl Default for PhysicalDeviceDescriptorIndexingProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_update_after_bind_descriptors_in_all_pools: Default::default(),
+            shader_uniform_buffer_array_non_uniform_indexing_native: Default::default(),
+            shader_sampled_image_array_non_uniform_indexing_native: Default::default(),
+            shader_storage_buffer_array_non_uniform_indexing_native: Default::default(),
+            shader_storage_image_array_non_uniform_indexing_native: Default::default(),
+            shader_input_attachment_array_non_uniform_indexing_native: Default::default(),
+            robust_buffer_access_update_after_bind: Default::default(),
+            quad_divergent_implicit_lod: Default::default(),
+            max_per_stage_descriptor_update_after_bind_samplers: Default::default(),
+            max_per_stage_descriptor_update_after_bind_uniform_buffers: Default::default(),
+            max_per_stage_descriptor_update_after_bind_storage_buffers: Default::default(),
+            max_per_stage_descriptor_update_after_bind_sampled_images: Default::default(),
+            max_per_stage_descriptor_update_after_bind_storage_images: Default::default(),
+            max_per_stage_descriptor_update_after_bind_input_attachments: Default::default(),
+            max_per_stage_update_after_bind_resources: Default::default(),
+            max_descriptor_set_update_after_bind_samplers: Default::default(),
+            max_descriptor_set_update_after_bind_uniform_buffers: Default::default(),
+            max_descriptor_set_update_after_bind_uniform_buffers_dynamic: Default::default(),
+            max_descriptor_set_update_after_bind_storage_buffers: Default::default(),
+            max_descriptor_set_update_after_bind_storage_buffers_dynamic: Default::default(),
+            max_descriptor_set_update_after_bind_sampled_images: Default::default(),
+            max_descriptor_set_update_after_bind_storage_images: Default::default(),
+            max_descriptor_set_update_after_bind_input_attachments: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -37179,11 +38547,12 @@ impl<'a> DescriptorSetLayoutBindingFlagsCreateInfo<'a> {
 impl Default for DescriptorSetLayoutBindingFlagsCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            binding_count: Default::default(),
+            p_binding_flags: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -37254,11 +38623,12 @@ impl<'a> DescriptorSetVariableDescriptorCountAllocateInfo<'a> {
 impl Default for DescriptorSetVariableDescriptorCountAllocateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            descriptor_set_count: Default::default(),
+            p_descriptor_counts: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -37315,11 +38685,11 @@ pub struct DescriptorSetVariableDescriptorCountLayoutSupport<'a> {
 impl Default for DescriptorSetVariableDescriptorCountLayoutSupport<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_variable_descriptor_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -37471,11 +38841,19 @@ impl<'a> AttachmentDescription2<'a> {
 impl Default for AttachmentDescription2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            format: Default::default(),
+            samples: Default::default(),
+            load_op: Default::default(),
+            store_op: Default::default(),
+            stencil_load_op: Default::default(),
+            stencil_store_op: Default::default(),
+            initial_layout: Default::default(),
+            final_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -37576,11 +38954,13 @@ impl<'a> AttachmentReference2<'a> {
 impl Default for AttachmentReference2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            attachment: Default::default(),
+            layout: Default::default(),
+            aspect_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -37735,11 +39115,21 @@ impl<'a> SubpassDescription2<'a> {
 impl Default for SubpassDescription2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            pipeline_bind_point: Default::default(),
+            view_mask: Default::default(),
+            input_attachment_count: Default::default(),
+            p_input_attachments: core::ptr::null(),
+            color_attachment_count: Default::default(),
+            p_color_attachments: core::ptr::null(),
+            p_resolve_attachments: core::ptr::null(),
+            p_depth_stencil_attachment: core::ptr::null(),
+            preserve_attachment_count: Default::default(),
+            p_preserve_attachments: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -37889,11 +39279,18 @@ impl<'a> SubpassDependency2<'a> {
 impl Default for SubpassDependency2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_subpass: Default::default(),
+            dst_subpass: Default::default(),
+            src_stage_mask: Default::default(),
+            dst_stage_mask: Default::default(),
+            src_access_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            dependency_flags: Default::default(),
+            view_offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38030,11 +39427,19 @@ impl<'a> RenderPassCreateInfo2<'a> {
 impl Default for RenderPassCreateInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            attachment_count: Default::default(),
+            p_attachments: core::ptr::null(),
+            subpass_count: Default::default(),
+            p_subpasses: core::ptr::null(),
+            dependency_count: Default::default(),
+            p_dependencies: core::ptr::null(),
+            correlated_view_mask_count: Default::default(),
+            p_correlated_view_masks: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38109,11 +39514,11 @@ impl<'a> SubpassBeginInfo<'a> {
 impl Default for SubpassBeginInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            contents: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38165,11 +39570,10 @@ impl<'a> SubpassEndInfo<'a> {
 impl Default for SubpassEndInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38217,11 +39621,11 @@ impl<'a> PhysicalDeviceTimelineSemaphoreFeatures<'a> {
 impl Default for PhysicalDeviceTimelineSemaphoreFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            timeline_semaphore: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38277,11 +39681,11 @@ pub struct PhysicalDeviceTimelineSemaphoreProperties<'a> {
 impl Default for PhysicalDeviceTimelineSemaphoreProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_timeline_semaphore_value_difference: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38354,11 +39758,12 @@ impl<'a> SemaphoreTypeCreateInfo<'a> {
 impl Default for SemaphoreTypeCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            semaphore_type: Default::default(),
+            initial_value: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38420,10 +39825,12 @@ pub struct TimelineSemaphoreSubmitInfo<'a> {
 }
 
 impl<'a> TimelineSemaphoreSubmitInfo<'a> {
-    /// Sets `wait_semaphore_value_count`.
+    /// Sets `wait_semaphore_value_count` alone and nulls `p_wait_semaphore_values`: the count
+    /// without its arrays (an array set before is dropped).
     #[inline]
     pub fn wait_semaphore_value_count(mut self, value: u32) -> Self {
         self.wait_semaphore_value_count = value;
+        self.p_wait_semaphore_values = core::ptr::null();
         self
     }
 
@@ -38437,10 +39844,12 @@ impl<'a> TimelineSemaphoreSubmitInfo<'a> {
         self
     }
 
-    /// Sets `signal_semaphore_value_count`.
+    /// Sets `signal_semaphore_value_count` alone and nulls `p_signal_semaphore_values`: the count
+    /// without its arrays (an array set before is dropped).
     #[inline]
     pub fn signal_semaphore_value_count(mut self, value: u32) -> Self {
         self.signal_semaphore_value_count = value;
+        self.p_signal_semaphore_values = core::ptr::null();
         self
     }
 
@@ -38458,11 +39867,14 @@ impl<'a> TimelineSemaphoreSubmitInfo<'a> {
 impl Default for TimelineSemaphoreSubmitInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            wait_semaphore_value_count: Default::default(),
+            p_wait_semaphore_values: core::ptr::null(),
+            signal_semaphore_value_count: Default::default(),
+            p_signal_semaphore_values: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38549,11 +39961,14 @@ impl<'a> SemaphoreWaitInfo<'a> {
 impl Default for SemaphoreWaitInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            semaphore_count: Default::default(),
+            p_semaphores: core::ptr::null(),
+            p_values: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38625,11 +40040,12 @@ impl<'a> SemaphoreSignalInfo<'a> {
 impl Default for SemaphoreSignalInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            semaphore: Default::default(),
+            value: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38684,8 +40100,10 @@ impl VertexInputBindingDivisorDescription {
 impl Default for VertexInputBindingDivisorDescription {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            binding: Default::default(),
+            divisor: Default::default(),
+        }
     }
 }
 
@@ -38745,11 +40163,12 @@ impl<'a> PipelineVertexInputDivisorStateCreateInfo<'a> {
 impl Default for PipelineVertexInputDivisorStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            vertex_binding_divisor_count: Default::default(),
+            p_vertex_binding_divisors: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38808,11 +40227,11 @@ pub struct PhysicalDeviceVertexAttributeDivisorPropertiesEXT<'a> {
 impl Default for PhysicalDeviceVertexAttributeDivisorPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_vertex_attrib_divisor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38871,11 +40290,12 @@ pub struct PhysicalDeviceVertexAttributeDivisorProperties<'a> {
 impl Default for PhysicalDeviceVertexAttributeDivisorProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_vertex_attrib_divisor: Default::default(),
+            supports_non_zero_first_instance: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -38938,11 +40358,14 @@ pub struct PhysicalDevicePCIBusInfoPropertiesEXT<'a> {
 impl Default for PhysicalDevicePCIBusInfoPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pci_domain: Default::default(),
+            pci_bus: Default::default(),
+            pci_device: Default::default(),
+            pci_function: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39014,11 +40437,11 @@ impl<'a> CommandBufferInheritanceConditionalRenderingInfoEXT<'a> {
 impl Default for CommandBufferInheritanceConditionalRenderingInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            conditional_rendering_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39106,11 +40529,13 @@ impl<'a> PhysicalDevice8BitStorageFeatures<'a> {
 impl Default for PhysicalDevice8BitStorageFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            storage_buffer8_bit_access: Default::default(),
+            uniform_and_storage_buffer8_bit_access: Default::default(),
+            storage_push_constant8: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39188,11 +40613,12 @@ impl<'a> PhysicalDeviceConditionalRenderingFeaturesEXT<'a> {
 impl Default for PhysicalDeviceConditionalRenderingFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            conditional_rendering: Default::default(),
+            inherited_conditional_rendering: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39277,11 +40703,13 @@ impl<'a> PhysicalDeviceVulkanMemoryModelFeatures<'a> {
 impl Default for PhysicalDeviceVulkanMemoryModelFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            vulkan_memory_model: Default::default(),
+            vulkan_memory_model_device_scope: Default::default(),
+            vulkan_memory_model_availability_visibility_chains: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39359,11 +40787,12 @@ impl<'a> PhysicalDeviceShaderAtomicInt64Features<'a> {
 impl Default for PhysicalDeviceShaderAtomicInt64Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_buffer_int64_atomics: Default::default(),
+            shader_shared_int64_atomics: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39529,11 +40958,22 @@ impl<'a> PhysicalDeviceShaderAtomicFloatFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderAtomicFloatFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_buffer_float32_atomics: Default::default(),
+            shader_buffer_float32_atomic_add: Default::default(),
+            shader_buffer_float64_atomics: Default::default(),
+            shader_buffer_float64_atomic_add: Default::default(),
+            shader_shared_float32_atomics: Default::default(),
+            shader_shared_float32_atomic_add: Default::default(),
+            shader_shared_float64_atomics: Default::default(),
+            shader_shared_float64_atomic_add: Default::default(),
+            shader_image_float32_atomics: Default::default(),
+            shader_image_float32_atomic_add: Default::default(),
+            sparse_image_float32_atomics: Default::default(),
+            sparse_image_float32_atomic_add: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39719,11 +41159,22 @@ impl<'a> PhysicalDeviceShaderAtomicFloat2FeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderAtomicFloat2FeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_buffer_float16_atomics: Default::default(),
+            shader_buffer_float16_atomic_add: Default::default(),
+            shader_buffer_float16_atomic_min_max: Default::default(),
+            shader_buffer_float32_atomic_min_max: Default::default(),
+            shader_buffer_float64_atomic_min_max: Default::default(),
+            shader_shared_float16_atomics: Default::default(),
+            shader_shared_float16_atomic_add: Default::default(),
+            shader_shared_float16_atomic_min_max: Default::default(),
+            shader_shared_float32_atomic_min_max: Default::default(),
+            shader_shared_float64_atomic_min_max: Default::default(),
+            shader_image_float32_atomic_min_max: Default::default(),
+            sparse_image_float32_atomic_min_max: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39819,11 +41270,12 @@ impl<'a> PhysicalDeviceVertexAttributeDivisorFeatures<'a> {
 impl Default for PhysicalDeviceVertexAttributeDivisorFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            vertex_attribute_instance_rate_divisor: Default::default(),
+            vertex_attribute_instance_rate_zero_divisor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39881,11 +41333,11 @@ pub struct QueueFamilyCheckpointPropertiesNV<'a> {
 impl Default for QueueFamilyCheckpointPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            checkpoint_execution_stage_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -39940,11 +41392,12 @@ pub struct CheckpointDataNV<'a> {
 impl Default for CheckpointDataNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            stage: Default::default(),
+            p_checkpoint_marker: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40010,11 +41463,14 @@ pub struct PhysicalDeviceDepthStencilResolveProperties<'a> {
 impl Default for PhysicalDeviceDepthStencilResolveProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supported_depth_resolve_modes: Default::default(),
+            supported_stencil_resolve_modes: Default::default(),
+            independent_resolve_none: Default::default(),
+            independent_resolve: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40110,11 +41566,13 @@ impl<'a> SubpassDescriptionDepthStencilResolve<'a> {
 impl Default for SubpassDescriptionDepthStencilResolve<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            depth_resolve_mode: Default::default(),
+            stencil_resolve_mode: Default::default(),
+            p_depth_stencil_resolve_attachment: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40182,11 +41640,11 @@ impl<'a> ImageViewASTCDecodeModeEXT<'a> {
 impl Default for ImageViewASTCDecodeModeEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            decode_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40244,11 +41702,11 @@ impl<'a> PhysicalDeviceASTCDecodeFeaturesEXT<'a> {
 impl Default for PhysicalDeviceASTCDecodeFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            decode_mode_shared_exponent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40322,11 +41780,12 @@ impl<'a> PhysicalDeviceTransformFeedbackFeaturesEXT<'a> {
 impl Default for PhysicalDeviceTransformFeedbackFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            transform_feedback: Default::default(),
+            geometry_streams: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40402,11 +41861,20 @@ pub struct PhysicalDeviceTransformFeedbackPropertiesEXT<'a> {
 impl Default for PhysicalDeviceTransformFeedbackPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_transform_feedback_streams: Default::default(),
+            max_transform_feedback_buffers: Default::default(),
+            max_transform_feedback_buffer_size: Default::default(),
+            max_transform_feedback_stream_data_size: Default::default(),
+            max_transform_feedback_buffer_data_size: Default::default(),
+            max_transform_feedback_buffer_data_stride: Default::default(),
+            transform_feedback_queries: Default::default(),
+            transform_feedback_streams_lines_triangles: Default::default(),
+            transform_feedback_rasterization_stream_select: Default::default(),
+            transform_feedback_draw: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40497,11 +41965,12 @@ impl<'a> PipelineRasterizationStateStreamCreateInfoEXT<'a> {
 impl Default for PipelineRasterizationStateStreamCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            rasterization_stream: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40567,11 +42036,11 @@ impl<'a> PhysicalDeviceRepresentativeFragmentTestFeaturesNV<'a> {
 impl Default for PhysicalDeviceRepresentativeFragmentTestFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            representative_fragment_test: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40636,11 +42105,11 @@ impl<'a> PipelineRepresentativeFragmentTestStateCreateInfoNV<'a> {
 impl Default for PipelineRepresentativeFragmentTestStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            representative_fragment_test_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40704,11 +42173,11 @@ impl<'a> PhysicalDeviceExclusiveScissorFeaturesNV<'a> {
 impl Default for PhysicalDeviceExclusiveScissorFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            exclusive_scissor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40778,11 +42247,12 @@ impl<'a> PipelineViewportExclusiveScissorStateCreateInfoNV<'a> {
 impl Default for PipelineViewportExclusiveScissorStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            exclusive_scissor_count: Default::default(),
+            p_exclusive_scissors: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40848,11 +42318,11 @@ impl<'a> PhysicalDeviceCornerSampledImageFeaturesNV<'a> {
 impl Default for PhysicalDeviceCornerSampledImageFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            corner_sampled_image: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40926,11 +42396,12 @@ impl<'a> PhysicalDeviceComputeShaderDerivativesFeaturesKHR<'a> {
 impl Default for PhysicalDeviceComputeShaderDerivativesFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            compute_derivative_group_quads: Default::default(),
+            compute_derivative_group_linear: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -40988,11 +42459,11 @@ pub struct PhysicalDeviceComputeShaderDerivativesPropertiesKHR<'a> {
 impl Default for PhysicalDeviceComputeShaderDerivativesPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            mesh_and_task_shader_derivatives: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41056,11 +42527,11 @@ impl<'a> PhysicalDeviceShaderImageFootprintFeaturesNV<'a> {
 impl Default for PhysicalDeviceShaderImageFootprintFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_footprint: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41125,11 +42596,11 @@ impl<'a> PhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV<'a> {
 impl Default for PhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            dedicated_allocation_image_aliasing: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41203,11 +42674,12 @@ impl<'a> PhysicalDeviceCopyMemoryIndirectFeaturesKHR<'a> {
 impl Default for PhysicalDeviceCopyMemoryIndirectFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            indirect_memory_copy: Default::default(),
+            indirect_memory_to_image_copy: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41274,11 +42746,11 @@ impl<'a> PhysicalDeviceCopyMemoryIndirectFeaturesNV<'a> {
 impl Default for PhysicalDeviceCopyMemoryIndirectFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            indirect_copy: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41336,11 +42808,11 @@ pub struct PhysicalDeviceCopyMemoryIndirectPropertiesKHR<'a> {
 impl Default for PhysicalDeviceCopyMemoryIndirectPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supported_queues: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41404,11 +42876,11 @@ impl<'a> PhysicalDeviceMemoryDecompressionFeaturesEXT<'a> {
 impl Default for PhysicalDeviceMemoryDecompressionFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_decompression: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41466,11 +42938,12 @@ pub struct PhysicalDeviceMemoryDecompressionPropertiesEXT<'a> {
 impl Default for PhysicalDeviceMemoryDecompressionPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            decompression_methods: Default::default(),
+            max_decompression_indirect_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41537,8 +43010,11 @@ impl<'a> ShadingRatePaletteNV<'a> {
 impl Default for ShadingRatePaletteNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            shading_rate_palette_entry_count: Default::default(),
+            p_shading_rate_palette_entries: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -41603,11 +43079,13 @@ impl<'a> PipelineViewportShadingRateImageStateCreateInfoNV<'a> {
 impl Default for PipelineViewportShadingRateImageStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            shading_rate_image_enable: Default::default(),
+            viewport_count: Default::default(),
+            p_shading_rate_palettes: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41684,11 +43162,12 @@ impl<'a> PhysicalDeviceShadingRateImageFeaturesNV<'a> {
 impl Default for PhysicalDeviceShadingRateImageFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shading_rate_image: Default::default(),
+            shading_rate_coarse_sample_order: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41750,11 +43229,13 @@ pub struct PhysicalDeviceShadingRateImagePropertiesNV<'a> {
 impl Default for PhysicalDeviceShadingRateImagePropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shading_rate_texel_size: Default::default(),
+            shading_rate_palette_size: Default::default(),
+            shading_rate_max_coarse_samples: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41822,11 +43303,11 @@ impl<'a> PhysicalDeviceInvocationMaskFeaturesHUAWEI<'a> {
 impl Default for PhysicalDeviceInvocationMaskFeaturesHUAWEI<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            invocation_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -41901,8 +43382,11 @@ impl CoarseSampleLocationNV {
 impl Default for CoarseSampleLocationNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            pixel_x: Default::default(),
+            pixel_y: Default::default(),
+            sample: Default::default(),
+        }
     }
 }
 
@@ -41974,8 +43458,13 @@ impl<'a> CoarseSampleOrderCustomNV<'a> {
 impl Default for CoarseSampleOrderCustomNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            shading_rate: Default::default(),
+            sample_count: Default::default(),
+            sample_location_count: Default::default(),
+            p_sample_locations: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -42044,11 +43533,13 @@ impl<'a> PipelineViewportCoarseSampleOrderStateCreateInfoNV<'a> {
 impl Default for PipelineViewportCoarseSampleOrderStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            sample_order_type: Default::default(),
+            custom_sample_order_count: Default::default(),
+            p_custom_sample_orders: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -42125,11 +43616,12 @@ impl<'a> PhysicalDeviceMeshShaderFeaturesNV<'a> {
 impl Default for PhysicalDeviceMeshShaderFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            task_shader: Default::default(),
+            mesh_shader: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -42211,11 +43703,23 @@ pub struct PhysicalDeviceMeshShaderPropertiesNV<'a> {
 impl Default for PhysicalDeviceMeshShaderPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_draw_mesh_tasks_count: Default::default(),
+            max_task_work_group_invocations: Default::default(),
+            max_task_work_group_size: [Default::default(); 3],
+            max_task_total_memory_size: Default::default(),
+            max_task_output_count: Default::default(),
+            max_mesh_work_group_invocations: Default::default(),
+            max_mesh_work_group_size: [Default::default(); 3],
+            max_mesh_total_memory_size: Default::default(),
+            max_mesh_output_vertices: Default::default(),
+            max_mesh_output_primitives: Default::default(),
+            max_mesh_multiview_view_count: Default::default(),
+            mesh_output_per_vertex_granularity: Default::default(),
+            mesh_output_per_primitive_granularity: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -42304,8 +43808,10 @@ impl DrawMeshTasksIndirectCommandNV {
 impl Default for DrawMeshTasksIndirectCommandNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            task_count: Default::default(),
+            first_task: Default::default(),
+        }
     }
 }
 
@@ -42395,11 +43901,15 @@ impl<'a> PhysicalDeviceMeshShaderFeaturesEXT<'a> {
 impl Default for PhysicalDeviceMeshShaderFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            task_shader: Default::default(),
+            mesh_shader: Default::default(),
+            multiview_mesh_shader: Default::default(),
+            primitive_fragment_shading_rate_mesh_shader: Default::default(),
+            mesh_shader_queries: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -42517,11 +44027,38 @@ pub struct PhysicalDeviceMeshShaderPropertiesEXT<'a> {
 impl Default for PhysicalDeviceMeshShaderPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_task_work_group_total_count: Default::default(),
+            max_task_work_group_count: [Default::default(); 3],
+            max_task_work_group_invocations: Default::default(),
+            max_task_work_group_size: [Default::default(); 3],
+            max_task_payload_size: Default::default(),
+            max_task_shared_memory_size: Default::default(),
+            max_task_payload_and_shared_memory_size: Default::default(),
+            max_mesh_work_group_total_count: Default::default(),
+            max_mesh_work_group_count: [Default::default(); 3],
+            max_mesh_work_group_invocations: Default::default(),
+            max_mesh_work_group_size: [Default::default(); 3],
+            max_mesh_shared_memory_size: Default::default(),
+            max_mesh_payload_and_shared_memory_size: Default::default(),
+            max_mesh_output_memory_size: Default::default(),
+            max_mesh_payload_and_output_memory_size: Default::default(),
+            max_mesh_output_components: Default::default(),
+            max_mesh_output_vertices: Default::default(),
+            max_mesh_output_primitives: Default::default(),
+            max_mesh_output_layers: Default::default(),
+            max_mesh_multiview_view_count: Default::default(),
+            mesh_output_per_vertex_granularity: Default::default(),
+            mesh_output_per_primitive_granularity: Default::default(),
+            max_preferred_task_work_group_invocations: Default::default(),
+            max_preferred_mesh_work_group_invocations: Default::default(),
+            prefers_local_invocation_vertex_output: Default::default(),
+            prefers_local_invocation_primitive_output: Default::default(),
+            prefers_compact_vertex_output: Default::default(),
+            prefers_compact_primitive_output: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -42649,8 +44186,11 @@ impl DrawMeshTasksIndirectCommandEXT {
 impl Default for DrawMeshTasksIndirectCommandEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            group_count_x: Default::default(),
+            group_count_y: Default::default(),
+            group_count_z: Default::default(),
+        }
     }
 }
 
@@ -42745,11 +44285,15 @@ impl<'a> RayTracingShaderGroupCreateInfoNV<'a> {
 impl Default for RayTracingShaderGroupCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            general_shader: Default::default(),
+            closest_hit_shader: Default::default(),
+            any_hit_shader: Default::default(),
+            intersection_shader: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -42859,11 +44403,16 @@ impl<'a> RayTracingShaderGroupCreateInfoKHR<'a> {
 impl Default for RayTracingShaderGroupCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            general_shader: Default::default(),
+            closest_hit_shader: Default::default(),
+            any_hit_shader: Default::default(),
+            intersection_shader: Default::default(),
+            p_shader_group_capture_replay_handle: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -43014,11 +44563,19 @@ impl<'a> RayTracingPipelineCreateInfoNV<'a> {
 impl Default for RayTracingPipelineCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            stage_count: Default::default(),
+            p_stages: core::ptr::null(),
+            group_count: Default::default(),
+            p_groups: core::ptr::null(),
+            max_recursion_depth: Default::default(),
+            layout: Default::default(),
+            base_pipeline_handle: Default::default(),
+            base_pipeline_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -43205,11 +44762,22 @@ impl<'a> RayTracingPipelineCreateInfoKHR<'a> {
 impl Default for RayTracingPipelineCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            stage_count: Default::default(),
+            p_stages: core::ptr::null(),
+            group_count: Default::default(),
+            p_groups: core::ptr::null(),
+            max_pipeline_ray_recursion_depth: Default::default(),
+            p_library_info: core::ptr::null(),
+            p_library_interface: core::ptr::null(),
+            p_dynamic_state: core::ptr::null(),
+            layout: Default::default(),
+            base_pipeline_handle: Default::default(),
+            base_pipeline_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -43381,11 +44949,21 @@ impl<'a> GeometryTrianglesNV<'a> {
 impl Default for GeometryTrianglesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            vertex_data: Default::default(),
+            vertex_offset: Default::default(),
+            vertex_count: Default::default(),
+            vertex_stride: Default::default(),
+            vertex_format: Default::default(),
+            index_data: Default::default(),
+            index_offset: Default::default(),
+            index_count: Default::default(),
+            index_type: Default::default(),
+            transform_data: Default::default(),
+            transform_offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -43493,11 +45071,14 @@ impl<'a> GeometryAABBNV<'a> {
 impl Default for GeometryAABBNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            aabb_data: Default::default(),
+            num_aab_bs: Default::default(),
+            stride: Default::default(),
+            offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -43565,8 +45146,11 @@ impl<'a> GeometryDataNV<'a> {
 impl Default for GeometryDataNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            triangles: Default::default(),
+            aabbs: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -43626,11 +45210,13 @@ impl<'a> GeometryNV<'a> {
 impl Default for GeometryNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            geometry_type: Default::default(),
+            geometry: Default::default(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -43723,11 +45309,15 @@ impl<'a> AccelerationStructureInfoNV<'a> {
 impl Default for AccelerationStructureInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            flags: Default::default(),
+            instance_count: Default::default(),
+            geometry_count: Default::default(),
+            p_geometries: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -43809,11 +45399,12 @@ impl<'a> AccelerationStructureCreateInfoNV<'a> {
 impl Default for AccelerationStructureCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            compacted_size: Default::default(),
+            info: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -43904,11 +45495,15 @@ impl<'a> BindAccelerationStructureMemoryInfoNV<'a> {
 impl Default for BindAccelerationStructureMemoryInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            acceleration_structure: Default::default(),
+            memory: Default::default(),
+            memory_offset: Default::default(),
+            device_index_count: Default::default(),
+            p_device_indices: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -43981,11 +45576,12 @@ impl<'a> WriteDescriptorSetAccelerationStructureKHR<'a> {
 impl Default for WriteDescriptorSetAccelerationStructureKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            acceleration_structure_count: Default::default(),
+            p_acceleration_structures: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -44057,11 +45653,12 @@ impl<'a> WriteDescriptorSetAccelerationStructureNV<'a> {
 impl Default for WriteDescriptorSetAccelerationStructureNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            acceleration_structure_count: Default::default(),
+            p_acceleration_structures: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -44134,11 +45731,12 @@ impl<'a> AccelerationStructureMemoryRequirementsInfoNV<'a> {
 impl Default for AccelerationStructureMemoryRequirementsInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            acceleration_structure: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -44238,11 +45836,15 @@ impl<'a> PhysicalDeviceAccelerationStructureFeaturesKHR<'a> {
 impl Default for PhysicalDeviceAccelerationStructureFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            acceleration_structure: Default::default(),
+            acceleration_structure_capture_replay: Default::default(),
+            acceleration_structure_indirect_build: Default::default(),
+            acceleration_structure_host_commands: Default::default(),
+            descriptor_binding_acceleration_structure_update_after_bind: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -44354,11 +45956,15 @@ impl<'a> PhysicalDeviceRayTracingPipelineFeaturesKHR<'a> {
 impl Default for PhysicalDeviceRayTracingPipelineFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_tracing_pipeline: Default::default(),
+            ray_tracing_pipeline_shader_group_handle_capture_replay: Default::default(),
+            ray_tracing_pipeline_shader_group_handle_capture_replay_mixed: Default::default(),
+            ray_tracing_pipeline_trace_rays_indirect: Default::default(),
+            ray_traversal_primitive_culling: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -44431,11 +46037,11 @@ impl<'a> PhysicalDeviceRayQueryFeaturesKHR<'a> {
 impl Default for PhysicalDeviceRayQueryFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_query: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -44505,11 +46111,18 @@ pub struct PhysicalDeviceAccelerationStructurePropertiesKHR<'a> {
 impl Default for PhysicalDeviceAccelerationStructurePropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_geometry_count: Default::default(),
+            max_instance_count: Default::default(),
+            max_primitive_count: Default::default(),
+            max_per_stage_descriptor_acceleration_structures: Default::default(),
+            max_per_stage_descriptor_update_after_bind_acceleration_structures: Default::default(),
+            max_descriptor_set_acceleration_structures: Default::default(),
+            max_descriptor_set_update_after_bind_acceleration_structures: Default::default(),
+            min_acceleration_structure_scratch_offset_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -44592,11 +46205,18 @@ pub struct PhysicalDeviceRayTracingPipelinePropertiesKHR<'a> {
 impl Default for PhysicalDeviceRayTracingPipelinePropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_group_handle_size: Default::default(),
+            max_ray_recursion_depth: Default::default(),
+            max_shader_group_stride: Default::default(),
+            shader_group_base_alignment: Default::default(),
+            shader_group_handle_capture_replay_size: Default::default(),
+            max_ray_dispatch_invocation_count: Default::default(),
+            shader_group_handle_alignment: Default::default(),
+            max_ray_hit_attribute_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -44679,11 +46299,18 @@ pub struct PhysicalDeviceRayTracingPropertiesNV<'a> {
 impl Default for PhysicalDeviceRayTracingPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_group_handle_size: Default::default(),
+            max_recursion_depth: Default::default(),
+            max_shader_group_stride: Default::default(),
+            shader_group_base_alignment: Default::default(),
+            max_geometry_count: Default::default(),
+            max_instance_count: Default::default(),
+            max_triangle_count: Default::default(),
+            max_descriptor_set_acceleration_structures: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -44771,8 +46398,11 @@ impl StridedDeviceAddressRegionKHR {
 impl Default for StridedDeviceAddressRegionKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            device_address: Default::default(),
+            stride: Default::default(),
+            size: Default::default(),
+        }
     }
 }
 
@@ -44845,8 +46475,11 @@ impl TraceRaysIndirectCommandKHR {
 impl Default for TraceRaysIndirectCommandKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            width: Default::default(),
+            height: Default::default(),
+            depth: Default::default(),
+        }
     }
 }
 
@@ -45010,8 +46643,22 @@ impl TraceRaysIndirectCommand2KHR {
 impl Default for TraceRaysIndirectCommand2KHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            raygen_shader_record_address: Default::default(),
+            raygen_shader_record_size: Default::default(),
+            miss_shader_binding_table_address: Default::default(),
+            miss_shader_binding_table_size: Default::default(),
+            miss_shader_binding_table_stride: Default::default(),
+            hit_shader_binding_table_address: Default::default(),
+            hit_shader_binding_table_size: Default::default(),
+            hit_shader_binding_table_stride: Default::default(),
+            callable_shader_binding_table_address: Default::default(),
+            callable_shader_binding_table_size: Default::default(),
+            callable_shader_binding_table_stride: Default::default(),
+            width: Default::default(),
+            height: Default::default(),
+            depth: Default::default(),
+        }
     }
 }
 
@@ -45095,11 +46742,12 @@ impl<'a> PhysicalDeviceRayTracingMaintenance1FeaturesKHR<'a> {
 impl Default for PhysicalDeviceRayTracingMaintenance1FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_tracing_maintenance1: Default::default(),
+            ray_tracing_pipeline_trace_rays_indirect2: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45159,11 +46807,12 @@ pub struct DrmFormatModifierPropertiesListEXT<'a> {
 impl Default for DrmFormatModifierPropertiesListEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            drm_format_modifier_count: Default::default(),
+            p_drm_format_modifier_properties: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45216,8 +46865,11 @@ pub struct DrmFormatModifierPropertiesEXT {
 impl Default for DrmFormatModifierPropertiesEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            drm_format_modifier: Default::default(),
+            drm_format_modifier_plane_count: Default::default(),
+            drm_format_modifier_tiling_features: Default::default(),
+        }
     }
 }
 
@@ -45303,11 +46955,14 @@ impl<'a> PhysicalDeviceImageDrmFormatModifierInfoEXT<'a> {
 impl Default for PhysicalDeviceImageDrmFormatModifierInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            drm_format_modifier: Default::default(),
+            sharing_mode: Default::default(),
+            queue_family_index_count: Default::default(),
+            p_queue_family_indices: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45382,11 +47037,12 @@ impl<'a> ImageDrmFormatModifierListCreateInfoEXT<'a> {
 impl Default for ImageDrmFormatModifierListCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            drm_format_modifier_count: Default::default(),
+            p_drm_format_modifiers: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45467,11 +47123,13 @@ impl<'a> ImageDrmFormatModifierExplicitCreateInfoEXT<'a> {
 impl Default for ImageDrmFormatModifierExplicitCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            drm_format_modifier: Default::default(),
+            drm_format_modifier_plane_count: Default::default(),
+            p_plane_layouts: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45528,11 +47186,11 @@ pub struct ImageDrmFormatModifierPropertiesEXT<'a> {
 impl Default for ImageDrmFormatModifierPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            drm_format_modifier: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45591,11 +47249,11 @@ impl<'a> ImageStencilUsageCreateInfo<'a> {
 impl Default for ImageStencilUsageCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stencil_usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45660,11 +47318,11 @@ impl<'a> ImageStencilUsage2CreateInfoKHR<'a> {
 impl Default for ImageStencilUsage2CreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            stencil_usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45729,11 +47387,11 @@ impl<'a> DeviceMemoryOverallocationCreateInfoAMD<'a> {
 impl Default for DeviceMemoryOverallocationCreateInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            overallocation_behavior: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45815,11 +47473,13 @@ impl<'a> PhysicalDeviceFragmentDensityMapFeaturesEXT<'a> {
 impl Default for PhysicalDeviceFragmentDensityMapFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            fragment_density_map: Default::default(),
+            fragment_density_map_dynamic: Default::default(),
+            fragment_density_map_non_subsampled_images: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45888,11 +47548,11 @@ impl<'a> PhysicalDeviceFragmentDensityMap2FeaturesEXT<'a> {
 impl Default for PhysicalDeviceFragmentDensityMap2FeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            fragment_density_map_deferred: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -45957,11 +47617,11 @@ impl<'a> PhysicalDeviceFragmentDensityMapOffsetFeaturesEXT<'a> {
 impl Default for PhysicalDeviceFragmentDensityMapOffsetFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            fragment_density_map_offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46021,11 +47681,13 @@ pub struct PhysicalDeviceFragmentDensityMapPropertiesEXT<'a> {
 impl Default for PhysicalDeviceFragmentDensityMapPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            min_fragment_density_texel_size: Default::default(),
+            max_fragment_density_texel_size: Default::default(),
+            fragment_density_invocations: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46090,11 +47752,14 @@ pub struct PhysicalDeviceFragmentDensityMap2PropertiesEXT<'a> {
 impl Default for PhysicalDeviceFragmentDensityMap2PropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            subsampled_loads: Default::default(),
+            subsampled_coarse_reconstruction_early_access: Default::default(),
+            max_subsampled_array_layers: Default::default(),
+            max_descriptor_set_subsampled_samplers: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46155,11 +47820,11 @@ pub struct PhysicalDeviceFragmentDensityMapOffsetPropertiesEXT<'a> {
 impl Default for PhysicalDeviceFragmentDensityMapOffsetPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            fragment_density_offset_granularity: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46225,11 +47890,11 @@ impl<'a> RenderPassFragmentDensityMapCreateInfoEXT<'a> {
 impl Default for RenderPassFragmentDensityMapCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            fragment_density_map_attachment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46300,11 +47965,12 @@ impl<'a> RenderPassFragmentDensityMapOffsetEndInfoEXT<'a> {
 impl Default for RenderPassFragmentDensityMapOffsetEndInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            fragment_density_offset_count: Default::default(),
+            p_fragment_density_offsets: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46371,11 +48037,11 @@ impl<'a> PhysicalDeviceScalarBlockLayoutFeatures<'a> {
 impl Default for PhysicalDeviceScalarBlockLayoutFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            scalar_block_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46433,11 +48099,11 @@ pub struct SurfaceProtectedCapabilitiesKHR<'a> {
 impl Default for SurfaceProtectedCapabilitiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supports_protected: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46501,11 +48167,11 @@ impl<'a> PhysicalDeviceUniformBufferStandardLayoutFeatures<'a> {
 impl Default for PhysicalDeviceUniformBufferStandardLayoutFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            uniform_buffer_standard_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46570,11 +48236,11 @@ impl<'a> PhysicalDeviceDepthClipEnableFeaturesEXT<'a> {
 impl Default for PhysicalDeviceDepthClipEnableFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            depth_clip_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46650,11 +48316,12 @@ impl<'a> PipelineRasterizationDepthClipStateCreateInfoEXT<'a> {
 impl Default for PipelineRasterizationDepthClipStateCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            depth_clip_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46713,11 +48380,12 @@ pub struct PhysicalDeviceMemoryBudgetPropertiesEXT<'a> {
 impl Default for PhysicalDeviceMemoryBudgetPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            heap_budget: [Default::default(); MAX_MEMORY_HEAPS],
+            heap_usage: [Default::default(); MAX_MEMORY_HEAPS],
+            _marker: PhantomData,
         }
     }
 }
@@ -46783,11 +48451,11 @@ impl<'a> PhysicalDeviceMemoryPriorityFeaturesEXT<'a> {
 impl Default for PhysicalDeviceMemoryPriorityFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_priority: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46852,11 +48520,11 @@ impl<'a> MemoryPriorityAllocateInfoEXT<'a> {
 impl Default for MemoryPriorityAllocateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            priority: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -46914,11 +48582,11 @@ impl<'a> PhysicalDevicePageableDeviceLocalMemoryFeaturesEXT<'a> {
 impl Default for PhysicalDevicePageableDeviceLocalMemoryFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pageable_device_local_memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47001,11 +48669,13 @@ impl<'a> PhysicalDeviceBufferDeviceAddressFeatures<'a> {
 impl Default for PhysicalDeviceBufferDeviceAddressFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            buffer_device_address: Default::default(),
+            buffer_device_address_capture_replay: Default::default(),
+            buffer_device_address_multi_device: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47092,11 +48762,13 @@ impl<'a> PhysicalDeviceBufferDeviceAddressFeaturesEXT<'a> {
 impl Default for PhysicalDeviceBufferDeviceAddressFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            buffer_device_address: Default::default(),
+            buffer_device_address_capture_replay: Default::default(),
+            buffer_device_address_multi_device: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47163,11 +48835,11 @@ impl<'a> BufferDeviceAddressInfo<'a> {
 impl Default for BufferDeviceAddressInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            buffer: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47220,11 +48892,11 @@ impl<'a> BufferOpaqueCaptureAddressCreateInfo<'a> {
 impl Default for BufferOpaqueCaptureAddressCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            opaque_capture_address: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47288,11 +48960,11 @@ impl<'a> BufferDeviceAddressCreateInfoEXT<'a> {
 impl Default for BufferDeviceAddressCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            device_address: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47356,11 +49028,11 @@ impl<'a> PhysicalDeviceImageViewImageFormatInfoEXT<'a> {
 impl Default for PhysicalDeviceImageViewImageFormatInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_view_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47423,11 +49095,12 @@ pub struct FilterCubicImageViewImageFormatPropertiesEXT<'a> {
 impl Default for FilterCubicImageViewImageFormatPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            filter_cubic: Default::default(),
+            filter_cubic_minmax: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47493,11 +49166,11 @@ impl<'a> PhysicalDeviceImagelessFramebufferFeatures<'a> {
 impl Default for PhysicalDeviceImagelessFramebufferFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            imageless_framebuffer: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47572,11 +49245,12 @@ impl<'a> FramebufferAttachmentsCreateInfo<'a> {
 impl Default for FramebufferAttachmentsCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            attachment_image_info_count: Default::default(),
+            p_attachment_image_infos: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47704,11 +49378,17 @@ impl<'a> FramebufferAttachmentImageInfo<'a> {
 impl Default for FramebufferAttachmentImageInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            usage: Default::default(),
+            width: Default::default(),
+            height: Default::default(),
+            layer_count: Default::default(),
+            view_format_count: Default::default(),
+            p_view_formats: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47786,11 +49466,12 @@ impl<'a> RenderPassAttachmentBeginInfo<'a> {
 impl Default for RenderPassAttachmentBeginInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            attachment_count: Default::default(),
+            p_attachments: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47856,11 +49537,11 @@ impl<'a> PhysicalDeviceTextureCompressionASTCHDRFeatures<'a> {
 impl Default for PhysicalDeviceTextureCompressionASTCHDRFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            texture_compression_astc_hdr: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47934,11 +49615,12 @@ impl<'a> PhysicalDeviceCooperativeMatrixFeaturesNV<'a> {
 impl Default for PhysicalDeviceCooperativeMatrixFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_matrix: Default::default(),
+            cooperative_matrix_robust_buffer_access: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -47996,11 +49678,11 @@ pub struct PhysicalDeviceCooperativeMatrixPropertiesNV<'a> {
 impl Default for PhysicalDeviceCooperativeMatrixPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_matrix_supported_stages: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48067,11 +49749,18 @@ pub struct CooperativeMatrixPropertiesNV<'a> {
 impl Default for CooperativeMatrixPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            m_size: Default::default(),
+            n_size: Default::default(),
+            k_size: Default::default(),
+            a_type: Default::default(),
+            b_type: Default::default(),
+            c_type: Default::default(),
+            d_type: Default::default(),
+            scope: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48144,11 +49833,11 @@ impl<'a> PhysicalDeviceYcbcrImageArraysFeaturesEXT<'a> {
 impl Default for PhysicalDeviceYcbcrImageArraysFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ycbcr_image_arrays: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48229,11 +49918,13 @@ impl<'a> ImageViewHandleInfoNVX<'a> {
 impl Default for ImageViewHandleInfoNVX<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image_view: Default::default(),
+            descriptor_type: Default::default(),
+            sampler: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48287,11 +49978,12 @@ pub struct ImageViewAddressPropertiesNVX<'a> {
 impl Default for ImageViewAddressPropertiesNVX<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_address: Default::default(),
+            size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48337,8 +50029,10 @@ pub struct PipelineCreationFeedback {
 impl Default for PipelineCreationFeedback {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            flags: Default::default(),
+            duration: Default::default(),
+        }
     }
 }
 
@@ -48407,11 +50101,13 @@ impl<'a> PipelineCreationFeedbackCreateInfo<'a> {
 impl Default for PipelineCreationFeedbackCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_pipeline_creation_feedback: core::ptr::null_mut(),
+            pipeline_stage_creation_feedback_count: Default::default(),
+            p_pipeline_stage_creation_feedbacks: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48483,11 +50179,11 @@ impl<'a> SurfaceFullScreenExclusiveInfoEXT<'a> {
 impl Default for SurfaceFullScreenExclusiveInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            full_screen_exclusive: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48552,11 +50248,11 @@ impl<'a> SurfaceFullScreenExclusiveWin32InfoEXT<'a> {
 impl Default for SurfaceFullScreenExclusiveWin32InfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            hmonitor: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48612,11 +50308,11 @@ pub struct SurfaceCapabilitiesFullScreenExclusiveEXT<'a> {
 impl Default for SurfaceCapabilitiesFullScreenExclusiveEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            full_screen_exclusive_supported: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48680,11 +50376,11 @@ impl<'a> PhysicalDevicePresentBarrierFeaturesNV<'a> {
 impl Default for PhysicalDevicePresentBarrierFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_barrier: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48740,11 +50436,11 @@ pub struct SurfaceCapabilitiesPresentBarrierNV<'a> {
 impl Default for SurfaceCapabilitiesPresentBarrierNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_barrier_supported: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48808,11 +50504,11 @@ impl<'a> SwapchainPresentBarrierCreateInfoNV<'a> {
 impl Default for SwapchainPresentBarrierCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_barrier_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48890,11 +50586,12 @@ impl<'a> PhysicalDevicePerformanceQueryFeaturesKHR<'a> {
 impl Default for PhysicalDevicePerformanceQueryFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            performance_counter_query_pools: Default::default(),
+            performance_counter_multiple_query_pools: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -48955,11 +50652,11 @@ pub struct PhysicalDevicePerformanceQueryPropertiesKHR<'a> {
 impl Default for PhysicalDevicePerformanceQueryPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            allow_command_buffer_query_copies: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49018,11 +50715,14 @@ pub struct PerformanceCounterKHR<'a> {
 impl Default for PerformanceCounterKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            unit: Default::default(),
+            scope: Default::default(),
+            storage: Default::default(),
+            uuid: [Default::default(); UUID_SIZE],
+            _marker: PhantomData,
         }
     }
 }
@@ -49082,11 +50782,14 @@ pub struct PerformanceCounterDescriptionKHR<'a> {
 impl Default for PerformanceCounterDescriptionKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            name: [Default::default(); MAX_DESCRIPTION_SIZE],
+            category: [Default::default(); MAX_DESCRIPTION_SIZE],
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            _marker: PhantomData,
         }
     }
 }
@@ -49168,11 +50871,13 @@ impl<'a> QueryPoolPerformanceCreateInfoKHR<'a> {
 impl Default for QueryPoolPerformanceCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            queue_family_index: Default::default(),
+            counter_index_count: Default::default(),
+            p_counter_indices: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49249,11 +50954,12 @@ impl<'a> AcquireProfilingLockInfoKHR<'a> {
 impl Default for AcquireProfilingLockInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            timeout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49316,11 +51022,11 @@ impl<'a> PerformanceQuerySubmitInfoKHR<'a> {
 impl Default for PerformanceQuerySubmitInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            counter_pass_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49383,11 +51089,11 @@ impl<'a> HeadlessSurfaceCreateInfoEXT<'a> {
 impl Default for HeadlessSurfaceCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49440,11 +51146,11 @@ impl<'a> PhysicalDeviceCoverageReductionModeFeaturesNV<'a> {
 impl Default for PhysicalDeviceCoverageReductionModeFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            coverage_reduction_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49518,11 +51224,12 @@ impl<'a> PipelineCoverageReductionStateCreateInfoNV<'a> {
 impl Default for PipelineCoverageReductionStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            coverage_reduction_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49583,11 +51290,14 @@ pub struct FramebufferMixedSamplesCombinationNV<'a> {
 impl Default for FramebufferMixedSamplesCombinationNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            coverage_reduction_mode: Default::default(),
+            rasterization_samples: Default::default(),
+            depth_stencil_samples: Default::default(),
+            color_samples: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49652,11 +51362,11 @@ impl<'a> PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL<'a> {
 impl Default for PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_integer_functions2: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49706,8 +51416,10 @@ pub struct PerformanceValueINTEL {
 impl Default for PerformanceValueINTEL {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            r#type: Default::default(),
+            data: Default::default(),
+        }
     }
 }
 
@@ -49747,11 +51459,11 @@ impl<'a> InitializePerformanceApiInfoINTEL<'a> {
 impl Default for InitializePerformanceApiInfoINTEL<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_user_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49810,11 +51522,11 @@ impl<'a> QueryPoolPerformanceQueryCreateInfoINTEL<'a> {
 impl Default for QueryPoolPerformanceQueryCreateInfoINTEL<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            performance_counters_sampling: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49876,11 +51588,11 @@ impl<'a> PerformanceMarkerInfoINTEL<'a> {
 impl Default for PerformanceMarkerInfoINTEL<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            marker: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -49931,11 +51643,11 @@ impl<'a> PerformanceStreamMarkerInfoINTEL<'a> {
 impl Default for PerformanceStreamMarkerInfoINTEL<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            marker: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50010,11 +51722,13 @@ impl<'a> PerformanceOverrideInfoINTEL<'a> {
 impl Default for PerformanceOverrideInfoINTEL<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            enable: Default::default(),
+            parameter: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50075,11 +51789,11 @@ impl<'a> PerformanceConfigurationAcquireInfoINTEL<'a> {
 impl Default for PerformanceConfigurationAcquireInfoINTEL<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50147,11 +51861,12 @@ impl<'a> PhysicalDeviceShaderClockFeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderClockFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_subgroup_clock: Default::default(),
+            shader_device_clock: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50218,11 +51933,11 @@ impl<'a> PhysicalDeviceIndexTypeUint8Features<'a> {
 impl Default for PhysicalDeviceIndexTypeUint8Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            index_type_uint8: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50280,11 +51995,12 @@ pub struct PhysicalDeviceShaderSMBuiltinsPropertiesNV<'a> {
 impl Default for PhysicalDeviceShaderSMBuiltinsPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_sm_count: Default::default(),
+            shader_warps_per_sm: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50350,11 +52066,11 @@ impl<'a> PhysicalDeviceShaderSMBuiltinsFeaturesNV<'a> {
 impl Default for PhysicalDeviceShaderSMBuiltinsFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_sm_builtins: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50439,11 +52155,13 @@ impl<'a> PhysicalDeviceFragmentShaderInterlockFeaturesEXT<'a> {
 impl Default for PhysicalDeviceFragmentShaderInterlockFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            fragment_shader_sample_interlock: Default::default(),
+            fragment_shader_pixel_interlock: Default::default(),
+            fragment_shader_shading_rate_interlock: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50512,11 +52230,11 @@ impl<'a> PhysicalDeviceSeparateDepthStencilLayoutsFeatures<'a> {
 impl Default for PhysicalDeviceSeparateDepthStencilLayoutsFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            separate_depth_stencil_layouts: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50581,11 +52299,11 @@ impl<'a> AttachmentReferenceStencilLayout<'a> {
 impl Default for AttachmentReferenceStencilLayout<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            stencil_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50658,11 +52376,12 @@ impl<'a> PhysicalDevicePrimitiveTopologyListRestartFeaturesEXT<'a> {
 impl Default for PhysicalDevicePrimitiveTopologyListRestartFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            primitive_topology_list_restart: Default::default(),
+            primitive_topology_patch_list_restart: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50740,11 +52459,12 @@ impl<'a> AttachmentDescriptionStencilLayout<'a> {
 impl Default for AttachmentDescriptionStencilLayout<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            stencil_initial_layout: Default::default(),
+            stencil_final_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50810,11 +52530,11 @@ impl<'a> PhysicalDevicePipelineExecutablePropertiesFeaturesKHR<'a> {
 impl Default for PhysicalDevicePipelineExecutablePropertiesFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_executable_info: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50877,11 +52597,11 @@ impl<'a> PipelineInfoKHR<'a> {
 impl Default for PipelineInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            pipeline: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -50929,11 +52649,14 @@ pub struct PipelineExecutablePropertiesKHR<'a> {
 impl Default for PipelineExecutablePropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            stages: Default::default(),
+            name: [Default::default(); MAX_DESCRIPTION_SIZE],
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            subgroup_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51007,11 +52730,12 @@ impl<'a> PipelineExecutableInfoKHR<'a> {
 impl Default for PipelineExecutableInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            pipeline: Default::default(),
+            executable_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51067,11 +52791,14 @@ pub struct PipelineExecutableStatisticKHR<'a> {
 impl Default for PipelineExecutableStatisticKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            name: [Default::default(); MAX_DESCRIPTION_SIZE],
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            format: Default::default(),
+            value: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51135,11 +52862,15 @@ pub struct PipelineExecutableInternalRepresentationKHR<'a> {
 impl Default for PipelineExecutableInternalRepresentationKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            name: [Default::default(); MAX_DESCRIPTION_SIZE],
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            is_text: Default::default(),
+            data_size: Default::default(),
+            p_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51208,11 +52939,11 @@ impl<'a> PhysicalDeviceShaderDemoteToHelperInvocationFeatures<'a> {
 impl Default for PhysicalDeviceShaderDemoteToHelperInvocationFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_demote_to_helper_invocation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51277,11 +53008,11 @@ impl<'a> PhysicalDeviceTexelBufferAlignmentFeaturesEXT<'a> {
 impl Default for PhysicalDeviceTexelBufferAlignmentFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            texel_buffer_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51343,11 +53074,14 @@ pub struct PhysicalDeviceTexelBufferAlignmentProperties<'a> {
 impl Default for PhysicalDeviceTexelBufferAlignmentProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            storage_texel_buffer_offset_alignment_bytes: Default::default(),
+            storage_texel_buffer_offset_single_texel_alignment: Default::default(),
+            uniform_texel_buffer_offset_alignment_bytes: Default::default(),
+            uniform_texel_buffer_offset_single_texel_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51426,11 +53160,12 @@ impl<'a> PhysicalDeviceSubgroupSizeControlFeatures<'a> {
 impl Default for PhysicalDeviceSubgroupSizeControlFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            subgroup_size_control: Default::default(),
+            compute_full_subgroups: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51502,11 +53237,14 @@ pub struct PhysicalDeviceSubgroupSizeControlProperties<'a> {
 impl Default for PhysicalDeviceSubgroupSizeControlProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            min_subgroup_size: Default::default(),
+            max_subgroup_size: Default::default(),
+            max_compute_workgroup_subgroups: Default::default(),
+            required_subgroup_size_stages: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51576,11 +53314,11 @@ impl<'a> PipelineShaderStageRequiredSubgroupSizeCreateInfo<'a> {
 impl Default for PipelineShaderStageRequiredSubgroupSizeCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            required_subgroup_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51654,11 +53392,12 @@ impl<'a> SubpassShadingPipelineCreateInfoHUAWEI<'a> {
 impl Default for SubpassShadingPipelineCreateInfoHUAWEI<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            render_pass: Default::default(),
+            subpass: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51715,11 +53454,11 @@ pub struct PhysicalDeviceSubpassShadingPropertiesHUAWEI<'a> {
 impl Default for PhysicalDeviceSubpassShadingPropertiesHUAWEI<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_subpass_shading_workgroup_size_aspect_ratio: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51780,11 +53519,14 @@ pub struct PhysicalDeviceClusterCullingShaderPropertiesHUAWEI<'a> {
 impl Default for PhysicalDeviceClusterCullingShaderPropertiesHUAWEI<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_work_group_count: [Default::default(); 3],
+            max_work_group_size: [Default::default(); 3],
+            max_output_cluster_count: Default::default(),
+            indirect_buffer_offset_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51854,11 +53596,11 @@ impl<'a> MemoryOpaqueCaptureAddressAllocateInfo<'a> {
 impl Default for MemoryOpaqueCaptureAddressAllocateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            opaque_capture_address: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -51920,11 +53662,11 @@ impl<'a> DeviceMemoryOpaqueCaptureAddressInfo<'a> {
 impl Default for DeviceMemoryOpaqueCaptureAddressInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -52028,11 +53770,16 @@ impl<'a> PhysicalDeviceLineRasterizationFeatures<'a> {
 impl Default for PhysicalDeviceLineRasterizationFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            rectangular_lines: Default::default(),
+            bresenham_lines: Default::default(),
+            smooth_lines: Default::default(),
+            stippled_rectangular_lines: Default::default(),
+            stippled_bresenham_lines: Default::default(),
+            stippled_smooth_lines: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -52098,11 +53845,11 @@ pub struct PhysicalDeviceLineRasterizationProperties<'a> {
 impl Default for PhysicalDeviceLineRasterizationProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            line_sub_pixel_precision_bits: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -52193,11 +53940,14 @@ impl<'a> PipelineRasterizationLineStateCreateInfo<'a> {
 impl Default for PipelineRasterizationLineStateCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            line_rasterization_mode: Default::default(),
+            stippled_line_enable: Default::default(),
+            line_stipple_factor: Default::default(),
+            line_stipple_pattern: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -52267,11 +54017,11 @@ impl<'a> PhysicalDevicePipelineCreationCacheControlFeatures<'a> {
 impl Default for PhysicalDevicePipelineCreationCacheControlFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_creation_cache_control: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -52451,11 +54201,22 @@ impl<'a> PhysicalDeviceVulkan11Features<'a> {
 impl Default for PhysicalDeviceVulkan11Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            storage_buffer16_bit_access: Default::default(),
+            uniform_and_storage_buffer16_bit_access: Default::default(),
+            storage_push_constant16: Default::default(),
+            storage_input_output16: Default::default(),
+            multiview: Default::default(),
+            multiview_geometry_shader: Default::default(),
+            multiview_tessellation_shader: Default::default(),
+            variable_pointers_storage_buffer: Default::default(),
+            variable_pointers: Default::default(),
+            protected_memory: Default::default(),
+            sampler_ycbcr_conversion: Default::default(),
+            shader_draw_parameters: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -52573,11 +54334,25 @@ pub struct PhysicalDeviceVulkan11Properties<'a> {
 impl Default for PhysicalDeviceVulkan11Properties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_uuid: [Default::default(); UUID_SIZE],
+            driver_uuid: [Default::default(); UUID_SIZE],
+            device_luid: [Default::default(); LUID_SIZE],
+            device_node_mask: Default::default(),
+            device_luid_valid: Default::default(),
+            subgroup_size: Default::default(),
+            subgroup_supported_stages: Default::default(),
+            subgroup_supported_operations: Default::default(),
+            subgroup_quad_operations_in_all_stages: Default::default(),
+            point_clipping_behavior: Default::default(),
+            max_multiview_view_count: Default::default(),
+            max_multiview_instance_index: Default::default(),
+            protected_no_fault: Default::default(),
+            max_per_set_descriptors: Default::default(),
+            max_memory_allocation_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -53099,11 +54874,57 @@ impl<'a> PhysicalDeviceVulkan12Features<'a> {
 impl Default for PhysicalDeviceVulkan12Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            sampler_mirror_clamp_to_edge: Default::default(),
+            draw_indirect_count: Default::default(),
+            storage_buffer8_bit_access: Default::default(),
+            uniform_and_storage_buffer8_bit_access: Default::default(),
+            storage_push_constant8: Default::default(),
+            shader_buffer_int64_atomics: Default::default(),
+            shader_shared_int64_atomics: Default::default(),
+            shader_float16: Default::default(),
+            shader_int8: Default::default(),
+            descriptor_indexing: Default::default(),
+            shader_input_attachment_array_dynamic_indexing: Default::default(),
+            shader_uniform_texel_buffer_array_dynamic_indexing: Default::default(),
+            shader_storage_texel_buffer_array_dynamic_indexing: Default::default(),
+            shader_uniform_buffer_array_non_uniform_indexing: Default::default(),
+            shader_sampled_image_array_non_uniform_indexing: Default::default(),
+            shader_storage_buffer_array_non_uniform_indexing: Default::default(),
+            shader_storage_image_array_non_uniform_indexing: Default::default(),
+            shader_input_attachment_array_non_uniform_indexing: Default::default(),
+            shader_uniform_texel_buffer_array_non_uniform_indexing: Default::default(),
+            shader_storage_texel_buffer_array_non_uniform_indexing: Default::default(),
+            descriptor_binding_uniform_buffer_update_after_bind: Default::default(),
+            descriptor_binding_sampled_image_update_after_bind: Default::default(),
+            descriptor_binding_storage_image_update_after_bind: Default::default(),
+            descriptor_binding_storage_buffer_update_after_bind: Default::default(),
+            descriptor_binding_uniform_texel_buffer_update_after_bind: Default::default(),
+            descriptor_binding_storage_texel_buffer_update_after_bind: Default::default(),
+            descriptor_binding_update_unused_while_pending: Default::default(),
+            descriptor_binding_partially_bound: Default::default(),
+            descriptor_binding_variable_descriptor_count: Default::default(),
+            runtime_descriptor_array: Default::default(),
+            sampler_filter_minmax: Default::default(),
+            scalar_block_layout: Default::default(),
+            imageless_framebuffer: Default::default(),
+            uniform_buffer_standard_layout: Default::default(),
+            shader_subgroup_extended_types: Default::default(),
+            separate_depth_stencil_layouts: Default::default(),
+            host_query_reset: Default::default(),
+            timeline_semaphore: Default::default(),
+            buffer_device_address: Default::default(),
+            buffer_device_address_capture_replay: Default::default(),
+            buffer_device_address_multi_device: Default::default(),
+            vulkan_memory_model: Default::default(),
+            vulkan_memory_model_device_scope: Default::default(),
+            vulkan_memory_model_availability_visibility_chains: Default::default(),
+            shader_output_viewport_index: Default::default(),
+            shader_output_layer: Default::default(),
+            subgroup_broadcast_dynamic_id: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -53391,11 +55212,62 @@ pub struct PhysicalDeviceVulkan12Properties<'a> {
 impl Default for PhysicalDeviceVulkan12Properties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            driver_id: Default::default(),
+            driver_name: [Default::default(); MAX_DRIVER_NAME_SIZE],
+            driver_info: [Default::default(); MAX_DRIVER_INFO_SIZE],
+            conformance_version: Default::default(),
+            denorm_behavior_independence: Default::default(),
+            rounding_mode_independence: Default::default(),
+            shader_signed_zero_inf_nan_preserve_float16: Default::default(),
+            shader_signed_zero_inf_nan_preserve_float32: Default::default(),
+            shader_signed_zero_inf_nan_preserve_float64: Default::default(),
+            shader_denorm_preserve_float16: Default::default(),
+            shader_denorm_preserve_float32: Default::default(),
+            shader_denorm_preserve_float64: Default::default(),
+            shader_denorm_flush_to_zero_float16: Default::default(),
+            shader_denorm_flush_to_zero_float32: Default::default(),
+            shader_denorm_flush_to_zero_float64: Default::default(),
+            shader_rounding_mode_rte_float16: Default::default(),
+            shader_rounding_mode_rte_float32: Default::default(),
+            shader_rounding_mode_rte_float64: Default::default(),
+            shader_rounding_mode_rtz_float16: Default::default(),
+            shader_rounding_mode_rtz_float32: Default::default(),
+            shader_rounding_mode_rtz_float64: Default::default(),
+            max_update_after_bind_descriptors_in_all_pools: Default::default(),
+            shader_uniform_buffer_array_non_uniform_indexing_native: Default::default(),
+            shader_sampled_image_array_non_uniform_indexing_native: Default::default(),
+            shader_storage_buffer_array_non_uniform_indexing_native: Default::default(),
+            shader_storage_image_array_non_uniform_indexing_native: Default::default(),
+            shader_input_attachment_array_non_uniform_indexing_native: Default::default(),
+            robust_buffer_access_update_after_bind: Default::default(),
+            quad_divergent_implicit_lod: Default::default(),
+            max_per_stage_descriptor_update_after_bind_samplers: Default::default(),
+            max_per_stage_descriptor_update_after_bind_uniform_buffers: Default::default(),
+            max_per_stage_descriptor_update_after_bind_storage_buffers: Default::default(),
+            max_per_stage_descriptor_update_after_bind_sampled_images: Default::default(),
+            max_per_stage_descriptor_update_after_bind_storage_images: Default::default(),
+            max_per_stage_descriptor_update_after_bind_input_attachments: Default::default(),
+            max_per_stage_update_after_bind_resources: Default::default(),
+            max_descriptor_set_update_after_bind_samplers: Default::default(),
+            max_descriptor_set_update_after_bind_uniform_buffers: Default::default(),
+            max_descriptor_set_update_after_bind_uniform_buffers_dynamic: Default::default(),
+            max_descriptor_set_update_after_bind_storage_buffers: Default::default(),
+            max_descriptor_set_update_after_bind_storage_buffers_dynamic: Default::default(),
+            max_descriptor_set_update_after_bind_sampled_images: Default::default(),
+            max_descriptor_set_update_after_bind_storage_images: Default::default(),
+            max_descriptor_set_update_after_bind_input_attachments: Default::default(),
+            supported_depth_resolve_modes: Default::default(),
+            supported_stencil_resolve_modes: Default::default(),
+            independent_resolve_none: Default::default(),
+            independent_resolve: Default::default(),
+            filter_minmax_single_component_formats: Default::default(),
+            filter_minmax_image_component_mapping: Default::default(),
+            max_timeline_semaphore_value_difference: Default::default(),
+            framebuffer_integer_color_sample_counts: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -53692,11 +55564,25 @@ impl<'a> PhysicalDeviceVulkan13Features<'a> {
 impl Default for PhysicalDeviceVulkan13Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            robust_image_access: Default::default(),
+            inline_uniform_block: Default::default(),
+            descriptor_binding_inline_uniform_block_update_after_bind: Default::default(),
+            pipeline_creation_cache_control: Default::default(),
+            private_data: Default::default(),
+            shader_demote_to_helper_invocation: Default::default(),
+            shader_terminate_invocation: Default::default(),
+            subgroup_size_control: Default::default(),
+            compute_full_subgroups: Default::default(),
+            synchronization2: Default::default(),
+            texture_compression_astc_hdr: Default::default(),
+            shader_zero_initialize_workgroup_memory: Default::default(),
+            dynamic_rendering: Default::default(),
+            shader_integer_dot_product: Default::default(),
+            maintenance4: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -53877,11 +55763,83 @@ pub struct PhysicalDeviceVulkan13Properties<'a> {
 impl Default for PhysicalDeviceVulkan13Properties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
+        let integer_dot_product_accumulating_saturating8_bit_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating8_bit_mixed_signedness_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating4x8_bit_packed_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating4x8_bit_packed_signed_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating4x8_bit_packed_mixed_signedness_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating16_bit_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating16_bit_signed_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating16_bit_mixed_signedness_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating32_bit_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating32_bit_signed_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating32_bit_mixed_signedness_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating64_bit_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating64_bit_signed_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating64_bit_mixed_signedness_accelerated =
+            Default::default();
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            min_subgroup_size: Default::default(),
+            max_subgroup_size: Default::default(),
+            max_compute_workgroup_subgroups: Default::default(),
+            required_subgroup_size_stages: Default::default(),
+            max_inline_uniform_block_size: Default::default(),
+            max_per_stage_descriptor_inline_uniform_blocks: Default::default(),
+            max_per_stage_descriptor_update_after_bind_inline_uniform_blocks: Default::default(),
+            max_descriptor_set_inline_uniform_blocks: Default::default(),
+            max_descriptor_set_update_after_bind_inline_uniform_blocks: Default::default(),
+            max_inline_uniform_total_size: Default::default(),
+            integer_dot_product8_bit_unsigned_accelerated: Default::default(),
+            integer_dot_product8_bit_signed_accelerated: Default::default(),
+            integer_dot_product8_bit_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product4x8_bit_packed_unsigned_accelerated: Default::default(),
+            integer_dot_product4x8_bit_packed_signed_accelerated: Default::default(),
+            integer_dot_product4x8_bit_packed_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product16_bit_unsigned_accelerated: Default::default(),
+            integer_dot_product16_bit_signed_accelerated: Default::default(),
+            integer_dot_product16_bit_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product32_bit_unsigned_accelerated: Default::default(),
+            integer_dot_product32_bit_signed_accelerated: Default::default(),
+            integer_dot_product32_bit_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product64_bit_unsigned_accelerated: Default::default(),
+            integer_dot_product64_bit_signed_accelerated: Default::default(),
+            integer_dot_product64_bit_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product_accumulating_saturating8_bit_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating8_bit_signed_accelerated: Default::default(),
+            integer_dot_product_accumulating_saturating8_bit_mixed_signedness_accelerated,
+            integer_dot_product_accumulating_saturating4x8_bit_packed_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating4x8_bit_packed_signed_accelerated,
+            integer_dot_product_accumulating_saturating4x8_bit_packed_mixed_signedness_accelerated,
+            integer_dot_product_accumulating_saturating16_bit_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating16_bit_signed_accelerated,
+            integer_dot_product_accumulating_saturating16_bit_mixed_signedness_accelerated,
+            integer_dot_product_accumulating_saturating32_bit_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating32_bit_signed_accelerated,
+            integer_dot_product_accumulating_saturating32_bit_mixed_signedness_accelerated,
+            integer_dot_product_accumulating_saturating64_bit_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating64_bit_signed_accelerated,
+            integer_dot_product_accumulating_saturating64_bit_mixed_signedness_accelerated,
+            storage_texel_buffer_offset_alignment_bytes: Default::default(),
+            storage_texel_buffer_offset_single_texel_alignment: Default::default(),
+            uniform_texel_buffer_offset_alignment_bytes: Default::default(),
+            uniform_texel_buffer_offset_single_texel_alignment: Default::default(),
+            max_buffer_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -54213,11 +56171,31 @@ impl<'a> PhysicalDeviceVulkan14Features<'a> {
 impl Default for PhysicalDeviceVulkan14Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            global_priority_query: Default::default(),
+            shader_subgroup_rotate: Default::default(),
+            shader_subgroup_rotate_clustered: Default::default(),
+            shader_float_controls2: Default::default(),
+            shader_expect_assume: Default::default(),
+            rectangular_lines: Default::default(),
+            bresenham_lines: Default::default(),
+            smooth_lines: Default::default(),
+            stippled_rectangular_lines: Default::default(),
+            stippled_bresenham_lines: Default::default(),
+            stippled_smooth_lines: Default::default(),
+            vertex_attribute_instance_rate_divisor: Default::default(),
+            vertex_attribute_instance_rate_zero_divisor: Default::default(),
+            index_type_uint8: Default::default(),
+            dynamic_rendering_local_read: Default::default(),
+            maintenance5: Default::default(),
+            maintenance6: Default::default(),
+            pipeline_protected_access: Default::default(),
+            pipeline_robustness: Default::default(),
+            host_image_copy: Default::default(),
+            push_descriptor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -54363,11 +56341,35 @@ pub struct PhysicalDeviceVulkan14Properties<'a> {
 impl Default for PhysicalDeviceVulkan14Properties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            line_sub_pixel_precision_bits: Default::default(),
+            max_vertex_attrib_divisor: Default::default(),
+            supports_non_zero_first_instance: Default::default(),
+            max_push_descriptors: Default::default(),
+            dynamic_rendering_local_read_depth_stencil_attachments: Default::default(),
+            dynamic_rendering_local_read_multisampled_attachments: Default::default(),
+            early_fragment_multisample_coverage_after_sample_counting: Default::default(),
+            early_fragment_sample_mask_test_before_sample_counting: Default::default(),
+            depth_stencil_swizzle_one_support: Default::default(),
+            polygon_mode_point_size: Default::default(),
+            non_strict_single_pixel_wide_lines_use_parallelogram: Default::default(),
+            non_strict_wide_lines_use_parallelogram: Default::default(),
+            block_texel_view_compatible_multiple_layers: Default::default(),
+            max_combined_image_sampler_descriptor_count: Default::default(),
+            fragment_shading_rate_clamp_combiner_inputs: Default::default(),
+            default_robustness_storage_buffers: Default::default(),
+            default_robustness_uniform_buffers: Default::default(),
+            default_robustness_vertex_inputs: Default::default(),
+            default_robustness_images: Default::default(),
+            copy_src_layout_count: Default::default(),
+            p_copy_src_layouts: core::ptr::null_mut(),
+            copy_dst_layout_count: Default::default(),
+            p_copy_dst_layouts: core::ptr::null_mut(),
+            optimal_tiling_layout_uuid: [Default::default(); UUID_SIZE],
+            identical_memory_type_requirements: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -54479,11 +56481,11 @@ impl<'a> PipelineCompilerControlCreateInfoAMD<'a> {
 impl Default for PipelineCompilerControlCreateInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            compiler_control_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -54548,11 +56550,11 @@ impl<'a> PhysicalDeviceCoherentMemoryFeaturesAMD<'a> {
 impl Default for PhysicalDeviceCoherentMemoryFeaturesAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_coherent_memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -54663,8 +56665,15 @@ impl GpaPerfBlockPropertiesAMD {
 impl Default for GpaPerfBlockPropertiesAMD {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            block_type: Default::default(),
+            flags: Default::default(),
+            instance_count: Default::default(),
+            max_event_id: Default::default(),
+            max_global_only_counters: Default::default(),
+            max_global_shared_counters: Default::default(),
+            max_streaming_counters: Default::default(),
+        }
     }
 }
 
@@ -54766,11 +56775,14 @@ impl<'a> PhysicalDeviceGpaFeaturesAMD<'a> {
 impl Default for PhysicalDeviceGpaFeaturesAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            perf_counters: Default::default(),
+            streaming_perf_counters: Default::default(),
+            sq_thread_tracing: Default::default(),
+            clock_modes: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -54840,11 +56852,15 @@ pub struct PhysicalDeviceGpaPropertiesAMD<'a> {
 impl Default for PhysicalDeviceGpaPropertiesAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            max_sqtt_se_buffer_size: Default::default(),
+            shader_engine_count: Default::default(),
+            perf_block_count: Default::default(),
+            p_perf_blocks: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -54907,11 +56923,11 @@ pub struct PhysicalDeviceGpaProperties2AMD<'a> {
 impl Default for PhysicalDeviceGpaProperties2AMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            revision_id: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -54985,8 +57001,11 @@ impl GpaPerfCounterAMD {
 impl Default for GpaPerfCounterAMD {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            block_type: Default::default(),
+            block_instance: Default::default(),
+            event_id: Default::default(),
+        }
     }
 }
 
@@ -55154,11 +57173,24 @@ impl<'a> GpaSampleBeginInfoAMD<'a> {
 impl Default for GpaSampleBeginInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            sample_type: Default::default(),
+            sample_internal_operations: Default::default(),
+            cache_flush_on_counter_collection: Default::default(),
+            sq_shader_mask_enable: Default::default(),
+            sq_shader_mask: Default::default(),
+            perf_counter_count: Default::default(),
+            p_perf_counters: core::ptr::null(),
+            streaming_perf_trace_sample_interval: Default::default(),
+            perf_counter_device_memory_limit: Default::default(),
+            sq_thread_trace_enable: Default::default(),
+            sq_thread_trace_suppress_instruction_tokens: Default::default(),
+            sq_thread_trace_device_memory_limit: Default::default(),
+            timing_pre_sample: Default::default(),
+            timing_post_sample: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -55259,11 +57291,13 @@ impl<'a> GpaDeviceClockModeInfoAMD<'a> {
 impl Default for GpaDeviceClockModeInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            clock_mode: Default::default(),
+            memory_clock_ratio_to_peak: Default::default(),
+            engine_clock_ratio_to_peak: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -55351,11 +57385,14 @@ impl<'a> GpaDeviceGetClockInfoAMD<'a> {
 impl Default for GpaDeviceGetClockInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_clock_ratio_to_peak: Default::default(),
+            engine_clock_ratio_to_peak: Default::default(),
+            memory_clock_frequency: Default::default(),
+            engine_clock_frequency: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -55418,11 +57455,11 @@ impl<'a> GpaSessionCreateInfoAMD<'a> {
 impl Default for GpaSessionCreateInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            secondary_copy_source: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -55478,11 +57515,15 @@ pub struct PhysicalDeviceToolProperties<'a> {
 impl Default for PhysicalDeviceToolProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            name: [Default::default(); MAX_EXTENSION_NAME_SIZE],
+            version: [Default::default(); MAX_EXTENSION_NAME_SIZE],
+            purposes: Default::default(),
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            layer: [Default::default(); MAX_EXTENSION_NAME_SIZE],
+            _marker: PhantomData,
         }
     }
 }
@@ -55562,11 +57603,12 @@ impl<'a> SamplerCustomBorderColorCreateInfoEXT<'a> {
 impl Default for SamplerCustomBorderColorCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            custom_border_color: Default::default(),
+            format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -55623,11 +57665,11 @@ pub struct PhysicalDeviceCustomBorderColorPropertiesEXT<'a> {
 impl Default for PhysicalDeviceCustomBorderColorPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_custom_border_color_samplers: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -55700,11 +57742,12 @@ impl<'a> PhysicalDeviceCustomBorderColorFeaturesEXT<'a> {
 impl Default for PhysicalDeviceCustomBorderColorFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            custom_border_colors: Default::default(),
+            custom_border_color_without_format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -55780,11 +57823,12 @@ impl<'a> SamplerBorderColorComponentMappingCreateInfoEXT<'a> {
 impl Default for SamplerBorderColorComponentMappingCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            components: Default::default(),
+            srgb: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -55859,11 +57903,12 @@ impl<'a> PhysicalDeviceBorderColorSwizzleFeaturesEXT<'a> {
 impl Default for PhysicalDeviceBorderColorSwizzleFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            border_color_swizzle: Default::default(),
+            border_color_swizzle_from_image: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -55990,11 +58035,17 @@ impl<'a> AccelerationStructureGeometryTrianglesDataKHR<'a> {
 impl Default for AccelerationStructureGeometryTrianglesDataKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            vertex_format: Default::default(),
+            vertex_data: Default::default(),
+            vertex_stride: Default::default(),
+            max_vertex: Default::default(),
+            index_type: Default::default(),
+            index_data: Default::default(),
+            transform_data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -56072,11 +58123,12 @@ impl<'a> AccelerationStructureGeometryAabbsDataKHR<'a> {
 impl Default for AccelerationStructureGeometryAabbsDataKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            data: Default::default(),
+            stride: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -56144,11 +58196,12 @@ impl<'a> AccelerationStructureGeometryInstancesDataKHR<'a> {
 impl Default for AccelerationStructureGeometryInstancesDataKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            array_of_pointers: Default::default(),
+            data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -56299,11 +58352,21 @@ impl<'a> AccelerationStructureGeometryLinearSweptSpheresDataNV<'a> {
 impl Default for AccelerationStructureGeometryLinearSweptSpheresDataNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            vertex_format: Default::default(),
+            vertex_data: Default::default(),
+            vertex_stride: Default::default(),
+            radius_format: Default::default(),
+            radius_data: Default::default(),
+            radius_stride: Default::default(),
+            index_type: Default::default(),
+            index_data: Default::default(),
+            index_stride: Default::default(),
+            indexing_mode: Default::default(),
+            end_caps_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -56459,11 +58522,19 @@ impl<'a> AccelerationStructureGeometrySpheresDataNV<'a> {
 impl Default for AccelerationStructureGeometrySpheresDataNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            vertex_format: Default::default(),
+            vertex_data: Default::default(),
+            vertex_stride: Default::default(),
+            radius_format: Default::default(),
+            radius_data: Default::default(),
+            radius_stride: Default::default(),
+            index_type: Default::default(),
+            index_data: Default::default(),
+            index_stride: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -56567,11 +58638,13 @@ impl<'a> AccelerationStructureGeometryKHR<'a> {
 impl Default for AccelerationStructureGeometryKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            geometry_type: Default::default(),
+            geometry: Default::default(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -56672,33 +58745,38 @@ impl<'a> AccelerationStructureBuildGeometryInfoKHR<'a> {
         self
     }
 
-    /// Sets `geometry_count`.
+    /// Sets `geometry_count` alone and nulls `p_geometries`, `pp_geometries`: the count without its
+    /// arrays (an array set before is dropped).
     #[inline]
     pub fn geometry_count(mut self, value: u32) -> Self {
         self.geometry_count = value;
+        self.p_geometries = core::ptr::null();
+        self.pp_geometries = core::ptr::null();
         self
     }
 
-    /// Sets `p_geometries` and `geometry_count` from the slice length.
+    /// Sets `p_geometries` and `geometry_count` from the slice length, and nulls `pp_geometries`:
+    /// the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn geometries(mut self, value: &'a [AccelerationStructureGeometryKHR<'a>]) -> Self {
-        let len = value.len();
         self.p_geometries = value.as_ptr();
-        self.geometry_count = crate::len::count_u32(len, "geometryCount");
+        self.pp_geometries = core::ptr::null();
+        self.geometry_count = crate::len::count_u32(value.len(), "geometryCount");
         self
     }
 
-    /// Sets `pp_geometries` and `geometry_count` from the slice length.
+    /// Sets `pp_geometries` and `geometry_count` from the slice length, and nulls `p_geometries`:
+    /// the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn pp_geometries(
         mut self,
         value: &'a [*const AccelerationStructureGeometryKHR<'a>],
     ) -> Self {
-        let len = value.len();
         self.pp_geometries = value.as_ptr();
-        self.geometry_count = crate::len::count_u32(len, "geometryCount");
+        self.p_geometries = core::ptr::null();
+        self.geometry_count = crate::len::count_u32(value.len(), "geometryCount");
         self
     }
 
@@ -56713,11 +58791,19 @@ impl<'a> AccelerationStructureBuildGeometryInfoKHR<'a> {
 impl Default for AccelerationStructureBuildGeometryInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            flags: Default::default(),
+            mode: Default::default(),
+            src_acceleration_structure: Default::default(),
+            dst_acceleration_structure: Default::default(),
+            geometry_count: Default::default(),
+            p_geometries: core::ptr::null(),
+            pp_geometries: core::ptr::null(),
+            scratch_data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -56811,8 +58897,12 @@ impl AccelerationStructureBuildRangeInfoKHR {
 impl Default for AccelerationStructureBuildRangeInfoKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            primitive_count: Default::default(),
+            primitive_offset: Default::default(),
+            first_vertex: Default::default(),
+            transform_offset: Default::default(),
+        }
     }
 }
 
@@ -56931,11 +59021,16 @@ impl<'a> AccelerationStructureCreateInfoKHR<'a> {
 impl Default for AccelerationStructureCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            create_flags: Default::default(),
+            buffer: Default::default(),
+            offset: Default::default(),
+            size: Default::default(),
+            r#type: Default::default(),
+            device_address: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -57041,8 +59136,14 @@ impl AabbPositionsKHR {
 impl Default for AabbPositionsKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            min_x: Default::default(),
+            min_y: Default::default(),
+            min_z: Default::default(),
+            max_x: Default::default(),
+            max_y: Default::default(),
+            max_z: Default::default(),
+        }
     }
 }
 
@@ -57106,8 +59207,9 @@ impl TransformMatrixKHR {
 impl Default for TransformMatrixKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            matrix: [[Default::default(); 4]; 3],
+        }
     }
 }
 
@@ -57234,8 +59336,12 @@ impl AccelerationStructureInstanceKHR {
 impl Default for AccelerationStructureInstanceKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            transform: Default::default(),
+            instance_custom_index_bits: 0,
+            instance_shader_binding_table_record_offset_bits: 0,
+            acceleration_structure_reference: Default::default(),
+        }
     }
 }
 
@@ -57304,11 +59410,11 @@ impl<'a> AccelerationStructureDeviceAddressInfoKHR<'a> {
 impl Default for AccelerationStructureDeviceAddressInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            acceleration_structure: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -57365,11 +59471,11 @@ impl<'a> AccelerationStructureVersionInfoKHR<'a> {
 impl Default for AccelerationStructureVersionInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_version_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -57444,11 +59550,13 @@ impl<'a> CopyAccelerationStructureInfoKHR<'a> {
 impl Default for CopyAccelerationStructureInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src: Default::default(),
+            dst: Default::default(),
+            mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -57527,11 +59635,13 @@ impl<'a> CopyAccelerationStructureToMemoryInfoKHR<'a> {
 impl Default for CopyAccelerationStructureToMemoryInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src: Default::default(),
+            dst: Default::default(),
+            mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -57610,11 +59720,13 @@ impl<'a> CopyMemoryToAccelerationStructureInfoKHR<'a> {
 impl Default for CopyMemoryToAccelerationStructureInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src: Default::default(),
+            dst: Default::default(),
+            mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -57684,11 +59796,12 @@ impl<'a> RayTracingPipelineInterfaceCreateInfoKHR<'a> {
 impl Default for RayTracingPipelineInterfaceCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            max_pipeline_ray_payload_size: Default::default(),
+            max_pipeline_ray_hit_attribute_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -57754,11 +59867,12 @@ impl<'a> PipelineLibraryCreateInfoKHR<'a> {
 impl Default for PipelineLibraryCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            library_count: Default::default(),
+            p_libraries: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -57824,11 +59938,11 @@ impl<'a> PhysicalDeviceExtendedDynamicStateFeaturesEXT<'a> {
 impl Default for PhysicalDeviceExtendedDynamicStateFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            extended_dynamic_state: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -57911,11 +60025,13 @@ impl<'a> PhysicalDeviceExtendedDynamicState2FeaturesEXT<'a> {
 impl Default for PhysicalDeviceExtendedDynamicState2FeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            extended_dynamic_state2: Default::default(),
+            extended_dynamic_state2_logic_op: Default::default(),
+            extended_dynamic_state2_patch_control_points: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -58260,11 +60376,41 @@ impl<'a> PhysicalDeviceExtendedDynamicState3FeaturesEXT<'a> {
 impl Default for PhysicalDeviceExtendedDynamicState3FeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            extended_dynamic_state3_tessellation_domain_origin: Default::default(),
+            extended_dynamic_state3_depth_clamp_enable: Default::default(),
+            extended_dynamic_state3_polygon_mode: Default::default(),
+            extended_dynamic_state3_rasterization_samples: Default::default(),
+            extended_dynamic_state3_sample_mask: Default::default(),
+            extended_dynamic_state3_alpha_to_coverage_enable: Default::default(),
+            extended_dynamic_state3_alpha_to_one_enable: Default::default(),
+            extended_dynamic_state3_logic_op_enable: Default::default(),
+            extended_dynamic_state3_color_blend_enable: Default::default(),
+            extended_dynamic_state3_color_blend_equation: Default::default(),
+            extended_dynamic_state3_color_write_mask: Default::default(),
+            extended_dynamic_state3_rasterization_stream: Default::default(),
+            extended_dynamic_state3_conservative_rasterization_mode: Default::default(),
+            extended_dynamic_state3_extra_primitive_overestimation_size: Default::default(),
+            extended_dynamic_state3_depth_clip_enable: Default::default(),
+            extended_dynamic_state3_sample_locations_enable: Default::default(),
+            extended_dynamic_state3_color_blend_advanced: Default::default(),
+            extended_dynamic_state3_provoking_vertex_mode: Default::default(),
+            extended_dynamic_state3_line_rasterization_mode: Default::default(),
+            extended_dynamic_state3_line_stipple_enable: Default::default(),
+            extended_dynamic_state3_depth_clip_negative_one_to_one: Default::default(),
+            extended_dynamic_state3_viewport_w_scaling_enable: Default::default(),
+            extended_dynamic_state3_viewport_swizzle: Default::default(),
+            extended_dynamic_state3_coverage_to_color_enable: Default::default(),
+            extended_dynamic_state3_coverage_to_color_location: Default::default(),
+            extended_dynamic_state3_coverage_modulation_mode: Default::default(),
+            extended_dynamic_state3_coverage_modulation_table_enable: Default::default(),
+            extended_dynamic_state3_coverage_modulation_table: Default::default(),
+            extended_dynamic_state3_coverage_reduction_mode: Default::default(),
+            extended_dynamic_state3_representative_fragment_test_enable: Default::default(),
+            extended_dynamic_state3_shading_rate_image_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -58380,11 +60526,11 @@ pub struct PhysicalDeviceExtendedDynamicState3PropertiesEXT<'a> {
 impl Default for PhysicalDeviceExtendedDynamicState3PropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            dynamic_primitive_topology_unrestricted: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -58448,11 +60594,11 @@ impl<'a> PhysicalDeviceExtendedFlagsFeaturesKHR<'a> {
 impl Default for PhysicalDeviceExtendedFlagsFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            extended_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -58554,8 +60700,14 @@ impl ColorBlendEquationEXT {
 impl Default for ColorBlendEquationEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_color_blend_factor: Default::default(),
+            dst_color_blend_factor: Default::default(),
+            color_blend_op: Default::default(),
+            src_alpha_blend_factor: Default::default(),
+            dst_alpha_blend_factor: Default::default(),
+            alpha_blend_op: Default::default(),
+        }
     }
 }
 
@@ -58655,8 +60807,13 @@ impl ColorBlendAdvancedEXT {
 impl Default for ColorBlendAdvancedEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            advanced_blend_op: Default::default(),
+            src_premultiplied: Default::default(),
+            dst_premultiplied: Default::default(),
+            blend_overlap: Default::default(),
+            clamp_results: Default::default(),
+        }
     }
 }
 
@@ -58727,11 +60884,11 @@ impl<'a> RenderPassTransformBeginInfoQCOM<'a> {
 impl Default for RenderPassTransformBeginInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            transform: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -58795,11 +60952,11 @@ impl<'a> CopyCommandTransformInfoQCOM<'a> {
 impl Default for CopyCommandTransformInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            transform: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -58870,11 +61027,12 @@ impl<'a> CommandBufferInheritanceRenderPassTransformInfoQCOM<'a> {
 impl Default for CommandBufferInheritanceRenderPassTransformInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            transform: Default::default(),
+            render_area: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -58940,11 +61098,11 @@ impl<'a> PhysicalDevicePartitionedAccelerationStructureFeaturesNV<'a> {
 impl Default for PhysicalDevicePartitionedAccelerationStructureFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            partitioned_acceleration_structure: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -59000,11 +61158,11 @@ pub struct PhysicalDevicePartitionedAccelerationStructurePropertiesNV<'a> {
 impl Default for PhysicalDevicePartitionedAccelerationStructurePropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_partition_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -59078,8 +61236,11 @@ impl BuildPartitionedAccelerationStructureIndirectCommandNV {
 impl Default for BuildPartitionedAccelerationStructureIndirectCommandNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            op_type: Default::default(),
+            arg_count: Default::default(),
+            arg_data: Default::default(),
+        }
     }
 }
 
@@ -59142,11 +61303,11 @@ impl<'a> PartitionedAccelerationStructureFlagsNV<'a> {
 impl Default for PartitionedAccelerationStructureFlagsNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            enable_partition_translation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -59277,8 +61438,17 @@ impl PartitionedAccelerationStructureWriteInstanceDataNV {
 impl Default for PartitionedAccelerationStructureWriteInstanceDataNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            transform: Default::default(),
+            explicit_aabb: [Default::default(); 6],
+            instance_id: Default::default(),
+            instance_mask: Default::default(),
+            instance_contribution_to_hit_group_index: Default::default(),
+            instance_flags: Default::default(),
+            instance_index: Default::default(),
+            partition_index: Default::default(),
+            acceleration_structure: Default::default(),
+        }
     }
 }
 
@@ -59369,8 +61539,11 @@ impl PartitionedAccelerationStructureUpdateInstanceDataNV {
 impl Default for PartitionedAccelerationStructureUpdateInstanceDataNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            instance_index: Default::default(),
+            instance_contribution_to_hit_group_index: Default::default(),
+            acceleration_structure: Default::default(),
+        }
     }
 }
 
@@ -59434,8 +61607,10 @@ impl PartitionedAccelerationStructureWritePartitionTranslationDataNV {
 impl Default for PartitionedAccelerationStructureWritePartitionTranslationDataNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            partition_index: Default::default(),
+            partition_translation: [Default::default(); 3],
+        }
     }
 }
 
@@ -59500,11 +61675,12 @@ impl<'a> WriteDescriptorSetPartitionedAccelerationStructureNV<'a> {
 impl Default for WriteDescriptorSetPartitionedAccelerationStructureNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            acceleration_structure_count: Default::default(),
+            p_acceleration_structures: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -59612,11 +61788,15 @@ impl<'a> PartitionedAccelerationStructureInstancesInputNV<'a> {
 impl Default for PartitionedAccelerationStructureInstancesInputNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            instance_count: Default::default(),
+            max_instance_per_partition_count: Default::default(),
+            partition_count: Default::default(),
+            max_instance_in_global_partition_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -59726,11 +61906,16 @@ impl<'a> BuildPartitionedAccelerationStructureInfoNV<'a> {
 impl Default for BuildPartitionedAccelerationStructureInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            input: Default::default(),
+            src_acceleration_structure_data: Default::default(),
+            dst_acceleration_structure_data: Default::default(),
+            scratch_data: Default::default(),
+            src_infos: Default::default(),
+            src_infos_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -59799,11 +61984,11 @@ impl<'a> PhysicalDeviceDiagnosticsConfigFeaturesNV<'a> {
 impl Default for PhysicalDeviceDiagnosticsConfigFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            diagnostics_config: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -59868,11 +62053,11 @@ impl<'a> DeviceDiagnosticsConfigCreateInfoNV<'a> {
 impl Default for DeviceDiagnosticsConfigCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -59936,11 +62121,11 @@ impl<'a> PhysicalDeviceZeroInitializeWorkgroupMemoryFeatures<'a> {
 impl Default for PhysicalDeviceZeroInitializeWorkgroupMemoryFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_zero_initialize_workgroup_memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60005,11 +62190,11 @@ impl<'a> PhysicalDeviceShaderSubgroupUniformControlFlowFeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderSubgroupUniformControlFlowFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_subgroup_uniform_control_flow: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60092,11 +62277,13 @@ impl<'a> PhysicalDeviceRobustness2FeaturesKHR<'a> {
 impl Default for PhysicalDeviceRobustness2FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            robust_buffer_access2: Default::default(),
+            robust_image_access2: Default::default(),
+            null_descriptor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60158,11 +62345,12 @@ pub struct PhysicalDeviceRobustness2PropertiesKHR<'a> {
 impl Default for PhysicalDeviceRobustness2PropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            robust_storage_buffer_access_size_alignment: Default::default(),
+            robust_uniform_buffer_access_size_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60228,11 +62416,11 @@ impl<'a> PhysicalDeviceImageRobustnessFeatures<'a> {
 impl Default for PhysicalDeviceImageRobustnessFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            robust_image_access: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60324,11 +62512,14 @@ impl<'a> PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR<'a> {
 impl Default for PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            workgroup_memory_explicit_layout: Default::default(),
+            workgroup_memory_explicit_layout_scalar_block_layout: Default::default(),
+            workgroup_memory_explicit_layout8_bit_access: Default::default(),
+            workgroup_memory_explicit_layout16_bit_access: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60408,11 +62599,12 @@ impl<'a> PhysicalDevice4444FormatsFeaturesEXT<'a> {
 impl Default for PhysicalDevice4444FormatsFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            format_a4_r4_g4_b4: Default::default(),
+            format_a4_b4_g4_r4: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60479,11 +62671,11 @@ impl<'a> PhysicalDeviceSubpassShadingFeaturesHUAWEI<'a> {
 impl Default for PhysicalDeviceSubpassShadingFeaturesHUAWEI<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            subpass_shading: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60565,11 +62757,12 @@ impl<'a> PhysicalDeviceClusterCullingShaderFeaturesHUAWEI<'a> {
 impl Default for PhysicalDeviceClusterCullingShaderFeaturesHUAWEI<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            clusterculling_shader: Default::default(),
+            multiview_cluster_culling_shader: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60636,11 +62829,11 @@ impl<'a> PhysicalDeviceClusterCullingShaderVrsFeaturesHUAWEI<'a> {
 impl Default for PhysicalDeviceClusterCullingShaderVrsFeaturesHUAWEI<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cluster_shading_rate: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60726,11 +62919,13 @@ impl<'a> BufferCopy2<'a> {
 impl Default for BufferCopy2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_offset: Default::default(),
+            dst_offset: Default::default(),
+            size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60833,11 +63028,15 @@ impl<'a> ImageCopy2<'a> {
 impl Default for ImageCopy2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_subresource: Default::default(),
+            src_offset: Default::default(),
+            dst_subresource: Default::default(),
+            dst_offset: Default::default(),
+            extent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -60941,11 +63140,14 @@ impl<'a> ImageBlit2<'a> {
 impl Default for ImageBlit2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_subresource: Default::default(),
+            src_offsets: [Default::default(); 2],
+            dst_subresource: Default::default(),
+            dst_offsets: [Default::default(); 2],
+            _marker: PhantomData,
         }
     }
 }
@@ -61069,11 +63271,16 @@ impl<'a> BufferImageCopy2<'a> {
 impl Default for BufferImageCopy2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            buffer_offset: Default::default(),
+            buffer_row_length: Default::default(),
+            buffer_image_height: Default::default(),
+            image_subresource: Default::default(),
+            image_offset: Default::default(),
+            image_extent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -61176,11 +63383,15 @@ impl<'a> ImageResolve2<'a> {
 impl Default for ImageResolve2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_subresource: Default::default(),
+            src_offset: Default::default(),
+            dst_subresource: Default::default(),
+            dst_offset: Default::default(),
+            extent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -61268,11 +63479,14 @@ impl<'a> CopyBufferInfo2<'a> {
 impl Default for CopyBufferInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_buffer: Default::default(),
+            dst_buffer: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -61376,11 +63590,16 @@ impl<'a> CopyImageInfo2<'a> {
 impl Default for CopyImageInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_image: Default::default(),
+            src_image_layout: Default::default(),
+            dst_image: Default::default(),
+            dst_image_layout: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -61505,11 +63724,17 @@ impl<'a> BlitImageInfo2<'a> {
 impl Default for BlitImageInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_image: Default::default(),
+            src_image_layout: Default::default(),
+            dst_image: Default::default(),
+            dst_image_layout: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            filter: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -61610,11 +63835,15 @@ impl<'a> CopyBufferToImageInfo2<'a> {
 impl Default for CopyBufferToImageInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_buffer: Default::default(),
+            dst_image: Default::default(),
+            dst_image_layout: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -61711,11 +63940,15 @@ impl<'a> CopyImageToBufferInfo2<'a> {
 impl Default for CopyImageToBufferInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_image: Default::default(),
+            src_image_layout: Default::default(),
+            dst_buffer: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -61829,11 +64062,16 @@ impl<'a> ResolveImageInfo2<'a> {
 impl Default for ResolveImageInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_image: Default::default(),
+            src_image_layout: Default::default(),
+            dst_image: Default::default(),
+            dst_image_layout: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -61911,11 +64149,12 @@ impl<'a> PhysicalDeviceShaderImageAtomicInt64FeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderImageAtomicInt64FeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_image_int64_atomics: Default::default(),
+            sparse_image_int64_atomics: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -61993,11 +64232,12 @@ impl<'a> FragmentShadingRateAttachmentInfoKHR<'a> {
 impl Default for FragmentShadingRateAttachmentInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_fragment_shading_rate_attachment: core::ptr::null(),
+            shading_rate_attachment_texel_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62072,11 +64312,12 @@ impl<'a> PipelineFragmentShadingRateStateCreateInfoKHR<'a> {
 impl Default for PipelineFragmentShadingRateStateCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            fragment_size: Default::default(),
+            combiner_ops: [Default::default(); 2],
+            _marker: PhantomData,
         }
     }
 }
@@ -62160,11 +64401,13 @@ impl<'a> PhysicalDeviceFragmentShadingRateFeaturesKHR<'a> {
 impl Default for PhysicalDeviceFragmentShadingRateFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_fragment_shading_rate: Default::default(),
+            primitive_fragment_shading_rate: Default::default(),
+            attachment_fragment_shading_rate: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62256,11 +64499,27 @@ pub struct PhysicalDeviceFragmentShadingRatePropertiesKHR<'a> {
 impl Default for PhysicalDeviceFragmentShadingRatePropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            min_fragment_shading_rate_attachment_texel_size: Default::default(),
+            max_fragment_shading_rate_attachment_texel_size: Default::default(),
+            max_fragment_shading_rate_attachment_texel_size_aspect_ratio: Default::default(),
+            primitive_fragment_shading_rate_with_multiple_viewports: Default::default(),
+            layered_shading_rate_attachments: Default::default(),
+            fragment_shading_rate_non_trivial_combiner_ops: Default::default(),
+            max_fragment_size: Default::default(),
+            max_fragment_size_aspect_ratio: Default::default(),
+            max_fragment_shading_rate_coverage_samples: Default::default(),
+            max_fragment_shading_rate_rasterization_samples: Default::default(),
+            fragment_shading_rate_with_shader_depth_stencil_writes: Default::default(),
+            fragment_shading_rate_with_sample_mask: Default::default(),
+            fragment_shading_rate_with_shader_sample_mask: Default::default(),
+            fragment_shading_rate_with_conservative_rasterization: Default::default(),
+            fragment_shading_rate_with_fragment_shader_interlock: Default::default(),
+            fragment_shading_rate_with_custom_sample_locations: Default::default(),
+            fragment_shading_rate_strict_multiply_combiner: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62347,11 +64606,12 @@ pub struct PhysicalDeviceFragmentShadingRateKHR<'a> {
 impl Default for PhysicalDeviceFragmentShadingRateKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            sample_counts: Default::default(),
+            fragment_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62412,11 +64672,11 @@ impl<'a> PhysicalDeviceShaderTerminateInvocationFeatures<'a> {
 impl Default for PhysicalDeviceShaderTerminateInvocationFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_terminate_invocation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62499,11 +64759,13 @@ impl<'a> PhysicalDeviceFragmentShadingRateEnumsFeaturesNV<'a> {
 impl Default for PhysicalDeviceFragmentShadingRateEnumsFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            fragment_shading_rate_enums: Default::default(),
+            supersample_fragment_shading_rates: Default::default(),
+            no_invocation_fragment_shading_rates: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62563,11 +64825,11 @@ pub struct PhysicalDeviceFragmentShadingRateEnumsPropertiesNV<'a> {
 impl Default for PhysicalDeviceFragmentShadingRateEnumsPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_fragment_shading_rate_invocation_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62649,11 +64911,13 @@ impl<'a> PipelineFragmentShadingRateEnumStateCreateInfoNV<'a> {
 impl Default for PipelineFragmentShadingRateEnumStateCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            shading_rate_type: Default::default(),
+            shading_rate: Default::default(),
+            combiner_ops: [Default::default(); 2],
+            _marker: PhantomData,
         }
     }
 }
@@ -62714,11 +64978,13 @@ pub struct AccelerationStructureBuildSizesInfoKHR<'a> {
 impl Default for AccelerationStructureBuildSizesInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            acceleration_structure_size: Default::default(),
+            update_scratch_size: Default::default(),
+            build_scratch_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62790,11 +65056,12 @@ impl<'a> PhysicalDeviceImage2DViewOf3DFeaturesEXT<'a> {
 impl Default for PhysicalDeviceImage2DViewOf3DFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image2_d_view_of3_d: Default::default(),
+            sampler2_d_view_of3_d: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62861,11 +65128,11 @@ impl<'a> PhysicalDeviceImageSlicedViewOf3DFeaturesEXT<'a> {
 impl Default for PhysicalDeviceImageSlicedViewOf3DFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_sliced_view_of3_d: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -62930,11 +65197,11 @@ impl<'a> PhysicalDeviceAttachmentFeedbackLoopDynamicStateFeaturesEXT<'a> {
 impl Default for PhysicalDeviceAttachmentFeedbackLoopDynamicStateFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            attachment_feedback_loop_dynamic_state: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63000,11 +65267,11 @@ impl<'a> PhysicalDeviceLegacyVertexAttributesFeaturesEXT<'a> {
 impl Default for PhysicalDeviceLegacyVertexAttributesFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            legacy_vertex_attributes: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63060,11 +65327,11 @@ pub struct PhysicalDeviceLegacyVertexAttributesPropertiesEXT<'a> {
 impl Default for PhysicalDeviceLegacyVertexAttributesPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            native_unaligned_performance: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63128,11 +65395,11 @@ impl<'a> PhysicalDeviceMutableDescriptorTypeFeaturesEXT<'a> {
 impl Default for PhysicalDeviceMutableDescriptorTypeFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            mutable_descriptor_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63196,8 +65463,11 @@ impl<'a> MutableDescriptorTypeListEXT<'a> {
 impl Default for MutableDescriptorTypeListEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            descriptor_type_count: Default::default(),
+            p_descriptor_types: core::ptr::null(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -63258,11 +65528,12 @@ impl<'a> MutableDescriptorTypeCreateInfoEXT<'a> {
 impl Default for MutableDescriptorTypeCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            mutable_descriptor_type_list_count: Default::default(),
+            p_mutable_descriptor_type_lists: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63329,11 +65600,11 @@ impl<'a> PhysicalDeviceDepthClipControlFeaturesEXT<'a> {
 impl Default for PhysicalDeviceDepthClipControlFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            depth_clip_control: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63398,11 +65669,11 @@ impl<'a> PhysicalDeviceZeroInitializeDeviceMemoryFeaturesEXT<'a> {
 impl Default for PhysicalDeviceZeroInitializeDeviceMemoryFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            zero_initialize_device_memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63454,11 +65725,10 @@ pub struct BeginCustomResolveInfoEXT<'a> {
 impl Default for BeginCustomResolveInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63506,11 +65776,11 @@ impl<'a> PhysicalDeviceCustomResolveFeaturesEXT<'a> {
 impl Default for PhysicalDeviceCustomResolveFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            custom_resolve: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63608,11 +65878,15 @@ impl<'a> CustomResolveCreateInfoEXT<'a> {
 impl Default for CustomResolveCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            custom_resolve: Default::default(),
+            color_attachment_count: Default::default(),
+            p_color_attachment_formats: core::ptr::null(),
+            depth_attachment_format: Default::default(),
+            stencil_attachment_format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63695,11 +65969,12 @@ impl<'a> PhysicalDeviceDeviceGeneratedCommandsFeaturesEXT<'a> {
 impl Default for PhysicalDeviceDeviceGeneratedCommandsFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_generated_commands: Default::default(),
+            dynamic_generated_pipeline_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63779,11 +66054,22 @@ pub struct PhysicalDeviceDeviceGeneratedCommandsPropertiesEXT<'a> {
 impl Default for PhysicalDeviceDeviceGeneratedCommandsPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_indirect_pipeline_count: Default::default(),
+            max_indirect_shader_object_count: Default::default(),
+            max_indirect_sequence_count: Default::default(),
+            max_indirect_commands_token_count: Default::default(),
+            max_indirect_commands_token_offset: Default::default(),
+            max_indirect_commands_indirect_stride: Default::default(),
+            supported_indirect_commands_input_modes: Default::default(),
+            supported_indirect_commands_shader_stages: Default::default(),
+            supported_indirect_commands_shader_stages_pipeline_binding: Default::default(),
+            supported_indirect_commands_shader_stages_shader_binding: Default::default(),
+            device_generated_commands_transform_feedback: Default::default(),
+            device_generated_commands_multi_draw_indirect_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63870,11 +66156,11 @@ impl<'a> GeneratedCommandsPipelineInfoEXT<'a> {
 impl Default for GeneratedCommandsPipelineInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -63945,11 +66231,12 @@ impl<'a> GeneratedCommandsShaderInfoEXT<'a> {
 impl Default for GeneratedCommandsShaderInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_count: Default::default(),
+            p_shaders: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64049,11 +66336,14 @@ impl<'a> GeneratedCommandsMemoryRequirementsInfoEXT<'a> {
 impl Default for GeneratedCommandsMemoryRequirementsInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            indirect_execution_set: Default::default(),
+            indirect_commands_layout: Default::default(),
+            max_sequence_count: Default::default(),
+            max_draw_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64125,11 +66415,12 @@ impl<'a> IndirectExecutionSetPipelineInfoEXT<'a> {
 impl Default for IndirectExecutionSetPipelineInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            initial_pipeline: Default::default(),
+            max_pipeline_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64193,11 +66484,12 @@ impl<'a> IndirectExecutionSetShaderLayoutInfoEXT<'a> {
 impl Default for IndirectExecutionSetShaderLayoutInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            set_layout_count: Default::default(),
+            p_set_layouts: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64294,11 +66586,16 @@ impl<'a> IndirectExecutionSetShaderInfoEXT<'a> {
 impl Default for IndirectExecutionSetShaderInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            shader_count: Default::default(),
+            p_initial_shaders: core::ptr::null(),
+            p_set_layout_infos: core::ptr::null(),
+            max_shader_count: Default::default(),
+            push_constant_range_count: Default::default(),
+            p_push_constant_ranges: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64374,11 +66671,12 @@ impl<'a> IndirectExecutionSetCreateInfoEXT<'a> {
 impl Default for IndirectExecutionSetCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            info: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64526,11 +66824,20 @@ impl<'a> GeneratedCommandsInfoEXT<'a> {
 impl Default for GeneratedCommandsInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            shader_stages: Default::default(),
+            indirect_execution_set: Default::default(),
+            indirect_commands_layout: Default::default(),
+            indirect_address: Default::default(),
+            indirect_address_size: Default::default(),
+            preprocess_address: Default::default(),
+            preprocess_size: Default::default(),
+            max_sequence_count: Default::default(),
+            sequence_count_address: Default::default(),
+            max_draw_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64614,11 +66921,12 @@ impl<'a> WriteIndirectExecutionSetPipelineEXT<'a> {
 impl Default for WriteIndirectExecutionSetPipelineEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            index: Default::default(),
+            pipeline: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64686,11 +66994,12 @@ impl<'a> WriteIndirectExecutionSetShaderEXT<'a> {
 impl Default for WriteIndirectExecutionSetShaderEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            index: Default::default(),
+            shader: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64798,11 +67107,16 @@ impl<'a> IndirectCommandsLayoutCreateInfoEXT<'a> {
 impl Default for IndirectCommandsLayoutCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            shader_stages: Default::default(),
+            indirect_stride: Default::default(),
+            pipeline_layout: Default::default(),
+            token_count: Default::default(),
+            p_tokens: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64895,11 +67209,13 @@ impl<'a> IndirectCommandsLayoutTokenEXT<'a> {
 impl Default for IndirectCommandsLayoutTokenEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            data: Default::default(),
+            offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -64972,8 +67288,11 @@ impl DrawIndirectCountIndirectCommandEXT {
 impl Default for DrawIndirectCountIndirectCommandEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            buffer_address: Default::default(),
+            stride: Default::default(),
+            command_count: Default::default(),
+        }
     }
 }
 
@@ -65028,8 +67347,9 @@ impl IndirectCommandsVertexBufferTokenEXT {
 impl Default for IndirectCommandsVertexBufferTokenEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            vertex_binding_unit: Default::default(),
+        }
     }
 }
 
@@ -65095,8 +67415,11 @@ impl BindVertexBufferIndirectCommandEXT {
 impl Default for BindVertexBufferIndirectCommandEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            buffer_address: Default::default(),
+            size: Default::default(),
+            stride: Default::default(),
+        }
     }
 }
 
@@ -65151,8 +67474,9 @@ impl IndirectCommandsIndexBufferTokenEXT {
 impl Default for IndirectCommandsIndexBufferTokenEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            mode: Default::default(),
+        }
     }
 }
 
@@ -65212,8 +67536,11 @@ impl BindIndexBufferIndirectCommandEXT {
 impl Default for BindIndexBufferIndirectCommandEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            buffer_address: Default::default(),
+            size: Default::default(),
+            index_type: Default::default(),
+        }
     }
 }
 
@@ -65268,8 +67595,9 @@ impl IndirectCommandsPushConstantTokenEXT {
 impl Default for IndirectCommandsPushConstantTokenEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            update_range: Default::default(),
+        }
     }
 }
 
@@ -65320,8 +67648,10 @@ impl IndirectCommandsExecutionSetTokenEXT {
 impl Default for IndirectCommandsExecutionSetTokenEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            r#type: Default::default(),
+            shader_stages: Default::default(),
+        }
     }
 }
 
@@ -65381,11 +67711,11 @@ impl<'a> PipelineViewportDepthClipControlCreateInfoEXT<'a> {
 impl Default for PipelineViewportDepthClipControlCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            negative_one_to_one: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -65449,11 +67779,11 @@ impl<'a> PhysicalDeviceDepthClampControlFeaturesEXT<'a> {
 impl Default for PhysicalDeviceDepthClampControlFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            depth_clamp_control: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -65527,11 +67857,12 @@ impl<'a> PipelineViewportDepthClampControlCreateInfoEXT<'a> {
 impl Default for PipelineViewportDepthClampControlCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            depth_clamp_mode: Default::default(),
+            p_depth_clamp_range: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -65597,11 +67928,11 @@ impl<'a> PhysicalDeviceVertexInputDynamicStateFeaturesEXT<'a> {
 impl Default for PhysicalDeviceVertexInputDynamicStateFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            vertex_input_dynamic_state: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -65666,11 +67997,11 @@ impl<'a> PhysicalDeviceExternalMemoryRDMAFeaturesNV<'a> {
 impl Default for PhysicalDeviceExternalMemoryRDMAFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            external_memory_rdma: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -65735,11 +68066,11 @@ impl<'a> PhysicalDeviceShaderRelaxedExtendedInstructionFeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderRelaxedExtendedInstructionFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_relaxed_extended_instruction: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -65829,11 +68160,14 @@ impl<'a> VertexInputBindingDescription2EXT<'a> {
 impl Default for VertexInputBindingDescription2EXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            binding: Default::default(),
+            stride: Default::default(),
+            input_rate: Default::default(),
+            divisor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -65931,11 +68265,14 @@ impl<'a> VertexInputAttributeDescription2EXT<'a> {
 impl Default for VertexInputAttributeDescription2EXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            location: Default::default(),
+            binding: Default::default(),
+            format: Default::default(),
+            offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -66000,11 +68337,11 @@ impl<'a> PhysicalDeviceColorWriteEnableFeaturesEXT<'a> {
 impl Default for PhysicalDeviceColorWriteEnableFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            color_write_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -66076,11 +68413,12 @@ impl<'a> PipelineColorWriteCreateInfoEXT<'a> {
 impl Default for PipelineColorWriteCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            attachment_count: Default::default(),
+            p_color_write_enables: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -66173,11 +68511,14 @@ impl<'a> MemoryBarrier2<'a> {
 impl Default for MemoryBarrier2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_stage_mask: Default::default(),
+            src_access_mask: Default::default(),
+            dst_stage_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -66334,11 +68675,20 @@ impl<'a> ImageMemoryBarrier2<'a> {
 impl Default for ImageMemoryBarrier2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_stage_mask: Default::default(),
+            src_access_mask: Default::default(),
+            dst_stage_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            old_layout: Default::default(),
+            new_layout: Default::default(),
+            src_queue_family_index: Default::default(),
+            dst_queue_family_index: Default::default(),
+            image: Default::default(),
+            subresource_range: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -66493,11 +68843,19 @@ impl<'a> BufferMemoryBarrier2<'a> {
 impl Default for BufferMemoryBarrier2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_stage_mask: Default::default(),
+            src_access_mask: Default::default(),
+            dst_stage_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            src_queue_family_index: Default::default(),
+            dst_queue_family_index: Default::default(),
+            buffer: Default::default(),
+            offset: Default::default(),
+            size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -66582,11 +68940,12 @@ impl<'a> MemoryBarrierAccessFlags3KHR<'a> {
 impl Default for MemoryBarrierAccessFlags3KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_access_mask3: Default::default(),
+            dst_access_mask3: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -66703,11 +69062,17 @@ impl<'a> DependencyInfo<'a> {
 impl Default for DependencyInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            dependency_flags: Default::default(),
+            memory_barrier_count: Default::default(),
+            p_memory_barriers: core::ptr::null(),
+            buffer_memory_barrier_count: Default::default(),
+            p_buffer_memory_barriers: core::ptr::null(),
+            image_memory_barrier_count: Default::default(),
+            p_image_memory_barriers: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -66803,11 +69168,14 @@ impl<'a> SemaphoreSubmitInfo<'a> {
 impl Default for SemaphoreSubmitInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            semaphore: Default::default(),
+            value: Default::default(),
+            stage_mask: Default::default(),
+            device_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -66887,11 +69255,12 @@ impl<'a> CommandBufferSubmitInfo<'a> {
 impl Default for CommandBufferSubmitInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            command_buffer: Default::default(),
+            device_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67000,11 +69369,17 @@ impl<'a> SubmitInfo2<'a> {
 impl Default for SubmitInfo2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            wait_semaphore_info_count: Default::default(),
+            p_wait_semaphore_infos: core::ptr::null(),
+            command_buffer_info_count: Default::default(),
+            p_command_buffer_infos: core::ptr::null(),
+            signal_semaphore_info_count: Default::default(),
+            p_signal_semaphore_infos: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67066,11 +69441,11 @@ pub struct QueueFamilyCheckpointProperties2NV<'a> {
 impl Default for QueueFamilyCheckpointProperties2NV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            checkpoint_execution_stage_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67125,11 +69500,12 @@ pub struct CheckpointData2NV<'a> {
 impl Default for CheckpointData2NV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            stage: Default::default(),
+            p_checkpoint_marker: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67190,11 +69566,11 @@ impl<'a> PhysicalDeviceSynchronization2Features<'a> {
 impl Default for PhysicalDeviceSynchronization2Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            synchronization2: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67268,11 +69644,12 @@ impl<'a> PhysicalDeviceUnifiedImageLayoutsFeaturesKHR<'a> {
 impl Default for PhysicalDeviceUnifiedImageLayoutsFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            unified_image_layouts: Default::default(),
+            unified_image_layouts_video: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67339,11 +69716,11 @@ impl<'a> PhysicalDeviceHostImageCopyFeatures<'a> {
 impl Default for PhysicalDeviceHostImageCopyFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            host_image_copy: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67407,10 +69784,12 @@ pub struct PhysicalDeviceHostImageCopyProperties<'a> {
 }
 
 impl<'a> PhysicalDeviceHostImageCopyProperties<'a> {
-    /// Sets `copy_src_layout_count`.
+    /// Sets `copy_src_layout_count` alone and nulls `p_copy_src_layouts`: the count without its
+    /// arrays (an array set before is dropped).
     #[inline]
     pub fn copy_src_layout_count(mut self, value: u32) -> Self {
         self.copy_src_layout_count = value;
+        self.p_copy_src_layouts = core::ptr::null_mut();
         self
     }
 
@@ -67424,10 +69803,12 @@ impl<'a> PhysicalDeviceHostImageCopyProperties<'a> {
         self
     }
 
-    /// Sets `copy_dst_layout_count`.
+    /// Sets `copy_dst_layout_count` alone and nulls `p_copy_dst_layouts`: the count without its
+    /// arrays (an array set before is dropped).
     #[inline]
     pub fn copy_dst_layout_count(mut self, value: u32) -> Self {
         self.copy_dst_layout_count = value;
+        self.p_copy_dst_layouts = core::ptr::null_mut();
         self
     }
 
@@ -67459,11 +69840,16 @@ impl<'a> PhysicalDeviceHostImageCopyProperties<'a> {
 impl Default for PhysicalDeviceHostImageCopyProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            copy_src_layout_count: Default::default(),
+            p_copy_src_layouts: core::ptr::null_mut(),
+            copy_dst_layout_count: Default::default(),
+            p_copy_dst_layouts: core::ptr::null_mut(),
+            optimal_tiling_layout_uuid: [Default::default(); UUID_SIZE],
+            identical_memory_type_requirements: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67582,11 +69968,16 @@ impl<'a> MemoryToImageCopy<'a> {
 impl Default for MemoryToImageCopy<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_host_pointer: core::ptr::null(),
+            memory_row_length: Default::default(),
+            memory_image_height: Default::default(),
+            image_subresource: Default::default(),
+            image_offset: Default::default(),
+            image_extent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67700,11 +70091,16 @@ impl<'a> ImageToMemoryCopy<'a> {
 impl Default for ImageToMemoryCopy<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_host_pointer: core::ptr::null_mut(),
+            memory_row_length: Default::default(),
+            memory_image_height: Default::default(),
+            image_subresource: Default::default(),
+            image_offset: Default::default(),
+            image_extent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67803,11 +70199,15 @@ impl<'a> CopyMemoryToImageInfo<'a> {
 impl Default for CopyMemoryToImageInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            dst_image: Default::default(),
+            dst_image_layout: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -67904,11 +70304,15 @@ impl<'a> CopyImageToMemoryInfo<'a> {
 impl Default for CopyImageToMemoryInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            src_image: Default::default(),
+            src_image_layout: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68023,11 +70427,17 @@ impl<'a> CopyImageToImageInfo<'a> {
 impl Default for CopyImageToImageInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            src_image: Default::default(),
+            src_image_layout: Default::default(),
+            dst_image: Default::default(),
+            dst_image_layout: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68123,11 +70533,14 @@ impl<'a> HostImageLayoutTransitionInfo<'a> {
 impl Default for HostImageLayoutTransitionInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image: Default::default(),
+            old_layout: Default::default(),
+            new_layout: Default::default(),
+            subresource_range: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68185,11 +70598,11 @@ pub struct SubresourceHostMemcpySize<'a> {
 impl Default for SubresourceHostMemcpySize<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68244,11 +70657,12 @@ pub struct HostImageCopyDevicePerformanceQuery<'a> {
 impl Default for HostImageCopyDevicePerformanceQuery<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            optimal_device_access: Default::default(),
+            identical_memory_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68332,11 +70746,13 @@ impl<'a> PhysicalDevicePrimitivesGeneratedQueryFeaturesEXT<'a> {
 impl Default for PhysicalDevicePrimitivesGeneratedQueryFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            primitives_generated_query: Default::default(),
+            primitives_generated_query_with_rasterizer_discard: Default::default(),
+            primitives_generated_query_with_non_zero_streams: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68405,11 +70821,11 @@ impl<'a> PhysicalDeviceLegacyDitheringFeaturesEXT<'a> {
 impl Default for PhysicalDeviceLegacyDitheringFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            legacy_dithering: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68474,11 +70890,11 @@ impl<'a> PhysicalDeviceMultisampledRenderToSingleSampledFeaturesEXT<'a> {
 impl Default for PhysicalDeviceMultisampledRenderToSingleSampledFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            multisampled_render_to_single_sampled: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68543,11 +70959,11 @@ impl<'a> SurfaceCapabilitiesPresentId2KHR<'a> {
 impl Default for SurfaceCapabilitiesPresentId2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_id2_supported: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68611,11 +71027,11 @@ impl<'a> SurfaceCapabilitiesPresentWait2KHR<'a> {
 impl Default for SurfaceCapabilitiesPresentWait2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_wait2_supported: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68670,11 +71086,11 @@ pub struct SubpassResolvePerformanceQueryEXT<'a> {
 impl Default for SubpassResolvePerformanceQueryEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            optimal: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68747,11 +71163,12 @@ impl<'a> MultisampledRenderToSingleSampledInfoEXT<'a> {
 impl Default for MultisampledRenderToSingleSampledInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            multisampled_render_to_single_sampled_enable: Default::default(),
+            rasterization_samples: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68818,11 +71235,11 @@ impl<'a> PhysicalDeviceMultisampledRenderToSwapchainFeaturesEXT<'a> {
 impl Default for PhysicalDeviceMultisampledRenderToSwapchainFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            multisampled_render_to_swapchain: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68887,11 +71304,11 @@ impl<'a> PhysicalDevicePipelineProtectedAccessFeatures<'a> {
 impl Default for PhysicalDevicePipelineProtectedAccessFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_protected_access: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -68956,11 +71373,11 @@ impl<'a> PhysicalDeviceInheritedViewportScissorFeaturesNV<'a> {
 impl Default for PhysicalDeviceInheritedViewportScissorFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            inherited_viewport_scissor2_d: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69043,11 +71460,13 @@ impl<'a> CommandBufferInheritanceViewportScissorInfoNV<'a> {
 impl Default for CommandBufferInheritanceViewportScissorInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            viewport_scissor2_d: Default::default(),
+            viewport_depth_count: Default::default(),
+            p_viewport_depths: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69115,11 +71534,11 @@ impl<'a> PhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT<'a> {
 impl Default for PhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ycbcr2plane444_formats: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69193,11 +71612,12 @@ impl<'a> PhysicalDeviceProvokingVertexFeaturesEXT<'a> {
 impl Default for PhysicalDeviceProvokingVertexFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            provoking_vertex_last: Default::default(),
+            transform_feedback_preserves_provoking_vertex: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69257,11 +71677,12 @@ pub struct PhysicalDeviceProvokingVertexPropertiesEXT<'a> {
 impl Default for PhysicalDeviceProvokingVertexPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            provoking_vertex_mode_per_pipeline: Default::default(),
+            transform_feedback_preserves_triangle_fan_provoking_vertex: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69327,11 +71748,11 @@ impl<'a> PipelineRasterizationProvokingVertexStateCreateInfoEXT<'a> {
 impl Default for PipelineRasterizationProvokingVertexStateCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            provoking_vertex_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69406,11 +71827,12 @@ impl<'a> CuModuleCreateInfoNVX<'a> {
 impl Default for CuModuleCreateInfoNVX<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            data_size: Default::default(),
+            p_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69471,11 +71893,11 @@ impl<'a> CuModuleTexturingModeCreateInfoNVX<'a> {
 impl Default for CuModuleTexturingModeCreateInfoNVX<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            use64bit_texturing: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69546,11 +71968,12 @@ impl<'a> CuFunctionCreateInfoNVX<'a> {
 impl Default for CuFunctionCreateInfoNVX<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            module: Default::default(),
+            p_name: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69693,11 +72116,22 @@ impl<'a> CuLaunchInfoNVX<'a> {
 impl Default for CuLaunchInfoNVX<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            function: Default::default(),
+            grid_dim_x: Default::default(),
+            grid_dim_y: Default::default(),
+            grid_dim_z: Default::default(),
+            block_dim_x: Default::default(),
+            block_dim_y: Default::default(),
+            block_dim_z: Default::default(),
+            shared_mem_bytes: Default::default(),
+            param_count: Default::default(),
+            p_params: core::ptr::null(),
+            extra_count: Default::default(),
+            p_extras: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69805,11 +72239,14 @@ impl<'a> PhysicalDeviceDescriptorBufferFeaturesEXT<'a> {
 impl Default for PhysicalDeviceDescriptorBufferFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            descriptor_buffer: Default::default(),
+            descriptor_buffer_capture_replay: Default::default(),
+            descriptor_buffer_image_layout_ignored: Default::default(),
+            descriptor_buffer_push_descriptors: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -69935,11 +72372,43 @@ pub struct PhysicalDeviceDescriptorBufferPropertiesEXT<'a> {
 impl Default for PhysicalDeviceDescriptorBufferPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            combined_image_sampler_descriptor_single_array: Default::default(),
+            bufferless_push_descriptors: Default::default(),
+            allow_sampler_image_view_post_submit_creation: Default::default(),
+            descriptor_buffer_offset_alignment: Default::default(),
+            max_descriptor_buffer_bindings: Default::default(),
+            max_resource_descriptor_buffer_bindings: Default::default(),
+            max_sampler_descriptor_buffer_bindings: Default::default(),
+            max_embedded_immutable_sampler_bindings: Default::default(),
+            max_embedded_immutable_samplers: Default::default(),
+            buffer_capture_replay_descriptor_data_size: Default::default(),
+            image_capture_replay_descriptor_data_size: Default::default(),
+            image_view_capture_replay_descriptor_data_size: Default::default(),
+            sampler_capture_replay_descriptor_data_size: Default::default(),
+            acceleration_structure_capture_replay_descriptor_data_size: Default::default(),
+            sampler_descriptor_size: Default::default(),
+            combined_image_sampler_descriptor_size: Default::default(),
+            sampled_image_descriptor_size: Default::default(),
+            storage_image_descriptor_size: Default::default(),
+            uniform_texel_buffer_descriptor_size: Default::default(),
+            robust_uniform_texel_buffer_descriptor_size: Default::default(),
+            storage_texel_buffer_descriptor_size: Default::default(),
+            robust_storage_texel_buffer_descriptor_size: Default::default(),
+            uniform_buffer_descriptor_size: Default::default(),
+            robust_uniform_buffer_descriptor_size: Default::default(),
+            storage_buffer_descriptor_size: Default::default(),
+            robust_storage_buffer_descriptor_size: Default::default(),
+            input_attachment_descriptor_size: Default::default(),
+            acceleration_structure_descriptor_size: Default::default(),
+            max_sampler_descriptor_buffer_range: Default::default(),
+            max_resource_descriptor_buffer_range: Default::default(),
+            sampler_descriptor_buffer_address_space_size: Default::default(),
+            resource_descriptor_buffer_address_space_size: Default::default(),
+            descriptor_buffer_address_space_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70058,11 +72527,11 @@ pub struct PhysicalDeviceDescriptorBufferDensityMapPropertiesEXT<'a> {
 impl Default for PhysicalDeviceDescriptorBufferDensityMapPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            combined_image_sampler_density_map_descriptor_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70142,11 +72611,13 @@ impl<'a> DescriptorAddressInfoEXT<'a> {
 impl Default for DescriptorAddressInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            address: Default::default(),
+            range: Default::default(),
+            format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70224,11 +72695,12 @@ impl<'a> DescriptorBufferBindingInfoEXT<'a> {
 impl Default for DescriptorBufferBindingInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            address: Default::default(),
+            usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70289,11 +72761,11 @@ impl<'a> DescriptorBufferBindingPushDescriptorBufferHandleEXT<'a> {
 impl Default for DescriptorBufferBindingPushDescriptorBufferHandleEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            buffer: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70372,11 +72844,12 @@ impl<'a> DescriptorGetInfoEXT<'a> {
 impl Default for DescriptorGetInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70428,11 +72901,11 @@ impl<'a> BufferCaptureDescriptorDataInfoEXT<'a> {
 impl Default for BufferCaptureDescriptorDataInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            buffer: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70489,11 +72962,11 @@ impl<'a> ImageCaptureDescriptorDataInfoEXT<'a> {
 impl Default for ImageCaptureDescriptorDataInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70550,11 +73023,11 @@ impl<'a> ImageViewCaptureDescriptorDataInfoEXT<'a> {
 impl Default for ImageViewCaptureDescriptorDataInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image_view: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70611,11 +73084,11 @@ impl<'a> SamplerCaptureDescriptorDataInfoEXT<'a> {
 impl Default for SamplerCaptureDescriptorDataInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            sampler: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70681,11 +73154,12 @@ impl<'a> AccelerationStructureCaptureDescriptorDataInfoEXT<'a> {
 impl Default for AccelerationStructureCaptureDescriptorDataInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            acceleration_structure: Default::default(),
+            acceleration_structure_nv: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70749,11 +73223,11 @@ impl<'a> OpaqueCaptureDescriptorDataCreateInfoEXT<'a> {
 impl Default for OpaqueCaptureDescriptorDataCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            opaque_capture_descriptor_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70825,11 +73299,11 @@ impl<'a> PhysicalDeviceShaderIntegerDotProductFeatures<'a> {
 impl Default for PhysicalDeviceShaderIntegerDotProductFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_integer_dot_product: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -70944,11 +73418,68 @@ pub struct PhysicalDeviceShaderIntegerDotProductProperties<'a> {
 impl Default for PhysicalDeviceShaderIntegerDotProductProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
+        let integer_dot_product_accumulating_saturating8_bit_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating8_bit_mixed_signedness_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating4x8_bit_packed_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating4x8_bit_packed_signed_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating4x8_bit_packed_mixed_signedness_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating16_bit_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating16_bit_signed_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating16_bit_mixed_signedness_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating32_bit_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating32_bit_signed_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating32_bit_mixed_signedness_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating64_bit_unsigned_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating64_bit_signed_accelerated =
+            Default::default();
+        let integer_dot_product_accumulating_saturating64_bit_mixed_signedness_accelerated =
+            Default::default();
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            integer_dot_product8_bit_unsigned_accelerated: Default::default(),
+            integer_dot_product8_bit_signed_accelerated: Default::default(),
+            integer_dot_product8_bit_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product4x8_bit_packed_unsigned_accelerated: Default::default(),
+            integer_dot_product4x8_bit_packed_signed_accelerated: Default::default(),
+            integer_dot_product4x8_bit_packed_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product16_bit_unsigned_accelerated: Default::default(),
+            integer_dot_product16_bit_signed_accelerated: Default::default(),
+            integer_dot_product16_bit_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product32_bit_unsigned_accelerated: Default::default(),
+            integer_dot_product32_bit_signed_accelerated: Default::default(),
+            integer_dot_product32_bit_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product64_bit_unsigned_accelerated: Default::default(),
+            integer_dot_product64_bit_signed_accelerated: Default::default(),
+            integer_dot_product64_bit_mixed_signedness_accelerated: Default::default(),
+            integer_dot_product_accumulating_saturating8_bit_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating8_bit_signed_accelerated: Default::default(),
+            integer_dot_product_accumulating_saturating8_bit_mixed_signedness_accelerated,
+            integer_dot_product_accumulating_saturating4x8_bit_packed_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating4x8_bit_packed_signed_accelerated,
+            integer_dot_product_accumulating_saturating4x8_bit_packed_mixed_signedness_accelerated,
+            integer_dot_product_accumulating_saturating16_bit_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating16_bit_signed_accelerated,
+            integer_dot_product_accumulating_saturating16_bit_mixed_signedness_accelerated,
+            integer_dot_product_accumulating_saturating32_bit_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating32_bit_signed_accelerated,
+            integer_dot_product_accumulating_saturating32_bit_mixed_signedness_accelerated,
+            integer_dot_product_accumulating_saturating64_bit_unsigned_accelerated,
+            integer_dot_product_accumulating_saturating64_bit_signed_accelerated,
+            integer_dot_product_accumulating_saturating64_bit_mixed_signedness_accelerated,
+            _marker: PhantomData,
         }
     }
 }
@@ -71071,11 +73602,16 @@ pub struct PhysicalDeviceDrmPropertiesEXT<'a> {
 impl Default for PhysicalDeviceDrmPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            has_primary: Default::default(),
+            has_render: Default::default(),
+            primary_major: Default::default(),
+            primary_minor: Default::default(),
+            render_major: Default::default(),
+            render_minor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -71149,11 +73685,11 @@ impl<'a> PhysicalDeviceFragmentShaderBarycentricFeaturesKHR<'a> {
 impl Default for PhysicalDeviceFragmentShaderBarycentricFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            fragment_shader_barycentric: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -71209,11 +73745,11 @@ pub struct PhysicalDeviceFragmentShaderBarycentricPropertiesKHR<'a> {
 impl Default for PhysicalDeviceFragmentShaderBarycentricPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            tri_strip_vertex_order_independent_of_provoking_vertex: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -71295,11 +73831,13 @@ impl<'a> PhysicalDeviceShaderFmaFeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderFmaFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_fma_float16: Default::default(),
+            shader_fma_float32: Default::default(),
+            shader_fma_float64: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -71377,11 +73915,12 @@ impl<'a> PhysicalDeviceRayTracingMotionBlurFeaturesNV<'a> {
 impl Default for PhysicalDeviceRayTracingMotionBlurFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_tracing_motion_blur: Default::default(),
+            ray_tracing_motion_blur_pipeline_trace_rays_indirect: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -71448,11 +73987,11 @@ impl<'a> PhysicalDeviceRayTracingValidationFeaturesNV<'a> {
 impl Default for PhysicalDeviceRayTracingValidationFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_tracing_validation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -71526,11 +74065,12 @@ impl<'a> PhysicalDeviceRayTracingLinearSweptSpheresFeaturesNV<'a> {
 impl Default for PhysicalDeviceRayTracingLinearSweptSpheresFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            spheres: Default::default(),
+            linear_swept_spheres: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -71597,11 +74137,11 @@ impl<'a> AccelerationStructureGeometryMotionTrianglesDataNV<'a> {
 impl Default for AccelerationStructureGeometryMotionTrianglesDataNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            vertex_data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -71674,11 +74214,12 @@ impl<'a> AccelerationStructureMotionInfoNV<'a> {
 impl Default for AccelerationStructureMotionInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            max_instances: Default::default(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -71871,8 +74412,24 @@ impl SRTDataNV {
 impl Default for SRTDataNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            sx: Default::default(),
+            a: Default::default(),
+            b: Default::default(),
+            pvx: Default::default(),
+            sy: Default::default(),
+            c: Default::default(),
+            pvy: Default::default(),
+            sz: Default::default(),
+            pvz: Default::default(),
+            qx: Default::default(),
+            qy: Default::default(),
+            qz: Default::default(),
+            qw: Default::default(),
+            tx: Default::default(),
+            ty: Default::default(),
+            tz: Default::default(),
+        }
     }
 }
 
@@ -72062,8 +74619,13 @@ impl AccelerationStructureSRTMotionInstanceNV {
 impl Default for AccelerationStructureSRTMotionInstanceNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            transform_t0: Default::default(),
+            transform_t1: Default::default(),
+            instance_custom_index_bits: 0,
+            instance_shader_binding_table_record_offset_bits: 0,
+            acceleration_structure_reference: Default::default(),
+        }
     }
 }
 
@@ -72225,8 +74787,13 @@ impl AccelerationStructureMatrixMotionInstanceNV {
 impl Default for AccelerationStructureMatrixMotionInstanceNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            transform_t0: Default::default(),
+            transform_t1: Default::default(),
+            instance_custom_index_bits: 0,
+            instance_shader_binding_table_record_offset_bits: 0,
+            acceleration_structure_reference: Default::default(),
+        }
     }
 }
 
@@ -72310,8 +74877,11 @@ impl AccelerationStructureMotionInstanceNV {
 impl Default for AccelerationStructureMotionInstanceNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            r#type: Default::default(),
+            flags: Default::default(),
+            data: Default::default(),
+        }
     }
 }
 
@@ -72371,11 +74941,12 @@ impl<'a> MemoryGetRemoteAddressInfoNV<'a> {
 impl Default for MemoryGetRemoteAddressInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            memory: Default::default(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -72436,11 +75007,11 @@ impl<'a> PhysicalDeviceRGBA10X6FormatsFeaturesEXT<'a> {
 impl Default for PhysicalDeviceRGBA10X6FormatsFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            format_rgba10x6_without_y_cb_cr_sampler: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -72500,11 +75071,13 @@ pub struct FormatProperties3<'a> {
 impl Default for FormatProperties3<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            linear_tiling_features: Default::default(),
+            optimal_tiling_features: Default::default(),
+            buffer_features: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -72567,11 +75140,13 @@ pub struct FormatProperties4KHR<'a> {
 impl Default for FormatProperties4KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            linear_tiling_features: Default::default(),
+            optimal_tiling_features: Default::default(),
+            buffer_features: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -72632,11 +75207,12 @@ pub struct DrmFormatModifierPropertiesList2EXT<'a> {
 impl Default for DrmFormatModifierPropertiesList2EXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            drm_format_modifier_count: Default::default(),
+            p_drm_format_modifier_properties: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -72689,8 +75265,11 @@ pub struct DrmFormatModifierProperties2EXT {
 impl Default for DrmFormatModifierProperties2EXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            drm_format_modifier: Default::default(),
+            drm_format_modifier_plane_count: Default::default(),
+            drm_format_modifier_tiling_features: Default::default(),
+        }
     }
 }
 
@@ -72775,11 +75354,15 @@ impl<'a> PipelineRenderingCreateInfo<'a> {
 impl Default for PipelineRenderingCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            view_mask: Default::default(),
+            color_attachment_count: Default::default(),
+            p_color_attachment_formats: core::ptr::null(),
+            depth_attachment_format: Default::default(),
+            stencil_attachment_format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -72916,11 +75499,18 @@ impl<'a> RenderingInfo<'a> {
 impl Default for RenderingInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            render_area: Default::default(),
+            layer_count: Default::default(),
+            view_mask: Default::default(),
+            color_attachment_count: Default::default(),
+            p_color_attachments: core::ptr::null(),
+            p_depth_attachment: core::ptr::null(),
+            p_stencil_attachment: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -72990,11 +75580,10 @@ impl<'a> RenderingEndInfoKHR<'a> {
 impl Default for RenderingEndInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73111,11 +75700,18 @@ impl<'a> RenderingAttachmentInfo<'a> {
 impl Default for RenderingAttachmentInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image_view: Default::default(),
+            image_layout: Default::default(),
+            resolve_mode: Default::default(),
+            resolve_image_view: Default::default(),
+            resolve_image_layout: Default::default(),
+            load_op: Default::default(),
+            store_op: Default::default(),
+            clear_value: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73206,11 +75802,13 @@ impl<'a> RenderingFragmentShadingRateAttachmentInfoKHR<'a> {
 impl Default for RenderingFragmentShadingRateAttachmentInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image_view: Default::default(),
+            image_layout: Default::default(),
+            shading_rate_attachment_texel_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73287,11 +75885,12 @@ impl<'a> RenderingFragmentDensityMapAttachmentInfoEXT<'a> {
 impl Default for RenderingFragmentDensityMapAttachmentInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image_view: Default::default(),
+            image_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73357,11 +75956,11 @@ impl<'a> PhysicalDeviceDynamicRenderingFeatures<'a> {
 impl Default for PhysicalDeviceDynamicRenderingFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            dynamic_rendering: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73476,11 +76075,17 @@ impl<'a> CommandBufferInheritanceRenderingInfo<'a> {
 impl Default for CommandBufferInheritanceRenderingInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            view_mask: Default::default(),
+            color_attachment_count: Default::default(),
+            p_color_attachment_formats: core::ptr::null(),
+            depth_attachment_format: Default::default(),
+            stencil_attachment_format: Default::default(),
+            rasterization_samples: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73570,11 +76175,13 @@ impl<'a> AttachmentSampleCountInfoAMD<'a> {
 impl Default for AttachmentSampleCountInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            color_attachment_count: Default::default(),
+            p_color_attachment_samples: core::ptr::null(),
+            depth_stencil_attachment_samples: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73653,11 +76260,12 @@ impl<'a> MultiviewPerViewAttributesInfoNVX<'a> {
 impl Default for MultiviewPerViewAttributesInfoNVX<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            per_view_attributes: Default::default(),
+            per_view_attributes_position_x_only: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73725,11 +76333,11 @@ impl<'a> PhysicalDeviceImageViewMinLodFeaturesEXT<'a> {
 impl Default for PhysicalDeviceImageViewMinLodFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            min_lod: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73794,11 +76402,11 @@ impl<'a> ImageViewMinLodCreateInfoEXT<'a> {
 impl Default for ImageViewMinLodCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            min_lod: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73874,11 +76482,13 @@ impl<'a> PhysicalDeviceRasterizationOrderAttachmentAccessFeaturesEXT<'a> {
 impl Default for PhysicalDeviceRasterizationOrderAttachmentAccessFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            rasterization_order_color_attachment_access: Default::default(),
+            rasterization_order_depth_attachment_access: Default::default(),
+            rasterization_order_stencil_attachment_access: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -73947,11 +76557,11 @@ impl<'a> PhysicalDeviceLinearColorAttachmentFeaturesNV<'a> {
 impl Default for PhysicalDeviceLinearColorAttachmentFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            linear_color_attachment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74016,11 +76626,11 @@ impl<'a> PhysicalDeviceGraphicsPipelineLibraryFeaturesEXT<'a> {
 impl Default for PhysicalDeviceGraphicsPipelineLibraryFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            graphics_pipeline_library: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74085,11 +76695,11 @@ impl<'a> PhysicalDevicePipelineBinaryFeaturesKHR<'a> {
 impl Default for PhysicalDevicePipelineBinaryFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_binaries: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74154,11 +76764,11 @@ impl<'a> DevicePipelineBinaryInternalCacheControlKHR<'a> {
 impl Default for DevicePipelineBinaryInternalCacheControlKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            disable_internal_cache: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74221,11 +76831,15 @@ pub struct PhysicalDevicePipelineBinaryPropertiesKHR<'a> {
 impl Default for PhysicalDevicePipelineBinaryPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_binary_internal_cache: Default::default(),
+            pipeline_binary_internal_cache_control: Default::default(),
+            pipeline_binary_prefers_internal_cache: Default::default(),
+            pipeline_binary_precompiled_internal_cache: Default::default(),
+            pipeline_binary_compressed_data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74290,11 +76904,12 @@ pub struct PhysicalDeviceGraphicsPipelineLibraryPropertiesEXT<'a> {
 impl Default for PhysicalDeviceGraphicsPipelineLibraryPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            graphics_pipeline_library_fast_linking: Default::default(),
+            graphics_pipeline_library_independent_interpolation_decoration: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74360,11 +76975,11 @@ impl<'a> GraphicsPipelineLibraryCreateInfoEXT<'a> {
 impl Default for GraphicsPipelineLibraryCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74428,11 +77043,11 @@ impl<'a> PhysicalDeviceDataGraphNeuralAcceleratorStatisticsFeaturesARM<'a> {
 impl Default for PhysicalDeviceDataGraphNeuralAcceleratorStatisticsFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            data_graph_neural_accelerator_statistics: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74498,11 +77113,11 @@ impl<'a> DataGraphPipelineNeuralStatisticsCreateInfoARM<'a> {
 impl Default for DataGraphPipelineNeuralStatisticsCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            allow_neural_statistics: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74566,11 +77181,11 @@ impl<'a> DataGraphPipelineSessionNeuralStatisticsCreateInfoARM<'a> {
 impl Default for DataGraphPipelineSessionNeuralStatisticsCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74633,11 +77248,15 @@ pub struct TensorExplicitTilingFormatPropertiesARM<'a> {
 impl Default for TensorExplicitTilingFormatPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            brick16_tiling_tensor_features: Default::default(),
+            brick8_tiling_tensor_features: Default::default(),
+            brick4_tiling_tensor_features: Default::default(),
+            block_u_tiling_tensor_features: Default::default(),
+            block_u64k_tiling_tensor_features: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74712,11 +77331,11 @@ impl<'a> TensorRollingBackingCreateInfoARM<'a> {
 impl Default for TensorRollingBackingCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            wraps: [Default::default(); MAX_TENSOR_CREATE_INFO_ROLLING_BACKING_WRAP_COUNT_ARM],
+            _marker: PhantomData,
         }
     }
 }
@@ -74780,11 +77399,11 @@ impl<'a> PhysicalDeviceDescriptorSetHostMappingFeaturesVALVE<'a> {
 impl Default for PhysicalDeviceDescriptorSetHostMappingFeaturesVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            descriptor_set_host_mapping: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74856,11 +77475,12 @@ impl<'a> DescriptorSetBindingReferenceVALVE<'a> {
 impl Default for DescriptorSetBindingReferenceVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            descriptor_set_layout: Default::default(),
+            binding: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -74928,11 +77548,12 @@ impl<'a> DescriptorSetLayoutHostMappingInfoVALVE<'a> {
 impl Default for DescriptorSetLayoutHostMappingInfoVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            descriptor_offset: Default::default(),
+            descriptor_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75011,11 +77632,13 @@ impl<'a> PhysicalDeviceNestedCommandBufferFeaturesEXT<'a> {
 impl Default for PhysicalDeviceNestedCommandBufferFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            nested_command_buffer: Default::default(),
+            nested_command_buffer_rendering: Default::default(),
+            nested_command_buffer_simultaneous_use: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75075,11 +77698,11 @@ pub struct PhysicalDeviceNestedCommandBufferPropertiesEXT<'a> {
 impl Default for PhysicalDeviceNestedCommandBufferPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_command_buffer_nesting_level: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75143,11 +77766,11 @@ impl<'a> PhysicalDeviceShaderModuleIdentifierFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderModuleIdentifierFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_module_identifier: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75203,11 +77826,11 @@ pub struct PhysicalDeviceShaderModuleIdentifierPropertiesEXT<'a> {
 impl Default for PhysicalDeviceShaderModuleIdentifierPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_module_identifier_algorithm_uuid: [Default::default(); UUID_SIZE],
+            _marker: PhantomData,
         }
     }
 }
@@ -75276,11 +77899,12 @@ impl<'a> PipelineShaderStageModuleIdentifierCreateInfoEXT<'a> {
 impl Default for PipelineShaderStageModuleIdentifierCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            identifier_size: Default::default(),
+            p_identifier: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75337,11 +77961,12 @@ pub struct ShaderModuleIdentifierEXT<'a> {
 impl Default for ShaderModuleIdentifierEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            identifier_size: Default::default(),
+            identifier: [Default::default(); MAX_SHADER_MODULE_IDENTIFIER_SIZE_EXT],
+            _marker: PhantomData,
         }
     }
 }
@@ -75418,11 +78043,13 @@ impl<'a> ImageCompressionControlEXT<'a> {
 impl Default for ImageCompressionControlEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            compression_control_plane_count: Default::default(),
+            p_fixed_rate_flags: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75492,11 +78119,11 @@ impl<'a> PhysicalDeviceImageCompressionControlFeaturesEXT<'a> {
 impl Default for PhysicalDeviceImageCompressionControlFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_compression_control: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75554,11 +78181,12 @@ pub struct ImageCompressionPropertiesEXT<'a> {
 impl Default for ImageCompressionPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_compression_flags: Default::default(),
+            image_compression_fixed_rate_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75626,11 +78254,11 @@ impl<'a> PhysicalDeviceImageCompressionControlSwapchainFeaturesEXT<'a> {
 impl Default for PhysicalDeviceImageCompressionControlSwapchainFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_compression_control_swapchain: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75693,11 +78321,11 @@ impl<'a> ImageSubresource2<'a> {
 impl Default for ImageSubresource2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_subresource: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75749,11 +78377,11 @@ impl<'a> SubresourceLayout2<'a> {
 impl Default for SubresourceLayout2<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            subresource_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75808,11 +78436,11 @@ impl<'a> RenderPassCreationControlEXT<'a> {
 impl Default for RenderPassCreationControlEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            disallow_merging: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75862,8 +78490,9 @@ pub struct RenderPassCreationFeedbackInfoEXT {
 impl Default for RenderPassCreationFeedbackInfoEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            post_merge_subpass_count: Default::default(),
+        }
     }
 }
 
@@ -75924,11 +78553,11 @@ impl<'a> RenderPassCreationFeedbackCreateInfoEXT<'a> {
 impl Default for RenderPassCreationFeedbackCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_render_pass_feedback: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -75981,8 +78610,11 @@ pub struct RenderPassSubpassFeedbackInfoEXT {
 impl Default for RenderPassSubpassFeedbackInfoEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            subpass_merge_status: Default::default(),
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            post_merge_index: Default::default(),
+        }
     }
 }
 
@@ -76048,11 +78680,11 @@ impl<'a> RenderPassSubpassFeedbackCreateInfoEXT<'a> {
 impl Default for RenderPassSubpassFeedbackCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_subpass_feedback: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76116,11 +78748,11 @@ impl<'a> PhysicalDeviceSubpassMergeFeedbackFeaturesEXT<'a> {
 impl Default for PhysicalDeviceSubpassMergeFeedbackFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            subpass_merge_feedback: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76220,30 +78852,35 @@ impl<'a> MicromapBuildInfoEXT<'a> {
         self
     }
 
-    /// Sets `usage_counts_count`.
+    /// Sets `usage_counts_count` alone and nulls `p_usage_counts`, `pp_usage_counts`: the count
+    /// without its arrays (an array set before is dropped).
     #[inline]
     pub fn usage_counts_count(mut self, value: u32) -> Self {
         self.usage_counts_count = value;
+        self.p_usage_counts = core::ptr::null();
+        self.pp_usage_counts = core::ptr::null();
         self
     }
 
-    /// Sets `p_usage_counts` and `usage_counts_count` from the slice length.
+    /// Sets `p_usage_counts` and `usage_counts_count` from the slice length, and nulls
+    /// `pp_usage_counts`: the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn usage_counts(mut self, value: &'a [MicromapUsageEXT]) -> Self {
-        let len = value.len();
         self.p_usage_counts = value.as_ptr();
-        self.usage_counts_count = crate::len::count_u32(len, "usageCountsCount");
+        self.pp_usage_counts = core::ptr::null();
+        self.usage_counts_count = crate::len::count_u32(value.len(), "usageCountsCount");
         self
     }
 
-    /// Sets `pp_usage_counts` and `usage_counts_count` from the slice length.
+    /// Sets `pp_usage_counts` and `usage_counts_count` from the slice length, and nulls
+    /// `p_usage_counts`: the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn pp_usage_counts(mut self, value: &'a [*const MicromapUsageEXT]) -> Self {
-        let len = value.len();
         self.pp_usage_counts = value.as_ptr();
-        self.usage_counts_count = crate::len::count_u32(len, "usageCountsCount");
+        self.p_usage_counts = core::ptr::null();
+        self.usage_counts_count = crate::len::count_u32(value.len(), "usageCountsCount");
         self
     }
 
@@ -76279,11 +78916,21 @@ impl<'a> MicromapBuildInfoEXT<'a> {
 impl Default for MicromapBuildInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            flags: Default::default(),
+            mode: Default::default(),
+            dst_micromap: Default::default(),
+            usage_counts_count: Default::default(),
+            p_usage_counts: core::ptr::null(),
+            pp_usage_counts: core::ptr::null(),
+            data: Default::default(),
+            scratch_data: Default::default(),
+            triangle_array: Default::default(),
+            triangle_array_stride: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76361,30 +79008,35 @@ pub struct AccelerationStructureGeometryMicromapDataKHR<'a> {
 }
 
 impl<'a> AccelerationStructureGeometryMicromapDataKHR<'a> {
-    /// Sets `usage_counts_count`.
+    /// Sets `usage_counts_count` alone and nulls `p_usage_counts`, `pp_usage_counts`: the count
+    /// without its arrays (an array set before is dropped).
     #[inline]
     pub fn usage_counts_count(mut self, value: u32) -> Self {
         self.usage_counts_count = value;
+        self.p_usage_counts = core::ptr::null();
+        self.pp_usage_counts = core::ptr::null();
         self
     }
 
-    /// Sets `p_usage_counts` and `usage_counts_count` from the slice length.
+    /// Sets `p_usage_counts` and `usage_counts_count` from the slice length, and nulls
+    /// `pp_usage_counts`: the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn usage_counts(mut self, value: &'a [MicromapUsageKHR]) -> Self {
-        let len = value.len();
         self.p_usage_counts = value.as_ptr();
-        self.usage_counts_count = crate::len::count_u32(len, "usageCountsCount");
+        self.pp_usage_counts = core::ptr::null();
+        self.usage_counts_count = crate::len::count_u32(value.len(), "usageCountsCount");
         self
     }
 
-    /// Sets `pp_usage_counts` and `usage_counts_count` from the slice length.
+    /// Sets `pp_usage_counts` and `usage_counts_count` from the slice length, and nulls
+    /// `p_usage_counts`: the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn pp_usage_counts(mut self, value: &'a [*const MicromapUsageKHR]) -> Self {
-        let len = value.len();
         self.pp_usage_counts = value.as_ptr();
-        self.usage_counts_count = crate::len::count_u32(len, "usageCountsCount");
+        self.p_usage_counts = core::ptr::null();
+        self.usage_counts_count = crate::len::count_u32(value.len(), "usageCountsCount");
         self
     }
 
@@ -76413,11 +79065,16 @@ impl<'a> AccelerationStructureGeometryMicromapDataKHR<'a> {
 impl Default for AccelerationStructureGeometryMicromapDataKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            usage_counts_count: Default::default(),
+            p_usage_counts: core::ptr::null(),
+            pp_usage_counts: core::ptr::null(),
+            data: Default::default(),
+            triangle_array: Default::default(),
+            triangle_array_stride: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76536,11 +79193,16 @@ impl<'a> MicromapCreateInfoEXT<'a> {
 impl Default for MicromapCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            create_flags: Default::default(),
+            buffer: Default::default(),
+            offset: Default::default(),
+            size: Default::default(),
+            r#type: Default::default(),
+            device_address: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76607,11 +79269,11 @@ impl<'a> MicromapVersionInfoEXT<'a> {
 impl Default for MicromapVersionInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_version_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76680,11 +79342,13 @@ impl<'a> CopyMicromapInfoEXT<'a> {
 impl Default for CopyMicromapInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src: Default::default(),
+            dst: Default::default(),
+            mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76755,11 +79419,13 @@ impl<'a> CopyMicromapToMemoryInfoEXT<'a> {
 impl Default for CopyMicromapToMemoryInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src: Default::default(),
+            dst: Default::default(),
+            mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76838,11 +79504,13 @@ impl<'a> CopyMemoryToMicromapInfoEXT<'a> {
 impl Default for CopyMemoryToMicromapInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src: Default::default(),
+            dst: Default::default(),
+            mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76921,11 +79589,13 @@ impl<'a> MicromapBuildSizesInfoEXT<'a> {
 impl Default for MicromapBuildSizesInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            micromap_size: Default::default(),
+            build_scratch_size: Default::default(),
+            discardable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -76998,8 +79668,11 @@ impl MicromapUsageKHR {
 impl Default for MicromapUsageKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            count: Default::default(),
+            subdivision_level: Default::default(),
+            format: Default::default(),
+        }
     }
 }
 
@@ -77068,8 +79741,11 @@ impl MicromapUsageEXT {
 impl Default for MicromapUsageEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            count: Default::default(),
+            subdivision_level: Default::default(),
+            format: Default::default(),
+        }
     }
 }
 
@@ -77136,8 +79812,11 @@ impl MicromapTriangleKHR {
 impl Default for MicromapTriangleKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            data_offset: Default::default(),
+            subdivision_level: Default::default(),
+            format: Default::default(),
+        }
     }
 }
 
@@ -77198,11 +79877,11 @@ impl<'a> PhysicalDeviceOpacityMicromapFeaturesKHR<'a> {
 impl Default for PhysicalDeviceOpacityMicromapFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            micromap: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -77285,11 +79964,13 @@ impl<'a> PhysicalDeviceOpacityMicromapFeaturesEXT<'a> {
 impl Default for PhysicalDeviceOpacityMicromapFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            micromap: Default::default(),
+            micromap_capture_replay: Default::default(),
+            micromap_host_commands: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -77355,11 +80036,14 @@ pub struct PhysicalDeviceOpacityMicromapPropertiesKHR<'a> {
 impl Default for PhysicalDeviceOpacityMicromapPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_opacity2_state_subdivision_level: Default::default(),
+            max_opacity4_state_subdivision_level: Default::default(),
+            max_opacity_lossy4_state_subdivision_level: Default::default(),
+            max_micromap_triangles: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -77422,11 +80106,12 @@ pub struct PhysicalDeviceOpacityMicromapPropertiesEXT<'a> {
 impl Default for PhysicalDeviceOpacityMicromapPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_opacity2_state_subdivision_level: Default::default(),
+            max_opacity4_state_subdivision_level: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -77528,11 +80213,15 @@ impl<'a> AccelerationStructureTrianglesOpacityMicromapKHR<'a> {
 impl Default for AccelerationStructureTrianglesOpacityMicromapKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            index_type: Default::default(),
+            index_buffer: Default::default(),
+            index_stride: Default::default(),
+            base_triangle: Default::default(),
+            micromap: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -77635,30 +80324,35 @@ impl<'a> AccelerationStructureTrianglesOpacityMicromapEXT<'a> {
         self
     }
 
-    /// Sets `usage_counts_count`.
+    /// Sets `usage_counts_count` alone and nulls `p_usage_counts`, `pp_usage_counts`: the count
+    /// without its arrays (an array set before is dropped).
     #[inline]
     pub fn usage_counts_count(mut self, value: u32) -> Self {
         self.usage_counts_count = value;
+        self.p_usage_counts = core::ptr::null();
+        self.pp_usage_counts = core::ptr::null();
         self
     }
 
-    /// Sets `p_usage_counts` and `usage_counts_count` from the slice length.
+    /// Sets `p_usage_counts` and `usage_counts_count` from the slice length, and nulls
+    /// `pp_usage_counts`: the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn usage_counts(mut self, value: &'a [MicromapUsageEXT]) -> Self {
-        let len = value.len();
         self.p_usage_counts = value.as_ptr();
-        self.usage_counts_count = crate::len::count_u32(len, "usageCountsCount");
+        self.pp_usage_counts = core::ptr::null();
+        self.usage_counts_count = crate::len::count_u32(value.len(), "usageCountsCount");
         self
     }
 
-    /// Sets `pp_usage_counts` and `usage_counts_count` from the slice length.
+    /// Sets `pp_usage_counts` and `usage_counts_count` from the slice length, and nulls
+    /// `p_usage_counts`: the arrays are alternatives.
     #[inline]
     #[track_caller]
     pub fn pp_usage_counts(mut self, value: &'a [*const MicromapUsageEXT]) -> Self {
-        let len = value.len();
         self.pp_usage_counts = value.as_ptr();
-        self.usage_counts_count = crate::len::count_u32(len, "usageCountsCount");
+        self.p_usage_counts = core::ptr::null();
+        self.usage_counts_count = crate::len::count_u32(value.len(), "usageCountsCount");
         self
     }
 
@@ -77673,11 +80367,18 @@ impl<'a> AccelerationStructureTrianglesOpacityMicromapEXT<'a> {
 impl Default for AccelerationStructureTrianglesOpacityMicromapEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            index_type: Default::default(),
+            index_buffer: Default::default(),
+            index_stride: Default::default(),
+            base_triangle: Default::default(),
+            usage_counts_count: Default::default(),
+            p_usage_counts: core::ptr::null(),
+            pp_usage_counts: core::ptr::null(),
+            micromap: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -77744,11 +80445,11 @@ pub struct PipelinePropertiesIdentifierEXT<'a> {
 impl Default for PipelinePropertiesIdentifierEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_identifier: [Default::default(); UUID_SIZE],
+            _marker: PhantomData,
         }
     }
 }
@@ -77807,11 +80508,11 @@ impl<'a> PhysicalDevicePipelinePropertiesFeaturesEXT<'a> {
 impl Default for PhysicalDevicePipelinePropertiesFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_properties_identifier: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -77876,11 +80577,11 @@ impl<'a> PhysicalDeviceShaderEarlyAndLateFragmentTestsFeaturesAMD<'a> {
 impl Default for PhysicalDeviceShaderEarlyAndLateFragmentTestsFeaturesAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_early_and_late_fragment_tests: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -77946,11 +80647,11 @@ impl<'a> ExternalMemoryAcquireUnmodifiedEXT<'a> {
 impl Default for ExternalMemoryAcquireUnmodifiedEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            acquire_unmodified_memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78017,11 +80718,11 @@ impl<'a> PhysicalDeviceNonSeamlessCubeMapFeaturesEXT<'a> {
 impl Default for PhysicalDeviceNonSeamlessCubeMapFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            non_seamless_cube_map: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78086,11 +80787,11 @@ impl<'a> PhysicalDevicePipelineRobustnessFeatures<'a> {
 impl Default for PhysicalDevicePipelineRobustnessFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_robustness: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78183,11 +80884,14 @@ impl<'a> PipelineRobustnessCreateInfo<'a> {
 impl Default for PipelineRobustnessCreateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            storage_buffers: Default::default(),
+            uniform_buffers: Default::default(),
+            vertex_inputs: Default::default(),
+            images: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78257,11 +80961,14 @@ pub struct PhysicalDevicePipelineRobustnessProperties<'a> {
 impl Default for PhysicalDevicePipelineRobustnessProperties<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            default_robustness_storage_buffers: Default::default(),
+            default_robustness_uniform_buffers: Default::default(),
+            default_robustness_vertex_inputs: Default::default(),
+            default_robustness_images: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78349,11 +81056,13 @@ impl<'a> ImageViewSampleWeightCreateInfoQCOM<'a> {
 impl Default for ImageViewSampleWeightCreateInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            filter_center: Default::default(),
+            filter_size: Default::default(),
+            num_phases: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78421,11 +81130,11 @@ impl<'a> PhysicalDeviceShaderMultipleWaitQueuesFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceShaderMultipleWaitQueuesFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_multiple_wait_queues: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78481,11 +81190,11 @@ pub struct PhysicalDeviceShaderMultipleWaitQueuesPropertiesQCOM<'a> {
 impl Default for PhysicalDeviceShaderMultipleWaitQueuesPropertiesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_shader_wait_queues: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78567,11 +81276,13 @@ impl<'a> PhysicalDeviceImageProcessingFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceImageProcessingFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            texture_sample_weighted: Default::default(),
+            texture_box_filter: Default::default(),
+            texture_block_match: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78637,11 +81348,14 @@ pub struct PhysicalDeviceImageProcessingPropertiesQCOM<'a> {
 impl Default for PhysicalDeviceImageProcessingPropertiesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_weight_filter_phases: Default::default(),
+            max_weight_filter_dimension: Default::default(),
+            max_block_match_region: Default::default(),
+            max_box_filter_block_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78711,11 +81425,11 @@ impl<'a> PhysicalDeviceTilePropertiesFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceTilePropertiesFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            tile_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78796,11 +81510,13 @@ impl<'a> TilePropertiesQCOM<'a> {
 impl Default for TilePropertiesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            tile_size: Default::default(),
+            apron_size: Default::default(),
+            origin: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78863,11 +81579,11 @@ impl<'a> TileMemoryBindInfoQCOM<'a> {
 impl Default for TileMemoryBindInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -78925,11 +81641,11 @@ impl<'a> PhysicalDeviceAmigoProfilingFeaturesSEC<'a> {
 impl Default for PhysicalDeviceAmigoProfilingFeaturesSEC<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            amigo_profiling: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79003,11 +81719,12 @@ impl<'a> AmigoProfilingSubmitInfoSEC<'a> {
 impl Default for AmigoProfilingSubmitInfoSEC<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            first_draw_timestamp: Default::default(),
+            swap_buffer_timestamp: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79073,11 +81790,11 @@ impl<'a> PhysicalDeviceAttachmentFeedbackLoopLayoutFeaturesEXT<'a> {
 impl Default for PhysicalDeviceAttachmentFeedbackLoopLayoutFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            attachment_feedback_loop_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79142,11 +81859,11 @@ impl<'a> AttachmentFeedbackLoopInfoEXT<'a> {
 impl Default for AttachmentFeedbackLoopInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            feedback_loop_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79210,11 +81927,11 @@ impl<'a> PhysicalDeviceAddressBindingReportFeaturesEXT<'a> {
 impl Default for PhysicalDeviceAddressBindingReportFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            report_address_binding: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79279,11 +81996,11 @@ impl<'a> RenderingAttachmentFlagsInfoKHR<'a> {
 impl Default for RenderingAttachmentFlagsInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79359,11 +82076,13 @@ impl<'a> ResolveImageModeInfoKHR<'a> {
 impl Default for ResolveImageModeInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            resolve_mode: Default::default(),
+            stencil_resolve_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79458,11 +82177,14 @@ impl<'a> DeviceAddressBindingCallbackDataEXT<'a> {
 impl Default for DeviceAddressBindingCallbackDataEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            base_address: Default::default(),
+            size: Default::default(),
+            binding_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79532,11 +82254,11 @@ impl<'a> PhysicalDeviceOpticalFlowFeaturesNV<'a> {
 impl Default for PhysicalDeviceOpticalFlowFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            optical_flow: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79612,11 +82334,21 @@ pub struct PhysicalDeviceOpticalFlowPropertiesNV<'a> {
 impl Default for PhysicalDeviceOpticalFlowPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supported_output_grid_sizes: Default::default(),
+            supported_hint_grid_sizes: Default::default(),
+            hint_supported: Default::default(),
+            cost_supported: Default::default(),
+            bidirectional_flow_supported: Default::default(),
+            global_flow_supported: Default::default(),
+            min_width: Default::default(),
+            min_height: Default::default(),
+            max_width: Default::default(),
+            max_height: Default::default(),
+            max_num_regions_of_interest: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79700,11 +82432,11 @@ impl<'a> OpticalFlowImageFormatInfoNV<'a> {
 impl Default for OpticalFlowImageFormatInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79752,11 +82484,11 @@ pub struct OpticalFlowImageFormatPropertiesNV<'a> {
 impl Default for OpticalFlowImageFormatPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79893,11 +82625,19 @@ impl<'a> OpticalFlowSessionCreateInfoNV<'a> {
 impl Default for OpticalFlowSessionCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            width: Default::default(),
+            height: Default::default(),
+            image_format: Default::default(),
+            flow_vector_format: Default::default(),
+            cost_format: Default::default(),
+            output_grid_size: Default::default(),
+            hint_grid_size: Default::default(),
+            performance_level: Default::default(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -79990,11 +82730,13 @@ impl<'a> OpticalFlowSessionCreatePrivateDataInfoNV<'a> {
 impl Default for OpticalFlowSessionCreatePrivateDataInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            id: Default::default(),
+            size: Default::default(),
+            p_private_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -80074,11 +82816,13 @@ impl<'a> OpticalFlowExecuteInfoNV<'a> {
 impl Default for OpticalFlowExecuteInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -80150,11 +82894,12 @@ impl<'a> PhysicalDeviceFaultFeaturesEXT<'a> {
 impl Default for PhysicalDeviceFaultFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_fault: Default::default(),
+            device_fault_vendor_binary: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -80208,8 +82953,11 @@ pub struct DeviceFaultAddressInfoKHR {
 impl Default for DeviceFaultAddressInfoKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            address_type: Default::default(),
+            reported_address: Default::default(),
+            address_precision: Default::default(),
+        }
     }
 }
 
@@ -80251,8 +82999,11 @@ pub struct DeviceFaultVendorInfoKHR {
 impl Default for DeviceFaultVendorInfoKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            vendor_fault_code: Default::default(),
+            vendor_fault_data: Default::default(),
+        }
     }
 }
 
@@ -80317,11 +83068,16 @@ pub struct DeviceFaultInfoKHR<'a> {
 impl Default for DeviceFaultInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            group_id: Default::default(),
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            fault_address_info: Default::default(),
+            instruction_address_info: Default::default(),
+            vendor_info: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -80392,11 +83148,12 @@ impl<'a> DeviceFaultDebugInfoKHR<'a> {
 impl Default for DeviceFaultDebugInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            vendor_binary_size: Default::default(),
+            p_vendor_binary_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -80475,11 +83232,13 @@ impl<'a> DeviceFaultCountsEXT<'a> {
 impl Default for DeviceFaultCountsEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            address_info_count: Default::default(),
+            vendor_info_count: Default::default(),
+            vendor_binary_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -80539,11 +83298,14 @@ pub struct DeviceFaultInfoEXT<'a> {
 impl Default for DeviceFaultInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            p_address_infos: core::ptr::null_mut(),
+            p_vendor_infos: core::ptr::null_mut(),
+            p_vendor_binary_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -80691,8 +83453,19 @@ impl DeviceFaultVendorBinaryHeaderVersionOneKHR {
 impl Default for DeviceFaultVendorBinaryHeaderVersionOneKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            header_size: Default::default(),
+            header_version: Default::default(),
+            vendor_id: Default::default(),
+            device_id: Default::default(),
+            driver_version: Default::default(),
+            pipeline_cache_uuid: [Default::default(); UUID_SIZE],
+            application_name_offset: Default::default(),
+            application_version: Default::default(),
+            engine_name_offset: Default::default(),
+            engine_version: Default::default(),
+            api_version: Default::default(),
+        }
     }
 }
 
@@ -80806,11 +83579,14 @@ impl<'a> PhysicalDeviceFaultFeaturesKHR<'a> {
 impl Default for PhysicalDeviceFaultFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_fault: Default::default(),
+            device_fault_vendor_binary: Default::default(),
+            device_fault_report_masked: Default::default(),
+            device_fault_device_lost_on_masked: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -80872,11 +83648,11 @@ pub struct PhysicalDeviceFaultPropertiesKHR<'a> {
 impl Default for PhysicalDeviceFaultPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_device_fault_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -80940,11 +83716,11 @@ impl<'a> PhysicalDevicePipelineLibraryGroupHandlesFeaturesKHR<'a> {
 impl Default for PhysicalDevicePipelineLibraryGroupHandlesFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_library_group_handles: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81033,11 +83809,13 @@ impl<'a> DepthBiasInfoEXT<'a> {
 impl Default for DepthBiasInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            depth_bias_constant_factor: Default::default(),
+            depth_bias_clamp: Default::default(),
+            depth_bias_slope_factor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81109,11 +83887,12 @@ impl<'a> DepthBiasRepresentationInfoEXT<'a> {
 impl Default for DepthBiasRepresentationInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            depth_bias_representation: Default::default(),
+            depth_bias_exact: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81212,8 +83991,13 @@ impl DecompressMemoryRegionNV {
 impl Default for DecompressMemoryRegionNV {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_address: Default::default(),
+            dst_address: Default::default(),
+            compressed_size: Default::default(),
+            decompressed_size: Default::default(),
+            decompression_method: Default::default(),
+        }
     }
 }
 
@@ -81305,8 +84089,12 @@ impl DecompressMemoryRegionEXT {
 impl Default for DecompressMemoryRegionEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            src_address: Default::default(),
+            dst_address: Default::default(),
+            compressed_size: Default::default(),
+            decompressed_size: Default::default(),
+        }
     }
 }
 
@@ -81384,11 +84172,13 @@ impl<'a> DecompressMemoryInfoEXT<'a> {
 impl Default for DecompressMemoryInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            decompression_method: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81446,11 +84236,13 @@ pub struct PhysicalDeviceShaderCoreBuiltinsPropertiesARM<'a> {
 impl Default for PhysicalDeviceShaderCoreBuiltinsPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_core_mask: Default::default(),
+            shader_core_count: Default::default(),
+            shader_warps_per_core: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81518,11 +84310,11 @@ impl<'a> PhysicalDeviceShaderCoreBuiltinsFeaturesARM<'a> {
 impl Default for PhysicalDeviceShaderCoreBuiltinsFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_core_builtins: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81606,10 +84398,12 @@ impl<'a> FrameBoundaryEXT<'a> {
         self
     }
 
-    /// Sets `image_count`.
+    /// Sets `image_count` alone and nulls `p_images`: the count without its arrays (an array set
+    /// before is dropped).
     #[inline]
     pub fn image_count(mut self, value: u32) -> Self {
         self.image_count = value;
+        self.p_images = core::ptr::null();
         self
     }
 
@@ -81623,10 +84417,12 @@ impl<'a> FrameBoundaryEXT<'a> {
         self
     }
 
-    /// Sets `buffer_count`.
+    /// Sets `buffer_count` alone and nulls `p_buffers`: the count without its arrays (an array set
+    /// before is dropped).
     #[inline]
     pub fn buffer_count(mut self, value: u32) -> Self {
         self.buffer_count = value;
+        self.p_buffers = core::ptr::null();
         self
     }
 
@@ -81647,10 +84443,12 @@ impl<'a> FrameBoundaryEXT<'a> {
         self
     }
 
-    /// Sets `tag_size`.
+    /// Sets `tag_size` alone and nulls `p_tag`: the count without its arrays (an array set before
+    /// is dropped).
     #[inline]
     pub fn tag_size(mut self, value: usize) -> Self {
         self.tag_size = value;
+        self.p_tag = core::ptr::null();
         self
     }
 
@@ -81668,11 +84466,19 @@ impl<'a> FrameBoundaryEXT<'a> {
 impl Default for FrameBoundaryEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            frame_id: Default::default(),
+            image_count: Default::default(),
+            p_images: core::ptr::null(),
+            buffer_count: Default::default(),
+            p_buffers: core::ptr::null(),
+            tag_name: Default::default(),
+            tag_size: Default::default(),
+            p_tag: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81755,11 +84561,11 @@ impl<'a> PhysicalDeviceFrameBoundaryFeaturesEXT<'a> {
 impl Default for PhysicalDeviceFrameBoundaryFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            frame_boundary: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81824,11 +84630,11 @@ impl<'a> PhysicalDeviceDynamicRenderingUnusedAttachmentsFeaturesEXT<'a> {
 impl Default for PhysicalDeviceDynamicRenderingUnusedAttachmentsFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            dynamic_rendering_unused_attachments: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81893,11 +84699,11 @@ impl<'a> PhysicalDeviceInternallySynchronizedQueuesFeaturesKHR<'a> {
 impl Default for PhysicalDeviceInternallySynchronizedQueuesFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            internally_synchronized_queues: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -81962,11 +84768,11 @@ impl<'a> SurfacePresentModeKHR<'a> {
 impl Default for SurfacePresentModeKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82064,11 +84870,15 @@ impl<'a> SurfacePresentScalingCapabilitiesKHR<'a> {
 impl Default for SurfacePresentScalingCapabilitiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supported_present_scaling: Default::default(),
+            supported_present_gravity_x: Default::default(),
+            supported_present_gravity_y: Default::default(),
+            min_scaled_image_extent: Default::default(),
+            max_scaled_image_extent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82133,10 +84943,12 @@ pub struct SurfacePresentModeCompatibilityKHR<'a> {
 }
 
 impl<'a> SurfacePresentModeCompatibilityKHR<'a> {
-    /// Sets `present_mode_count`.
+    /// Sets `present_mode_count` alone and nulls `p_present_modes`: the count without its arrays
+    /// (an array set before is dropped).
     #[inline]
     pub fn present_mode_count(mut self, value: u32) -> Self {
         self.present_mode_count = value;
+        self.p_present_modes = core::ptr::null_mut();
         self
     }
 
@@ -82154,11 +84966,12 @@ impl<'a> SurfacePresentModeCompatibilityKHR<'a> {
 impl Default for SurfacePresentModeCompatibilityKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_mode_count: Default::default(),
+            p_present_modes: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82224,11 +85037,11 @@ impl<'a> PhysicalDeviceSwapchainMaintenance1FeaturesKHR<'a> {
 impl Default for PhysicalDeviceSwapchainMaintenance1FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            swapchain_maintenance1: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82302,11 +85115,12 @@ impl<'a> SwapchainPresentFenceInfoKHR<'a> {
 impl Default for SwapchainPresentFenceInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain_count: Default::default(),
+            p_fences: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82377,11 +85191,12 @@ impl<'a> SwapchainPresentModesCreateInfoKHR<'a> {
 impl Default for SwapchainPresentModesCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            present_mode_count: Default::default(),
+            p_present_modes: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82456,11 +85271,12 @@ impl<'a> SwapchainPresentModeInfoKHR<'a> {
 impl Default for SwapchainPresentModeInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain_count: Default::default(),
+            p_present_modes: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82544,11 +85360,13 @@ impl<'a> SwapchainPresentScalingCreateInfoKHR<'a> {
 impl Default for SwapchainPresentScalingCreateInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            scaling_behavior: Default::default(),
+            present_gravity_x: Default::default(),
+            present_gravity_y: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82634,11 +85452,13 @@ impl<'a> ReleaseSwapchainImagesInfoKHR<'a> {
 impl Default for ReleaseSwapchainImagesInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            swapchain: Default::default(),
+            image_index_count: Default::default(),
+            p_image_indices: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82728,11 +85548,14 @@ impl<'a> PhysicalDeviceDepthBiasControlFeaturesEXT<'a> {
 impl Default for PhysicalDeviceDepthBiasControlFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            depth_bias_control: Default::default(),
+            least_representable_value_force_unorm_representation: Default::default(),
+            float_representation: Default::default(),
+            depth_bias_exact: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82803,11 +85626,11 @@ impl<'a> PhysicalDeviceRayTracingInvocationReorderFeaturesEXT<'a> {
 impl Default for PhysicalDeviceRayTracingInvocationReorderFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_tracing_invocation_reorder: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82872,11 +85695,11 @@ impl<'a> PhysicalDeviceRayTracingInvocationReorderFeaturesNV<'a> {
 impl Default for PhysicalDeviceRayTracingInvocationReorderFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_tracing_invocation_reorder: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82934,11 +85757,12 @@ pub struct PhysicalDeviceRayTracingInvocationReorderPropertiesEXT<'a> {
 impl Default for PhysicalDeviceRayTracingInvocationReorderPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_tracing_invocation_reorder_reordering_hint: Default::default(),
+            max_shader_binding_table_record_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -82995,11 +85819,11 @@ pub struct PhysicalDeviceRayTracingInvocationReorderPropertiesNV<'a> {
 impl Default for PhysicalDeviceRayTracingInvocationReorderPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_tracing_invocation_reorder_reordering_hint: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83063,11 +85887,11 @@ impl<'a> PhysicalDeviceExtendedSparseAddressSpaceFeaturesNV<'a> {
 impl Default for PhysicalDeviceExtendedSparseAddressSpaceFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            extended_sparse_address_space: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83133,11 +85957,13 @@ pub struct PhysicalDeviceExtendedSparseAddressSpacePropertiesNV<'a> {
 impl Default for PhysicalDeviceExtendedSparseAddressSpacePropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            extended_sparse_address_space_size: Default::default(),
+            extended_sparse_image_usage_flags: Default::default(),
+            extended_sparse_buffer_usage_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83215,11 +86041,12 @@ impl<'a> DirectDriverLoadingInfoLUNARG<'a> {
 impl Default for DirectDriverLoadingInfoLUNARG<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            pfn_get_instance_proc_addr: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83294,11 +86121,13 @@ impl<'a> DirectDriverLoadingListLUNARG<'a> {
 impl Default for DirectDriverLoadingListLUNARG<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            mode: Default::default(),
+            driver_count: Default::default(),
+            p_drivers: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83366,11 +86195,11 @@ impl<'a> PhysicalDeviceMultiviewPerViewViewportsFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceMultiviewPerViewViewportsFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            multiview_per_view_viewports: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83435,11 +86264,11 @@ impl<'a> PhysicalDeviceRayTracingPositionFetchFeaturesKHR<'a> {
 impl Default for PhysicalDeviceRayTracingPositionFetchFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ray_tracing_position_fetch: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83511,11 +86340,12 @@ impl<'a> DeviceImageSubresourceInfo<'a> {
 impl Default for DeviceImageSubresourceInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_create_info: core::ptr::null(),
+            p_subresource: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83571,11 +86401,13 @@ pub struct PhysicalDeviceShaderCorePropertiesARM<'a> {
 impl Default for PhysicalDeviceShaderCorePropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pixel_rate: Default::default(),
+            texel_rate: Default::default(),
+            fma_rate: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83643,11 +86475,11 @@ impl<'a> PhysicalDeviceMultiviewPerViewRenderAreasFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceMultiviewPerViewRenderAreasFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            multiview_per_view_render_areas: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83717,11 +86549,12 @@ impl<'a> MultiviewPerViewRenderAreasRenderPassBeginInfoQCOM<'a> {
 impl Default for MultiviewPerViewRenderAreasRenderPassBeginInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            per_view_render_area_count: Default::default(),
+            p_per_view_render_areas: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83788,11 +86621,11 @@ impl<'a> QueryLowLatencySupportNV<'a> {
 impl Default for QueryLowLatencySupportNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_queried_low_latency_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83889,11 +86722,14 @@ impl<'a> MemoryMapInfo<'a> {
 impl Default for MemoryMapInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            memory: Default::default(),
+            offset: Default::default(),
+            size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -83965,11 +86801,12 @@ impl<'a> MemoryUnmapInfo<'a> {
 impl Default for MemoryUnmapInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84023,11 +86860,11 @@ impl<'a> PhysicalDeviceShaderObjectFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderObjectFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_object: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84085,11 +86922,12 @@ pub struct PhysicalDeviceShaderObjectPropertiesEXT<'a> {
 impl Default for PhysicalDeviceShaderObjectPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_binary_uuid: [Default::default(); UUID_SIZE],
+            shader_binary_version: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84185,20 +87023,25 @@ impl<'a> ShaderCreateInfoEXT<'a> {
         self
     }
 
-    /// Sets `code_type`.
+    /// Sets `code_type` to `ShaderCodeTypeEXT::SPIRV`, `p_code` and `code_size` (the size in bytes)
+    /// from 32-bit words (aligned to 4).
     #[inline]
-    pub fn code_type(mut self, value: ShaderCodeTypeEXT) -> Self {
-        self.code_type = value;
+    #[track_caller]
+    pub fn code_spirv(mut self, value: &'a [u32]) -> Self {
+        self.code_type = ShaderCodeTypeEXT::SPIRV;
+        self.p_code = value.as_ptr().cast();
+        self.code_size = core::mem::size_of_val(value);
         self
     }
 
-    /// Sets `p_code` and `code_size` from the slice length in bytes.
+    /// Sets `code_type` to `ShaderCodeTypeEXT::BINARY`, `p_code` and `code_size` (the size in
+    /// bytes) from bytes aligned to 16.
     #[inline]
     #[track_caller]
-    pub fn code<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
-        let len = core::mem::size_of_val(value);
-        self.p_code = value.as_ptr().cast();
-        self.code_size = len;
+    pub fn code_binary(mut self, value: &'a crate::AlignedBytes) -> Self {
+        self.code_type = ShaderCodeTypeEXT::BINARY;
+        self.p_code = value.as_bytes().as_ptr().cast();
+        self.code_size = value.len();
         self
     }
 
@@ -84209,10 +87052,12 @@ impl<'a> ShaderCreateInfoEXT<'a> {
         self
     }
 
-    /// Sets `set_layout_count`.
+    /// Sets `set_layout_count` alone and nulls `p_set_layouts`: the count without its arrays (an
+    /// array set before is dropped).
     #[inline]
     pub fn set_layout_count(mut self, value: u32) -> Self {
         self.set_layout_count = value;
+        self.p_set_layouts = core::ptr::null();
         self
     }
 
@@ -84226,10 +87071,12 @@ impl<'a> ShaderCreateInfoEXT<'a> {
         self
     }
 
-    /// Sets `push_constant_range_count`.
+    /// Sets `push_constant_range_count` alone and nulls `p_push_constant_ranges`: the count without
+    /// its arrays (an array set before is dropped).
     #[inline]
     pub fn push_constant_range_count(mut self, value: u32) -> Self {
         self.push_constant_range_count = value;
+        self.p_push_constant_ranges = core::ptr::null();
         self
     }
 
@@ -84262,11 +87109,22 @@ impl<'a> ShaderCreateInfoEXT<'a> {
 impl Default for ShaderCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            stage: Default::default(),
+            next_stage: Default::default(),
+            code_type: Default::default(),
+            code_size: Default::default(),
+            p_code: core::ptr::null(),
+            p_name: core::ptr::null(),
+            set_layout_count: Default::default(),
+            p_set_layouts: core::ptr::null(),
+            push_constant_range_count: Default::default(),
+            p_push_constant_ranges: core::ptr::null(),
+            p_specialization_info: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84365,11 +87223,13 @@ impl<'a> PhysicalDeviceShaderTileImageFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderTileImageFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_tile_image_color_read_access: Default::default(),
+            shader_tile_image_depth_read_access: Default::default(),
+            shader_tile_image_stencil_read_access: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84433,11 +87293,13 @@ pub struct PhysicalDeviceShaderTileImagePropertiesEXT<'a> {
 impl Default for PhysicalDeviceShaderTileImagePropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_tile_image_coherent_read_accelerated: Default::default(),
+            shader_tile_image_read_sample_from_pixel_rate_invocation: Default::default(),
+            shader_tile_image_read_from_helper_invocation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84514,11 +87376,12 @@ impl<'a> PhysicalDeviceCooperativeMatrixFeaturesKHR<'a> {
 impl Default for PhysicalDeviceCooperativeMatrixFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_matrix: Default::default(),
+            cooperative_matrix_robust_buffer_access: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84590,11 +87453,19 @@ pub struct CooperativeMatrixPropertiesKHR<'a> {
 impl Default for CooperativeMatrixPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            m_size: Default::default(),
+            n_size: Default::default(),
+            k_size: Default::default(),
+            a_type: Default::default(),
+            b_type: Default::default(),
+            c_type: Default::default(),
+            result_type: Default::default(),
+            saturating_accumulation: Default::default(),
+            scope: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84694,11 +87565,14 @@ impl<'a> PhysicalDeviceCooperativeMatrixInfo2EXT<'a> {
 impl Default for PhysicalDeviceCooperativeMatrixInfo2EXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            scope: Default::default(),
+            invocations: Default::default(),
+            subgroup_size: Default::default(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84764,11 +87638,17 @@ pub struct CooperativeMatrixProperties2EXT<'a> {
 impl Default for CooperativeMatrixProperties2EXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            m_granularity: Default::default(),
+            n_granularity: Default::default(),
+            k_granularity: Default::default(),
+            a_type: Default::default(),
+            b_type: Default::default(),
+            c_type: Default::default(),
+            result_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84830,11 +87710,11 @@ pub struct PhysicalDeviceCooperativeMatrixPropertiesKHR<'a> {
 impl Default for PhysicalDeviceCooperativeMatrixPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_matrix_supported_stages: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84898,11 +87778,11 @@ impl<'a> PhysicalDeviceCooperativeMatrixConversionFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceCooperativeMatrixConversionFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_matrix_conversion: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -84967,11 +87847,11 @@ impl<'a> PhysicalDeviceAntiLagFeaturesAMD<'a> {
 impl Default for PhysicalDeviceAntiLagFeaturesAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            anti_lag: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85052,11 +87932,13 @@ impl<'a> AntiLagDataAMD<'a> {
 impl Default for AntiLagDataAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            mode: Default::default(),
+            max_fps: Default::default(),
+            p_presentation_info: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85126,11 +88008,12 @@ impl<'a> AntiLagPresentationInfoAMD<'a> {
 impl Default for AntiLagPresentationInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            stage: Default::default(),
+            frame_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85191,11 +88074,11 @@ impl<'a> BindMemoryStatus<'a> {
 impl Default for BindMemoryStatus<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_result: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85254,11 +88137,11 @@ impl<'a> PhysicalDeviceTileMemoryHeapFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceTileMemoryHeapFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            tile_memory_heap: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85332,11 +88215,12 @@ impl<'a> PhysicalDeviceTileMemoryHeapPropertiesQCOM<'a> {
 impl Default for PhysicalDeviceTileMemoryHeapPropertiesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            queue_submit_boundary: Default::default(),
+            tile_buffer_transfers: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85402,11 +88286,11 @@ impl<'a> TileMemorySizeInfoQCOM<'a> {
 impl Default for TileMemorySizeInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85475,11 +88359,12 @@ impl<'a> TileMemoryRequirementsQCOM<'a> {
 impl Default for TileMemoryRequirementsQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            size: Default::default(),
+            alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85575,10 +88460,12 @@ impl<'a> BindDescriptorSetsInfo<'a> {
         self
     }
 
-    /// Sets `dynamic_offset_count`.
+    /// Sets `dynamic_offset_count` alone and nulls `p_dynamic_offsets`: the count without its
+    /// arrays (an array set before is dropped).
     #[inline]
     pub fn dynamic_offset_count(mut self, value: u32) -> Self {
         self.dynamic_offset_count = value;
+        self.p_dynamic_offsets = core::ptr::null();
         self
     }
 
@@ -85604,11 +88491,17 @@ impl<'a> BindDescriptorSetsInfo<'a> {
 impl Default for BindDescriptorSetsInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stage_flags: Default::default(),
+            layout: Default::default(),
+            first_set: Default::default(),
+            descriptor_set_count: Default::default(),
+            p_descriptor_sets: core::ptr::null(),
+            dynamic_offset_count: Default::default(),
+            p_dynamic_offsets: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85717,11 +88610,15 @@ impl<'a> PushConstantsInfo<'a> {
 impl Default for PushConstantsInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            layout: Default::default(),
+            stage_flags: Default::default(),
+            offset: Default::default(),
+            size: Default::default(),
+            p_values: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85826,11 +88723,15 @@ impl<'a> PushDescriptorSetInfo<'a> {
 impl Default for PushDescriptorSetInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stage_flags: Default::default(),
+            layout: Default::default(),
+            set: Default::default(),
+            descriptor_write_count: Default::default(),
+            p_descriptor_writes: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -85930,11 +88831,14 @@ impl<'a> PushDescriptorSetWithTemplateInfo<'a> {
 impl Default for PushDescriptorSetWithTemplateInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            descriptor_update_template: Default::default(),
+            layout: Default::default(),
+            set: Default::default(),
+            p_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86041,11 +88945,16 @@ impl<'a> SetDescriptorBufferOffsetsInfoEXT<'a> {
 impl Default for SetDescriptorBufferOffsetsInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stage_flags: Default::default(),
+            layout: Default::default(),
+            first_set: Default::default(),
+            set_count: Default::default(),
+            p_buffer_indices: core::ptr::null(),
+            p_offsets: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86138,11 +89047,13 @@ impl<'a> BindDescriptorBufferEmbeddedSamplersInfoEXT<'a> {
 impl Default for BindDescriptorBufferEmbeddedSamplersInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stage_flags: Default::default(),
+            layout: Default::default(),
+            set: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86205,11 +89116,11 @@ impl<'a> PhysicalDeviceCubicClampFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceCubicClampFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cubic_range_clamp: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86274,11 +89185,11 @@ impl<'a> PhysicalDeviceYcbcrDegammaFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceYcbcrDegammaFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            ycbcr_degamma: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86352,11 +89263,12 @@ impl<'a> SamplerYcbcrConversionYcbcrDegammaCreateInfoQCOM<'a> {
 impl Default for SamplerYcbcrConversionYcbcrDegammaCreateInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            enable_y_degamma: Default::default(),
+            enable_cb_cr_degamma: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86422,11 +89334,11 @@ impl<'a> PhysicalDeviceCubicWeightsFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceCubicWeightsFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            selectable_cubic_weights: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86491,11 +89403,11 @@ impl<'a> SamplerCubicWeightsCreateInfoQCOM<'a> {
 impl Default for SamplerCubicWeightsCreateInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            cubic_weights: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86559,11 +89471,11 @@ impl<'a> BlitImageCubicWeightsInfoQCOM<'a> {
 impl Default for BlitImageCubicWeightsInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            cubic_weights: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86627,11 +89539,11 @@ impl<'a> PhysicalDeviceImageProcessing2FeaturesQCOM<'a> {
 impl Default for PhysicalDeviceImageProcessing2FeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            texture_block_match2: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86687,11 +89599,11 @@ pub struct PhysicalDeviceImageProcessing2PropertiesQCOM<'a> {
 impl Default for PhysicalDeviceImageProcessing2PropertiesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_block_match_window: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86764,11 +89676,12 @@ impl<'a> SamplerBlockMatchWindowCreateInfoQCOM<'a> {
 impl Default for SamplerBlockMatchWindowCreateInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            window_extent: Default::default(),
+            window_compare_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86852,11 +89765,13 @@ impl<'a> PhysicalDeviceImageProcessing3FeaturesQCOM<'a> {
 impl Default for PhysicalDeviceImageProcessing3FeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_gather_linear: Default::default(),
+            image_gather_extended_modes: Default::default(),
+            block_match_extended_clamp_to_edge: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86925,11 +89840,11 @@ impl<'a> PhysicalDeviceDescriptorPoolOverallocationFeaturesNV<'a> {
 impl Default for PhysicalDeviceDescriptorPoolOverallocationFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            descriptor_pool_overallocation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -86985,11 +89900,11 @@ pub struct PhysicalDeviceLayeredDriverPropertiesMSFT<'a> {
 impl Default for PhysicalDeviceLayeredDriverPropertiesMSFT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            underlying_api: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87062,11 +89977,12 @@ impl<'a> PhysicalDevicePerStageDescriptorSetFeaturesNV<'a> {
 impl Default for PhysicalDevicePerStageDescriptorSetFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            per_stage_descriptor_set: Default::default(),
+            dynamic_pipeline_layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87149,11 +90065,13 @@ impl<'a> LatencySleepModeInfoNV<'a> {
 impl Default for LatencySleepModeInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            low_latency_mode: Default::default(),
+            low_latency_boost: Default::default(),
+            minimum_interval_us: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87223,11 +90141,12 @@ impl<'a> LatencySleepInfoNV<'a> {
 impl Default for LatencySleepInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            signal_semaphore: Default::default(),
+            value: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87295,11 +90214,12 @@ impl<'a> SetLatencyMarkerInfoNV<'a> {
 impl Default for SetLatencyMarkerInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            present_id: Default::default(),
+            marker: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87349,10 +90269,12 @@ pub struct GetLatencyMarkerInfoNV<'a> {
 }
 
 impl<'a> GetLatencyMarkerInfoNV<'a> {
-    /// Sets `timing_count`.
+    /// Sets `timing_count` alone and nulls `p_timings`: the count without its arrays (an array set
+    /// before is dropped).
     #[inline]
     pub fn timing_count(mut self, value: u32) -> Self {
         self.timing_count = value;
+        self.p_timings = core::ptr::null_mut();
         self
     }
 
@@ -87370,11 +90292,12 @@ impl<'a> GetLatencyMarkerInfoNV<'a> {
 impl Default for GetLatencyMarkerInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            timing_count: Default::default(),
+            p_timings: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87450,11 +90373,24 @@ pub struct LatencyTimingsFrameReportNV<'a> {
 impl Default for LatencyTimingsFrameReportNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_id: Default::default(),
+            input_sample_time_us: Default::default(),
+            sim_start_time_us: Default::default(),
+            sim_end_time_us: Default::default(),
+            render_submit_start_time_us: Default::default(),
+            render_submit_end_time_us: Default::default(),
+            present_start_time_us: Default::default(),
+            present_end_time_us: Default::default(),
+            driver_start_time_us: Default::default(),
+            driver_end_time_us: Default::default(),
+            os_render_queue_start_time_us: Default::default(),
+            os_render_queue_end_time_us: Default::default(),
+            gpu_render_start_time_us: Default::default(),
+            gpu_render_end_time_us: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87537,11 +90473,11 @@ impl<'a> OutOfBandQueueTypeInfoNV<'a> {
 impl Default for OutOfBandQueueTypeInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            queue_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87594,11 +90530,11 @@ impl<'a> LatencySubmissionPresentIdNV<'a> {
 impl Default for LatencySubmissionPresentIdNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            present_id: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87663,11 +90599,11 @@ impl<'a> SwapchainLatencyCreateInfoNV<'a> {
 impl Default for SwapchainLatencyCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            latency_mode_enable: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87722,10 +90658,12 @@ pub struct LatencySurfaceCapabilitiesNV<'a> {
 }
 
 impl<'a> LatencySurfaceCapabilitiesNV<'a> {
-    /// Sets `present_mode_count`.
+    /// Sets `present_mode_count` alone and nulls `p_present_modes`: the count without its arrays
+    /// (an array set before is dropped).
     #[inline]
     pub fn present_mode_count(mut self, value: u32) -> Self {
         self.present_mode_count = value;
+        self.p_present_modes = core::ptr::null_mut();
         self
     }
 
@@ -87743,11 +90681,12 @@ impl<'a> LatencySurfaceCapabilitiesNV<'a> {
 impl Default for LatencySurfaceCapabilitiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            present_mode_count: Default::default(),
+            p_present_modes: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87813,11 +90752,11 @@ impl<'a> DeviceQueueShaderCoreControlCreateInfoARM<'a> {
 impl Default for DeviceQueueShaderCoreControlCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_core_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87882,11 +90821,11 @@ impl<'a> PhysicalDeviceSchedulingControlsFeaturesARM<'a> {
 impl Default for PhysicalDeviceSchedulingControlsFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            scheduling_controls: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -87942,11 +90881,11 @@ pub struct PhysicalDeviceSchedulingControlsPropertiesARM<'a> {
 impl Default for PhysicalDeviceSchedulingControlsPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            scheduling_controls_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88005,11 +90944,13 @@ pub struct PhysicalDeviceSchedulingControlsDispatchParametersPropertiesARM<'a> {
 impl Default for PhysicalDeviceSchedulingControlsDispatchParametersPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            scheduling_controls_max_warps_count: Default::default(),
+            scheduling_controls_max_queued_batches_count: Default::default(),
+            scheduling_controls_max_work_group_batch_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88096,11 +91037,13 @@ impl<'a> DispatchParametersARM<'a> {
 impl Default for DispatchParametersARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            work_group_batch_size: Default::default(),
+            max_queued_work_group_batches: Default::default(),
+            max_warps_per_shader_core: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88163,11 +91106,11 @@ impl<'a> PhysicalDeviceRelaxedLineRasterizationFeaturesIMG<'a> {
 impl Default for PhysicalDeviceRelaxedLineRasterizationFeaturesIMG<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            relaxed_line_rasterization: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88232,11 +91175,11 @@ impl<'a> PhysicalDeviceRenderPassStripedFeaturesARM<'a> {
 impl Default for PhysicalDeviceRenderPassStripedFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            render_pass_striped: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88294,11 +91237,12 @@ pub struct PhysicalDeviceRenderPassStripedPropertiesARM<'a> {
 impl Default for PhysicalDeviceRenderPassStripedPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            render_pass_stripe_granularity: Default::default(),
+            max_render_pass_stripes: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88362,11 +91306,11 @@ impl<'a> RenderPassStripeInfoARM<'a> {
 impl Default for RenderPassStripeInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stripe_area: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88424,11 +91368,12 @@ impl<'a> RenderPassStripeBeginInfoARM<'a> {
 impl Default for RenderPassStripeBeginInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stripe_info_count: Default::default(),
+            p_stripe_infos: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88500,11 +91445,12 @@ impl<'a> RenderPassStripeSubmitInfoARM<'a> {
 impl Default for RenderPassStripeSubmitInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stripe_semaphore_info_count: Default::default(),
+            p_stripe_semaphore_infos: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88570,11 +91516,11 @@ impl<'a> PhysicalDevicePipelineOpacityMicromapFeaturesARM<'a> {
 impl Default for PhysicalDevicePipelineOpacityMicromapFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_opacity_micromap: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88639,11 +91585,11 @@ impl<'a> PhysicalDeviceShaderMaximalReconvergenceFeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderMaximalReconvergenceFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_maximal_reconvergence: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88717,11 +91663,12 @@ impl<'a> PhysicalDeviceShaderSubgroupRotateFeatures<'a> {
 impl Default for PhysicalDeviceShaderSubgroupRotateFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_subgroup_rotate: Default::default(),
+            shader_subgroup_rotate_clustered: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88788,11 +91735,11 @@ impl<'a> PhysicalDeviceShaderExpectAssumeFeatures<'a> {
 impl Default for PhysicalDeviceShaderExpectAssumeFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_expect_assume: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88857,11 +91804,11 @@ impl<'a> PhysicalDeviceShaderFloatControls2Features<'a> {
 impl Default for PhysicalDeviceShaderFloatControls2Features<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_float_controls2: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -88926,11 +91873,11 @@ impl<'a> PhysicalDeviceDynamicRenderingLocalReadFeatures<'a> {
 impl Default for PhysicalDeviceDynamicRenderingLocalReadFeatures<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            dynamic_rendering_local_read: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89000,11 +91947,12 @@ impl<'a> RenderingAttachmentLocationInfo<'a> {
 impl Default for RenderingAttachmentLocationInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            color_attachment_count: Default::default(),
+            p_color_attachment_locations: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89066,10 +92014,12 @@ pub struct RenderingInputAttachmentIndexInfo<'a> {
 }
 
 impl<'a> RenderingInputAttachmentIndexInfo<'a> {
-    /// Sets `color_attachment_count`.
+    /// Sets `color_attachment_count` alone and nulls `p_color_attachment_input_indices`: the count
+    /// without its arrays (an array set before is dropped).
     #[inline]
     pub fn color_attachment_count(mut self, value: u32) -> Self {
         self.color_attachment_count = value;
+        self.p_color_attachment_input_indices = core::ptr::null();
         self
     }
 
@@ -89101,11 +92051,14 @@ impl<'a> RenderingInputAttachmentIndexInfo<'a> {
 impl Default for RenderingInputAttachmentIndexInfo<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            color_attachment_count: Default::default(),
+            p_color_attachment_input_indices: core::ptr::null(),
+            p_depth_input_attachment_index: core::ptr::null(),
+            p_stencil_input_attachment_index: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89176,11 +92129,11 @@ impl<'a> PhysicalDeviceShaderQuadControlFeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderQuadControlFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_quad_control: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89245,11 +92198,11 @@ impl<'a> PhysicalDeviceShaderAtomicFloat16VectorFeaturesNV<'a> {
 impl Default for PhysicalDeviceShaderAtomicFloat16VectorFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_float16_vector_atomics: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89332,11 +92285,13 @@ impl<'a> PhysicalDeviceMapMemoryPlacedFeaturesEXT<'a> {
 impl Default for PhysicalDeviceMapMemoryPlacedFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            memory_map_placed: Default::default(),
+            memory_map_range_placed: Default::default(),
+            memory_unmap_reserve: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89396,11 +92351,11 @@ pub struct PhysicalDeviceMapMemoryPlacedPropertiesEXT<'a> {
 impl Default for PhysicalDeviceMapMemoryPlacedPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            min_placed_memory_map_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89464,11 +92419,11 @@ impl<'a> MemoryMapPlacedInfoEXT<'a> {
 impl Default for MemoryMapPlacedInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_placed_address: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89550,11 +92505,13 @@ impl<'a> PhysicalDeviceShaderBfloat16FeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderBfloat16FeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_b_float16_type: Default::default(),
+            shader_b_float16_dot_product: Default::default(),
+            shader_b_float16_cooperative_matrix: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89623,11 +92580,11 @@ impl<'a> PhysicalDeviceRawAccessChainsFeaturesNV<'a> {
 impl Default for PhysicalDeviceRawAccessChainsFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_raw_access_chains: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89692,11 +92649,11 @@ impl<'a> PhysicalDeviceCommandBufferInheritanceFeaturesNV<'a> {
 impl Default for PhysicalDeviceCommandBufferInheritanceFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            command_buffer_inheritance: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89761,11 +92718,11 @@ impl<'a> PhysicalDeviceImageAlignmentControlFeaturesMESA<'a> {
 impl Default for PhysicalDeviceImageAlignmentControlFeaturesMESA<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_alignment_control: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89821,11 +92778,11 @@ pub struct PhysicalDeviceImageAlignmentControlPropertiesMESA<'a> {
 impl Default for PhysicalDeviceImageAlignmentControlPropertiesMESA<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supported_image_alignment_mask: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89889,11 +92846,11 @@ impl<'a> ImageAlignmentControlCreateInfoMESA<'a> {
 impl Default for ImageAlignmentControlCreateInfoMESA<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            maximum_requested_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -89957,11 +92914,11 @@ impl<'a> PhysicalDeviceShaderReplicatedCompositesFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderReplicatedCompositesFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_replicated_composites: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90026,11 +92983,11 @@ impl<'a> PhysicalDevicePresentModeFifoLatestReadyFeaturesKHR<'a> {
 impl Default for PhysicalDevicePresentModeFifoLatestReadyFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_mode_fifo_latest_ready: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90096,8 +93053,10 @@ impl DepthClampRangeEXT {
 impl Default for DepthClampRangeEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            min_depth_clamp: Default::default(),
+            max_depth_clamp: Default::default(),
+        }
     }
 }
 
@@ -90205,11 +93164,17 @@ impl<'a> PhysicalDeviceCooperativeMatrix2FeaturesNV<'a> {
 impl Default for PhysicalDeviceCooperativeMatrix2FeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_matrix_workgroup_scope: Default::default(),
+            cooperative_matrix_flexible_dimensions: Default::default(),
+            cooperative_matrix_reductions: Default::default(),
+            cooperative_matrix_conversions: Default::default(),
+            cooperative_matrix_per_element_operations: Default::default(),
+            cooperative_matrix_tensor_addressing: Default::default(),
+            cooperative_matrix_block_loads: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90281,11 +93246,13 @@ pub struct PhysicalDeviceCooperativeMatrix2PropertiesNV<'a> {
 impl Default for PhysicalDeviceCooperativeMatrix2PropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_matrix_workgroup_scope_max_workgroup_size: Default::default(),
+            cooperative_matrix_flexible_dimensions_max_dimension: Default::default(),
+            cooperative_matrix_workgroup_scope_reserved_shared_memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90360,11 +93327,20 @@ pub struct CooperativeMatrixFlexibleDimensionsPropertiesNV<'a> {
 impl Default for CooperativeMatrixFlexibleDimensionsPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            m_granularity: Default::default(),
+            n_granularity: Default::default(),
+            k_granularity: Default::default(),
+            a_type: Default::default(),
+            b_type: Default::default(),
+            c_type: Default::default(),
+            result_type: Default::default(),
+            saturating_accumulation: Default::default(),
+            scope: Default::default(),
+            workgroup_invocations: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90441,11 +93417,11 @@ impl<'a> PhysicalDeviceCooperativeMatrixDecodeVectorFeaturesNV<'a> {
 impl Default for PhysicalDeviceCooperativeMatrixDecodeVectorFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_matrix_decode_vector: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90510,11 +93486,11 @@ impl<'a> PhysicalDeviceHdrVividFeaturesHUAWEI<'a> {
 impl Default for PhysicalDeviceHdrVividFeaturesHUAWEI<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            hdr_vivid: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90579,11 +93555,11 @@ impl<'a> PhysicalDeviceVertexAttributeRobustnessFeaturesEXT<'a> {
 impl Default for PhysicalDeviceVertexAttributeRobustnessFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            vertex_attribute_robustness: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90648,11 +93624,11 @@ impl<'a> PhysicalDeviceDepthClampZeroOneFeaturesKHR<'a> {
 impl Default for PhysicalDeviceDepthClampZeroOneFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            depth_clamp_zero_one: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90726,11 +93702,12 @@ impl<'a> PhysicalDeviceCooperativeVectorFeaturesNV<'a> {
 impl Default for PhysicalDeviceCooperativeVectorFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_vector: Default::default(),
+            cooperative_vector_training: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90840,11 +93817,16 @@ impl<'a> CooperativeVectorPropertiesNV<'a> {
 impl Default for CooperativeVectorPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            input_type: Default::default(),
+            input_interpretation: Default::default(),
+            matrix_interpretation: Default::default(),
+            bias_interpretation: Default::default(),
+            result_type: Default::default(),
+            transpose: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -90910,11 +93892,14 @@ pub struct PhysicalDeviceCooperativeVectorPropertiesNV<'a> {
 impl Default for PhysicalDeviceCooperativeVectorPropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_vector_supported_stages: Default::default(),
+            cooperative_vector_training_float16_accumulation: Default::default(),
+            cooperative_vector_training_float32_accumulation: Default::default(),
+            max_cooperative_vector_components: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91081,11 +94066,22 @@ impl<'a> ConvertCooperativeVectorMatrixInfoNV<'a> {
 impl Default for ConvertCooperativeVectorMatrixInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_size: Default::default(),
+            src_data: Default::default(),
+            p_dst_size: core::ptr::null_mut(),
+            dst_data: Default::default(),
+            src_component_type: Default::default(),
+            dst_component_type: Default::default(),
+            num_rows: Default::default(),
+            num_columns: Default::default(),
+            src_layout: Default::default(),
+            src_stride: Default::default(),
+            dst_layout: Default::default(),
+            dst_stride: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91283,11 +94279,24 @@ impl<'a> PhysicalDeviceTileShadingFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceTileShadingFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            tile_shading: Default::default(),
+            tile_shading_fragment_stage: Default::default(),
+            tile_shading_color_attachments: Default::default(),
+            tile_shading_depth_attachments: Default::default(),
+            tile_shading_stencil_attachments: Default::default(),
+            tile_shading_input_attachments: Default::default(),
+            tile_shading_sampled_attachments: Default::default(),
+            tile_shading_per_tile_draw: Default::default(),
+            tile_shading_per_tile_dispatch: Default::default(),
+            tile_shading_dispatch_tile: Default::default(),
+            tile_shading_apron: Default::default(),
+            tile_shading_anisotropic_apron: Default::default(),
+            tile_shading_atomic_ops: Default::default(),
+            tile_shading_image_processing: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91375,11 +94384,14 @@ pub struct PhysicalDeviceTileShadingPropertiesQCOM<'a> {
 impl Default for PhysicalDeviceTileShadingPropertiesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_apron_size: Default::default(),
+            prefer_non_coherent: Default::default(),
+            tile_granularity: Default::default(),
+            max_tile_shading_rate: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91459,11 +94471,12 @@ impl<'a> RenderPassTileShadingCreateInfoQCOM<'a> {
 impl Default for RenderPassTileShadingCreateInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            tile_apron_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91519,11 +94532,10 @@ pub struct PerTileBeginInfoQCOM<'a> {
 impl Default for PerTileBeginInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91558,11 +94570,10 @@ pub struct PerTileEndInfoQCOM<'a> {
 impl Default for PerTileEndInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91597,11 +94608,10 @@ pub struct DispatchTileInfoQCOM<'a> {
 impl Default for DispatchTileInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91640,11 +94650,11 @@ pub struct PhysicalDeviceFragmentDensityMapLayeredPropertiesVALVE<'a> {
 impl Default for PhysicalDeviceFragmentDensityMapLayeredPropertiesVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_fragment_density_map_layers: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91708,11 +94718,11 @@ impl<'a> PhysicalDeviceFragmentDensityMapLayeredFeaturesVALVE<'a> {
 impl Default for PhysicalDeviceFragmentDensityMapLayeredFeaturesVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            fragment_density_map_layered: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91777,11 +94787,11 @@ impl<'a> PipelineFragmentDensityMapLayeredCreateInfoVALVE<'a> {
 impl Default for PipelineFragmentDensityMapLayeredCreateInfoVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            max_fragment_density_map_layers: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91854,11 +94864,12 @@ impl<'a> SetPresentConfigNV<'a> {
 impl Default for SetPresentConfigNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            num_frames_per_batch: Default::default(),
+            present_config_feedback: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91924,11 +94935,11 @@ impl<'a> PhysicalDevicePresentMeteringFeaturesNV<'a> {
 impl Default for PhysicalDevicePresentMeteringFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            present_metering: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -91993,11 +95004,11 @@ impl<'a> ExternalComputeQueueDeviceCreateInfoNV<'a> {
 impl Default for ExternalComputeQueueDeviceCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            reserved_external_queues: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92059,11 +95070,11 @@ impl<'a> ExternalComputeQueueCreateInfoNV<'a> {
 impl Default for ExternalComputeQueueCreateInfoNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            preferred_queue: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92120,11 +95131,11 @@ impl<'a> ExternalComputeQueueDataParamsNV<'a> {
 impl Default for ExternalComputeQueueDataParamsNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            device_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92176,11 +95187,12 @@ pub struct PhysicalDeviceExternalComputeQueuePropertiesNV<'a> {
 impl Default for PhysicalDeviceExternalComputeQueuePropertiesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            external_data_size: Default::default(),
+            max_external_queues: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92246,11 +95258,11 @@ impl<'a> PhysicalDeviceShaderUniformBufferUnsizedArrayFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderUniformBufferUnsizedArrayFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_uniform_buffer_unsized_array: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92342,11 +95354,14 @@ impl<'a> PhysicalDeviceShaderMixedFloatDotProductFeaturesVALVE<'a> {
 impl Default for PhysicalDeviceShaderMixedFloatDotProductFeaturesVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_mixed_float_dot_product_float16_acc_float32: Default::default(),
+            shader_mixed_float_dot_product_float16_acc_float16: Default::default(),
+            shader_mixed_float_dot_product_b_float16_acc: Default::default(),
+            shader_mixed_float_dot_product_float8_acc_float32: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92417,11 +95432,11 @@ impl<'a> PhysicalDevicePrimitiveRestartIndexFeaturesEXT<'a> {
 impl Default for PhysicalDevicePrimitiveRestartIndexFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            primitive_restart_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92486,11 +95501,11 @@ impl<'a> PhysicalDeviceFormatPackFeaturesARM<'a> {
 impl Default for PhysicalDeviceFormatPackFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            format_pack: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92555,11 +95570,11 @@ impl<'a> PhysicalDeviceThrottleHintFeaturesSEC<'a> {
 impl Default for PhysicalDeviceThrottleHintFeaturesSEC<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            throttle_hint: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92624,11 +95639,11 @@ impl<'a> ThrottleHintSubmitInfoSEC<'a> {
 impl Default for ThrottleHintSubmitInfoSEC<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            throttle_hint: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92730,11 +95745,16 @@ impl<'a> TensorDescriptionARM<'a> {
 impl Default for TensorDescriptionARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tiling: Default::default(),
+            format: Default::default(),
+            dimension_count: Default::default(),
+            p_dimensions: core::ptr::null(),
+            p_strides: core::ptr::null(),
+            usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92847,11 +95867,15 @@ impl<'a> TensorCreateInfoARM<'a> {
 impl Default for TensorCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            p_description: core::ptr::null(),
+            sharing_mode: Default::default(),
+            queue_family_index_count: Default::default(),
+            p_queue_family_indices: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -92942,11 +95966,13 @@ impl<'a> TensorViewCreateInfoARM<'a> {
 impl Default for TensorViewCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            tensor: Default::default(),
+            format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93007,11 +96033,11 @@ impl<'a> TensorMemoryRequirementsInfoARM<'a> {
 impl Default for TensorMemoryRequirementsInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tensor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93080,11 +96106,13 @@ impl<'a> BindTensorMemoryInfoARM<'a> {
 impl Default for BindTensorMemoryInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tensor: Default::default(),
+            memory: Default::default(),
+            memory_offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93152,11 +96180,12 @@ impl<'a> WriteDescriptorSetTensorARM<'a> {
 impl Default for WriteDescriptorSetTensorARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tensor_view_count: Default::default(),
+            p_tensor_views: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93215,11 +96244,12 @@ pub struct TensorFormatPropertiesARM<'a> {
 impl Default for TensorFormatPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            optimal_tiling_tensor_features: Default::default(),
+            linear_tiling_tensor_features: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93300,11 +96330,23 @@ pub struct PhysicalDeviceTensorPropertiesARM<'a> {
 impl Default for PhysicalDeviceTensorPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_tensor_dimension_count: Default::default(),
+            max_tensor_elements: Default::default(),
+            max_per_dimension_tensor_elements: Default::default(),
+            max_tensor_stride: Default::default(),
+            max_tensor_size: Default::default(),
+            max_tensor_shader_access_array_length: Default::default(),
+            max_tensor_shader_access_size: Default::default(),
+            max_descriptor_set_storage_tensors: Default::default(),
+            max_per_stage_descriptor_set_storage_tensors: Default::default(),
+            max_descriptor_set_update_after_bind_storage_tensors: Default::default(),
+            max_per_stage_descriptor_update_after_bind_storage_tensors: Default::default(),
+            shader_storage_tensor_array_non_uniform_indexing_native: Default::default(),
+            shader_tensor_supported_stages: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93446,11 +96488,17 @@ impl<'a> TensorMemoryBarrierARM<'a> {
 impl Default for TensorMemoryBarrierARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_stage_mask: Default::default(),
+            src_access_mask: Default::default(),
+            dst_stage_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            src_queue_family_index: Default::default(),
+            dst_queue_family_index: Default::default(),
+            tensor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93531,11 +96579,12 @@ impl<'a> TensorDependencyInfoARM<'a> {
 impl Default for TensorDependencyInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tensor_memory_barrier_count: Default::default(),
+            p_tensor_memory_barriers: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93646,11 +96695,16 @@ impl<'a> PhysicalDeviceTensorFeaturesARM<'a> {
 impl Default for PhysicalDeviceTensorFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            tensor_non_packed: Default::default(),
+            shader_tensor_access: Default::default(),
+            shader_storage_tensor_array_dynamic_indexing: Default::default(),
+            shader_storage_tensor_array_non_uniform_indexing: Default::default(),
+            descriptor_binding_storage_tensor_update_after_bind: Default::default(),
+            tensors: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93723,11 +96777,11 @@ impl<'a> DeviceTensorMemoryRequirementsARM<'a> {
 impl Default for DeviceTensorMemoryRequirementsARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_create_info: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93807,11 +96861,14 @@ impl<'a> CopyTensorInfoARM<'a> {
 impl Default for CopyTensorInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_tensor: Default::default(),
+            dst_tensor: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93869,39 +96926,48 @@ pub struct TensorCopyARM<'a> {
 }
 
 impl<'a> TensorCopyARM<'a> {
-    /// Sets `dimension_count`.
+    /// Sets `dimension_count` alone and nulls `p_src_offset`, `p_dst_offset`, `p_extent`: the count
+    /// without its arrays (an array set before is dropped).
     #[inline]
     pub fn dimension_count(mut self, value: u32) -> Self {
         self.dimension_count = value;
+        self.p_src_offset = core::ptr::null();
+        self.p_dst_offset = core::ptr::null();
+        self.p_extent = core::ptr::null();
         self
     }
 
-    /// Sets `p_src_offset` and `dimension_count` from the slice length.
+    /// Sets `p_src_offset`, `p_dst_offset`, `p_extent` (`None` for an array not given) and
+    /// `dimension_count` to their common length, 0 when none is given: the arrays are parallel.
     #[inline]
     #[track_caller]
-    pub fn src_offset(mut self, value: &'a [u64]) -> Self {
-        let len = value.len();
-        self.p_src_offset = value.as_ptr();
-        self.dimension_count = crate::len::count_u32(len, "dimensionCount");
-        self
-    }
-
-    /// Sets `p_dst_offset` and `dimension_count` from the slice length.
-    #[inline]
-    #[track_caller]
-    pub fn dst_offset(mut self, value: &'a [u64]) -> Self {
-        let len = value.len();
-        self.p_dst_offset = value.as_ptr();
-        self.dimension_count = crate::len::count_u32(len, "dimensionCount");
-        self
-    }
-
-    /// Sets `p_extent` and `dimension_count` from the slice length.
-    #[inline]
-    #[track_caller]
-    pub fn extent(mut self, value: &'a [u64]) -> Self {
-        let len = value.len();
-        self.p_extent = value.as_ptr();
+    pub fn src_offset(
+        mut self,
+        src_offset: Option<&'a [u64]>,
+        dst_offset: Option<&'a [u64]>,
+        extent: Option<&'a [u64]>,
+    ) -> Self {
+        let len = [
+            src_offset.as_ref().map(|s| s.len()),
+            dst_offset.as_ref().map(|s| s.len()),
+            extent.as_ref().map(|s| s.len()),
+        ]
+        .into_iter()
+        .flatten()
+        .next()
+        .unwrap_or(0);
+        if let Some(s) = &src_offset {
+            assert_eq!(s.len(), len, "dimensionCount: arrays differ in length");
+        }
+        if let Some(s) = &dst_offset {
+            assert_eq!(s.len(), len, "dimensionCount: arrays differ in length");
+        }
+        if let Some(s) = &extent {
+            assert_eq!(s.len(), len, "dimensionCount: arrays differ in length");
+        }
+        self.p_src_offset = src_offset.map_or(core::ptr::null(), |s| s.as_ptr());
+        self.p_dst_offset = dst_offset.map_or(core::ptr::null(), |s| s.as_ptr());
+        self.p_extent = extent.map_or(core::ptr::null(), |s| s.as_ptr());
         self.dimension_count = crate::len::count_u32(len, "dimensionCount");
         self
     }
@@ -93910,11 +96976,14 @@ impl<'a> TensorCopyARM<'a> {
 impl Default for TensorCopyARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            dimension_count: Default::default(),
+            p_src_offset: core::ptr::null(),
+            p_dst_offset: core::ptr::null(),
+            p_extent: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -93981,11 +97050,11 @@ impl<'a> MemoryDedicatedAllocateInfoTensorARM<'a> {
 impl Default for MemoryDedicatedAllocateInfoTensorARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tensor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94067,11 +97136,13 @@ impl<'a> PhysicalDeviceDescriptorBufferTensorPropertiesARM<'a> {
 impl Default for PhysicalDeviceDescriptorBufferTensorPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            tensor_capture_replay_descriptor_data_size: Default::default(),
+            tensor_view_capture_replay_descriptor_data_size: Default::default(),
+            tensor_descriptor_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94139,11 +97210,11 @@ impl<'a> PhysicalDeviceDescriptorBufferTensorFeaturesARM<'a> {
 impl Default for PhysicalDeviceDescriptorBufferTensorFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            descriptor_buffer_tensor_descriptors: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94206,11 +97277,11 @@ impl<'a> TensorCaptureDescriptorDataInfoARM<'a> {
 impl Default for TensorCaptureDescriptorDataInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tensor: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94267,11 +97338,11 @@ impl<'a> TensorViewCaptureDescriptorDataInfoARM<'a> {
 impl Default for TensorViewCaptureDescriptorDataInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tensor_view: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94330,11 +97401,11 @@ impl<'a> DescriptorGetTensorInfoARM<'a> {
 impl Default for DescriptorGetTensorInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tensor_view: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94397,11 +97468,12 @@ impl<'a> FrameBoundaryTensorsARM<'a> {
 impl Default for FrameBoundaryTensorsARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tensor_count: Default::default(),
+            p_tensors: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94486,11 +97558,13 @@ impl<'a> PhysicalDeviceExternalTensorInfoARM<'a> {
 impl Default for PhysicalDeviceExternalTensorInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            p_description: core::ptr::null(),
+            handle_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94551,11 +97625,11 @@ impl<'a> ExternalTensorPropertiesARM<'a> {
 impl Default for ExternalTensorPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            external_memory_properties: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94614,11 +97688,11 @@ impl<'a> ExternalMemoryTensorCreateInfoARM<'a> {
 impl Default for ExternalMemoryTensorCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            handle_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94691,11 +97765,12 @@ impl<'a> PhysicalDeviceShaderFloat8FeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderFloat8FeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_float8: Default::default(),
+            shader_float8_cooperative_matrix: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94798,11 +97873,15 @@ impl<'a> PhysicalDeviceDataGraphFeaturesARM<'a> {
 impl Default for PhysicalDeviceDataGraphFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            data_graph: Default::default(),
+            data_graph_update_after_bind: Default::default(),
+            data_graph_specialization_constants: Default::default(),
+            data_graph_descriptor_buffer: Default::default(),
+            data_graph_shader_module: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94893,11 +97972,13 @@ impl<'a> DataGraphPipelineConstantTensorSemiStructuredSparsityInfoARM<'a> {
 impl Default for DataGraphPipelineConstantTensorSemiStructuredSparsityInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            dimension: Default::default(),
+            zero_count: Default::default(),
+            group_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -94981,11 +98062,12 @@ impl<'a> DataGraphPipelineConstantARM<'a> {
 impl Default for DataGraphPipelineConstantARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            id: Default::default(),
+            p_constant_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95070,11 +98152,13 @@ impl<'a> DataGraphPipelineResourceInfoARM<'a> {
 impl Default for DataGraphPipelineResourceInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            descriptor_set: Default::default(),
+            binding: Default::default(),
+            array_element: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95137,11 +98221,11 @@ impl<'a> DataGraphPipelineResourceInfoImageLayoutARM<'a> {
 impl Default for DataGraphPipelineResourceInfoImageLayoutARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95205,11 +98289,11 @@ impl<'a> DataGraphPipelineCompilerControlCreateInfoARM<'a> {
 impl Default for DataGraphPipelineCompilerControlCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_vendor_options: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95302,11 +98386,14 @@ impl<'a> DataGraphPipelineCreateInfoARM<'a> {
 impl Default for DataGraphPipelineCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            layout: Default::default(),
+            resource_info_count: Default::default(),
+            p_resource_infos: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95389,10 +98476,12 @@ impl<'a> DataGraphPipelineShaderModuleCreateInfoARM<'a> {
         self
     }
 
-    /// Sets `constant_count`.
+    /// Sets `constant_count` alone and nulls `p_constants`: the count without its arrays (an array
+    /// set before is dropped).
     #[inline]
     pub fn constant_count(mut self, value: u32) -> Self {
         self.constant_count = value;
+        self.p_constants = core::ptr::null();
         self
     }
 
@@ -95410,11 +98499,15 @@ impl<'a> DataGraphPipelineShaderModuleCreateInfoARM<'a> {
 impl Default for DataGraphPipelineShaderModuleCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            module: Default::default(),
+            p_name: core::ptr::null(),
+            p_specialization_info: core::ptr::null(),
+            constant_count: Default::default(),
+            p_constants: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95501,11 +98594,12 @@ impl<'a> DataGraphPipelineSessionCreateInfoARM<'a> {
 impl Default for DataGraphPipelineSessionCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            flags: Default::default(),
+            data_graph_pipeline: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95564,11 +98658,11 @@ impl<'a> DataGraphPipelineSessionBindPointRequirementsInfoARM<'a> {
 impl Default for DataGraphPipelineSessionBindPointRequirementsInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            session: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95620,11 +98714,13 @@ pub struct DataGraphPipelineSessionBindPointRequirementARM<'a> {
 impl Default for DataGraphPipelineSessionBindPointRequirementARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            bind_point: Default::default(),
+            bind_point_type: Default::default(),
+            num_objects: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95703,11 +98799,13 @@ impl<'a> DataGraphPipelineSessionMemoryRequirementsInfoARM<'a> {
 impl Default for DataGraphPipelineSessionMemoryRequirementsInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            session: Default::default(),
+            bind_point: Default::default(),
+            object_index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95804,11 +98902,15 @@ impl<'a> BindDataGraphPipelineSessionMemoryInfoARM<'a> {
 impl Default for BindDataGraphPipelineSessionMemoryInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            session: Default::default(),
+            bind_point: Default::default(),
+            object_index: Default::default(),
+            memory: Default::default(),
+            memory_offset: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95873,11 +98975,11 @@ impl<'a> DataGraphPipelineInfoARM<'a> {
 impl Default for DataGraphPipelineInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            data_graph_pipeline: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -95943,10 +99045,12 @@ impl<'a> DataGraphPipelinePropertyQueryResultARM<'a> {
         self
     }
 
-    /// Sets `data_size`.
+    /// Sets `data_size` alone and nulls `p_data`: the count without its arrays (an array set before
+    /// is dropped).
     #[inline]
     pub fn data_size(mut self, value: usize) -> Self {
         self.data_size = value;
+        self.p_data = core::ptr::null_mut();
         self
     }
 
@@ -95964,11 +99068,14 @@ impl<'a> DataGraphPipelinePropertyQueryResultARM<'a> {
 impl Default for DataGraphPipelinePropertyQueryResultARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            property: Default::default(),
+            is_text: Default::default(),
+            data_size: Default::default(),
+            p_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96038,11 +99145,12 @@ impl<'a> DataGraphPipelineIdentifierCreateInfoARM<'a> {
 impl Default for DataGraphPipelineIdentifierCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            identifier_size: Default::default(),
+            p_identifier: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96114,11 +99222,11 @@ impl<'a> DataGraphPipelineDispatchInfoARM<'a> {
 impl Default for DataGraphPipelineDispatchInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96172,8 +99280,10 @@ impl PhysicalDeviceDataGraphProcessingEngineARM {
 impl Default for PhysicalDeviceDataGraphProcessingEngineARM {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            r#type: Default::default(),
+            is_foreign: Default::default(),
+        }
     }
 }
 
@@ -96244,8 +99354,11 @@ impl PhysicalDeviceDataGraphOperationSupportARM {
 impl Default for PhysicalDeviceDataGraphOperationSupportARM {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            operation_type: Default::default(),
+            name: [Default::default(); MAX_PHYSICAL_DEVICE_DATA_GRAPH_OPERATION_SET_NAME_SIZE_ARM],
+            version: Default::default(),
+        }
     }
 }
 
@@ -96302,11 +99415,12 @@ pub struct QueueFamilyDataGraphPropertiesARM<'a> {
 impl Default for QueueFamilyDataGraphPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            engine: Default::default(),
+            operation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96374,11 +99488,12 @@ impl<'a> PhysicalDeviceQueueFamilyDataGraphProcessingEngineInfoARM<'a> {
 impl Default for PhysicalDeviceQueueFamilyDataGraphProcessingEngineInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            queue_family_index: Default::default(),
+            engine_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96430,11 +99545,12 @@ pub struct QueueFamilyDataGraphProcessingEnginePropertiesARM<'a> {
 impl Default for QueueFamilyDataGraphProcessingEnginePropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            foreign_semaphore_handle_types: Default::default(),
+            foreign_memory_handle_types: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96504,11 +99620,12 @@ impl<'a> DataGraphProcessingEngineCreateInfoARM<'a> {
 impl Default for DataGraphProcessingEngineCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            processing_engine_count: Default::default(),
+            p_processing_engines: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96576,11 +99693,11 @@ impl<'a> PhysicalDevicePipelineCacheIncrementalModeFeaturesSEC<'a> {
 impl Default for PhysicalDevicePipelineCacheIncrementalModeFeaturesSEC<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            pipeline_cache_incremental_mode: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96645,11 +99762,11 @@ impl<'a> DataGraphPipelineBuiltinModelCreateInfoQCOM<'a> {
 impl Default for DataGraphPipelineBuiltinModelCreateInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_operation: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96713,11 +99830,11 @@ impl<'a> PhysicalDeviceDataGraphModelFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceDataGraphModelFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            data_graph_model: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96782,11 +99899,11 @@ impl<'a> PhysicalDeviceShaderUntypedPointersFeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderUntypedPointersFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_untyped_pointers: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96851,11 +99968,11 @@ impl<'a> PhysicalDeviceShader64BitIndexingFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShader64BitIndexingFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader64_bit_indexing: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96929,11 +100046,12 @@ impl<'a> PerfHintInfoQCOM<'a> {
 impl Default for PerfHintInfoQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            r#type: Default::default(),
+            scale: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -96987,11 +100105,11 @@ impl<'a> PhysicalDeviceQueuePerfHintFeaturesQCOM<'a> {
 impl Default for PhysicalDeviceQueuePerfHintFeaturesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            queue_perf_hint: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97047,11 +100165,11 @@ pub struct PhysicalDeviceQueuePerfHintPropertiesQCOM<'a> {
 impl Default for PhysicalDeviceQueuePerfHintPropertiesQCOM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supported_queues: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97115,11 +100233,11 @@ impl<'a> PhysicalDevicePerformanceCountersByRegionFeaturesARM<'a> {
 impl Default for PhysicalDevicePerformanceCountersByRegionFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            performance_counters_by_region: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97183,11 +100301,15 @@ pub struct PhysicalDevicePerformanceCountersByRegionPropertiesARM<'a> {
 impl Default for PhysicalDevicePerformanceCountersByRegionPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_per_region_performance_counters: Default::default(),
+            performance_counter_region_size: Default::default(),
+            row_stride_alignment: Default::default(),
+            region_alignment: Default::default(),
+            identity_transform_order: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97248,11 +100370,11 @@ pub struct PerformanceCounterARM<'a> {
 impl Default for PerformanceCounterARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            counter_id: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97296,11 +100418,12 @@ pub struct PerformanceCounterDescriptionARM<'a> {
 impl Default for PerformanceCounterDescriptionARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            name: [Default::default(); MAX_DESCRIPTION_SIZE],
+            _marker: PhantomData,
         }
     }
 }
@@ -97392,11 +100515,15 @@ impl<'a> RenderPassPerformanceCountersByRegionBeginInfoARM<'a> {
 impl Default for RenderPassPerformanceCountersByRegionBeginInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            counter_address_count: Default::default(),
+            p_counter_addresses: core::ptr::null(),
+            serialize_regions: Default::default(),
+            counter_index_count: Default::default(),
+            p_counter_indices: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97476,11 +100603,12 @@ impl<'a> ComputeOccupancyPriorityParametersNV<'a> {
 impl Default for ComputeOccupancyPriorityParametersNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            occupancy_priority: Default::default(),
+            occupancy_throttling: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97541,11 +100669,11 @@ impl<'a> PhysicalDeviceComputeOccupancyPriorityFeaturesNV<'a> {
 impl Default for PhysicalDeviceComputeOccupancyPriorityFeaturesNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            compute_occupancy_priority: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97610,11 +100738,11 @@ impl<'a> PhysicalDeviceShaderLongVectorFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderLongVectorFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            long_vector: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97670,11 +100798,11 @@ pub struct PhysicalDeviceShaderLongVectorPropertiesEXT<'a> {
 impl Default for PhysicalDeviceShaderLongVectorPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_vector_components: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97738,11 +100866,11 @@ impl<'a> PhysicalDeviceTextureCompressionASTC3DFeaturesEXT<'a> {
 impl Default for PhysicalDeviceTextureCompressionASTC3DFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            texture_compression_astc_3_d: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97807,11 +100935,11 @@ impl<'a> PhysicalDeviceShaderSubgroupPartitionedFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderSubgroupPartitionedFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_subgroup_partitioned: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -97875,8 +101003,11 @@ impl<'a> HostAddressRangeEXT<'a> {
 impl Default for HostAddressRangeEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            address: core::ptr::null_mut(),
+            size: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -97917,8 +101048,11 @@ impl<'a> HostAddressRangeConstEXT<'a> {
 impl Default for HostAddressRangeConstEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            address: core::ptr::null(),
+            size: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -97967,11 +101101,12 @@ impl<'a> TexelBufferDescriptorInfoEXT<'a> {
 impl Default for TexelBufferDescriptorInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            format: Default::default(),
+            address_range: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -98039,11 +101174,12 @@ impl<'a> ImageDescriptorInfoEXT<'a> {
 impl Default for ImageDescriptorInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_view: core::ptr::null(),
+            layout: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -98112,11 +101248,12 @@ impl<'a> ResourceDescriptorInfoEXT<'a> {
 impl Default for ResourceDescriptorInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            r#type: Default::default(),
+            data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -98186,11 +101323,13 @@ impl<'a> BindHeapInfoEXT<'a> {
 impl Default for BindHeapInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            heap_range: Default::default(),
+            reserved_range_offset: Default::default(),
+            reserved_range_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -98268,11 +101407,12 @@ impl<'a> PushDataInfoEXT<'a> {
 impl Default for PushDataInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            offset: Default::default(),
+            data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -98356,8 +101496,14 @@ impl<'a> DescriptorMappingSourceConstantOffsetEXT<'a> {
 impl Default for DescriptorMappingSourceConstantOffsetEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            heap_offset: Default::default(),
+            heap_array_stride: Default::default(),
+            p_embedded_sampler: core::ptr::null(),
+            sampler_heap_offset: Default::default(),
+            sampler_heap_array_stride: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -98489,8 +101635,19 @@ impl<'a> DescriptorMappingSourcePushIndexEXT<'a> {
 impl Default for DescriptorMappingSourcePushIndexEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            heap_offset: Default::default(),
+            push_offset: Default::default(),
+            heap_index_stride: Default::default(),
+            heap_array_stride: Default::default(),
+            p_embedded_sampler: core::ptr::null(),
+            use_combined_image_sampler_index: Default::default(),
+            sampler_heap_offset: Default::default(),
+            sampler_push_offset: Default::default(),
+            sampler_heap_index_stride: Default::default(),
+            sampler_heap_array_stride: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -98650,8 +101807,21 @@ impl<'a> DescriptorMappingSourceIndirectIndexEXT<'a> {
 impl Default for DescriptorMappingSourceIndirectIndexEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            heap_offset: Default::default(),
+            push_offset: Default::default(),
+            address_offset: Default::default(),
+            heap_index_stride: Default::default(),
+            heap_array_stride: Default::default(),
+            p_embedded_sampler: core::ptr::null(),
+            use_combined_image_sampler_index: Default::default(),
+            sampler_heap_offset: Default::default(),
+            sampler_push_offset: Default::default(),
+            sampler_address_offset: Default::default(),
+            sampler_heap_index_stride: Default::default(),
+            sampler_heap_array_stride: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -98797,8 +101967,19 @@ impl<'a> DescriptorMappingSourceIndirectIndexArrayEXT<'a> {
 impl Default for DescriptorMappingSourceIndirectIndexArrayEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            heap_offset: Default::default(),
+            push_offset: Default::default(),
+            address_offset: Default::default(),
+            heap_index_stride: Default::default(),
+            p_embedded_sampler: core::ptr::null(),
+            use_combined_image_sampler_index: Default::default(),
+            sampler_heap_offset: Default::default(),
+            sampler_push_offset: Default::default(),
+            sampler_address_offset: Default::default(),
+            sampler_heap_index_stride: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -98866,8 +102047,10 @@ impl DescriptorMappingSourceHeapDataEXT {
 impl Default for DescriptorMappingSourceHeapDataEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            heap_offset: Default::default(),
+            push_offset: Default::default(),
+        }
     }
 }
 
@@ -99001,8 +102184,19 @@ impl<'a> DescriptorMappingSourceShaderRecordIndexEXT<'a> {
 impl Default for DescriptorMappingSourceShaderRecordIndexEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            heap_offset: Default::default(),
+            shader_record_offset: Default::default(),
+            heap_index_stride: Default::default(),
+            heap_array_stride: Default::default(),
+            p_embedded_sampler: core::ptr::null(),
+            use_combined_image_sampler_index: Default::default(),
+            sampler_heap_offset: Default::default(),
+            sampler_shader_record_offset: Default::default(),
+            sampler_heap_index_stride: Default::default(),
+            sampler_heap_array_stride: Default::default(),
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -99070,8 +102264,10 @@ impl DescriptorMappingSourceIndirectAddressEXT {
 impl Default for DescriptorMappingSourceIndirectAddressEXT {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            push_offset: Default::default(),
+            address_offset: Default::default(),
+        }
     }
 }
 
@@ -99181,11 +102377,16 @@ impl<'a> DescriptorSetAndBindingMappingEXT<'a> {
 impl Default for DescriptorSetAndBindingMappingEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            descriptor_set: Default::default(),
+            first_binding: Default::default(),
+            binding_count: Default::default(),
+            resource_mask: Default::default(),
+            source: Default::default(),
+            source_data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99259,11 +102460,12 @@ impl<'a> ShaderDescriptorSetAndBindingMappingInfoEXT<'a> {
 impl Default for ShaderDescriptorSetAndBindingMappingInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            mapping_count: Default::default(),
+            p_mappings: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99330,11 +102532,11 @@ impl<'a> SamplerCustomBorderColorIndexCreateInfoEXT<'a> {
 impl Default for SamplerCustomBorderColorIndexCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            index: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99398,11 +102600,11 @@ impl<'a> OpaqueCaptureDataCreateInfoEXT<'a> {
 impl Default for OpaqueCaptureDataCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_data: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99470,11 +102672,12 @@ impl<'a> IndirectCommandsLayoutPushDataTokenNV<'a> {
 impl Default for IndirectCommandsLayoutPushDataTokenNV<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            push_data_offset: Default::default(),
+            push_data_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99540,11 +102743,11 @@ impl<'a> SubsampledImageFormatPropertiesEXT<'a> {
 impl Default for SubsampledImageFormatPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            subsampled_image_descriptor_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99608,11 +102811,11 @@ impl<'a> PhysicalDeviceShaderSplitBarrierFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderSplitBarrierFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_split_barrier: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99668,11 +102871,11 @@ pub struct PhysicalDeviceShaderSplitBarrierPropertiesEXT<'a> {
 impl Default for PhysicalDeviceShaderSplitBarrierPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            split_barrier_reserved_shared_memory: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99745,11 +102948,12 @@ impl<'a> PhysicalDeviceDescriptorHeapFeaturesEXT<'a> {
 impl Default for PhysicalDeviceDescriptorHeapFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            descriptor_heap: Default::default(),
+            descriptor_heap_capture_replay: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99843,11 +103047,29 @@ pub struct PhysicalDeviceDescriptorHeapPropertiesEXT<'a> {
 impl Default for PhysicalDeviceDescriptorHeapPropertiesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            sampler_heap_alignment: Default::default(),
+            resource_heap_alignment: Default::default(),
+            max_sampler_heap_size: Default::default(),
+            max_resource_heap_size: Default::default(),
+            min_sampler_heap_reserved_range: Default::default(),
+            min_sampler_heap_reserved_range_with_embedded: Default::default(),
+            min_resource_heap_reserved_range: Default::default(),
+            sampler_descriptor_size: Default::default(),
+            image_descriptor_size: Default::default(),
+            buffer_descriptor_size: Default::default(),
+            sampler_descriptor_alignment: Default::default(),
+            image_descriptor_alignment: Default::default(),
+            buffer_descriptor_alignment: Default::default(),
+            max_push_data_size: Default::default(),
+            image_capture_replay_opaque_data_size: Default::default(),
+            max_descriptor_heap_embedded_samplers: Default::default(),
+            sampler_ycbcr_conversion_count: Default::default(),
+            sparse_descriptor_heaps: Default::default(),
+            protected_descriptor_heaps: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -99956,11 +103178,12 @@ impl<'a> CommandBufferInheritanceDescriptorHeapInfoEXT<'a> {
 impl Default for CommandBufferInheritanceDescriptorHeapInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            p_sampler_heap_bind_info: core::ptr::null(),
+            p_resource_heap_bind_info: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -100021,11 +103244,13 @@ pub struct PhysicalDeviceDescriptorHeapTensorPropertiesARM<'a> {
 impl Default for PhysicalDeviceDescriptorHeapTensorPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            tensor_descriptor_size: Default::default(),
+            tensor_descriptor_alignment: Default::default(),
+            tensor_capture_replay_opaque_data_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -100093,11 +103318,11 @@ impl<'a> PhysicalDeviceShaderInstrumentationFeaturesARM<'a> {
 impl Default for PhysicalDeviceShaderInstrumentationFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_instrumentation: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -100155,11 +103380,12 @@ pub struct PhysicalDeviceShaderInstrumentationPropertiesARM<'a> {
 impl Default for PhysicalDeviceShaderInstrumentationPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            num_metrics: Default::default(),
+            per_basic_block_granularity: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -100212,11 +103438,10 @@ pub struct ShaderInstrumentationCreateInfoARM<'a> {
 impl Default for ShaderInstrumentationCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -100271,11 +103496,12 @@ impl<'a> ShaderInstrumentationMetricDescriptionARM<'a> {
 impl Default for ShaderInstrumentationMetricDescriptionARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            name: [Default::default(); MAX_DESCRIPTION_SIZE],
+            description: [Default::default(); MAX_DESCRIPTION_SIZE],
+            _marker: PhantomData,
         }
     }
 }
@@ -100357,8 +103583,12 @@ impl ShaderInstrumentationMetricDataHeaderARM {
 impl Default for ShaderInstrumentationMetricDataHeaderARM {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            result_index: Default::default(),
+            result_sub_index: Default::default(),
+            stages: Default::default(),
+            basic_block_index: Default::default(),
+        }
     }
 }
 
@@ -100425,8 +103655,10 @@ impl DeviceAddressRangeKHR {
 impl Default for DeviceAddressRangeKHR {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            address: Default::default(),
+            size: Default::default(),
+        }
     }
 }
 
@@ -100501,11 +103733,14 @@ impl<'a> DeviceMemoryCopyKHR<'a> {
 impl Default for DeviceMemoryCopyKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_range: Default::default(),
+            src_flags: Default::default(),
+            dst_range: Default::default(),
+            dst_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -100573,11 +103808,12 @@ impl<'a> CopyDeviceMemoryInfoKHR<'a> {
 impl Default for CopyDeviceMemoryInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -100707,11 +103943,18 @@ impl<'a> DeviceMemoryImageCopyKHR<'a> {
 impl Default for DeviceMemoryImageCopyKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            address_row_length: Default::default(),
+            address_image_height: Default::default(),
+            image_subresource: Default::default(),
+            image_layout: Default::default(),
+            image_offset: Default::default(),
+            image_extent: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -100796,11 +104039,13 @@ impl<'a> CopyDeviceMemoryImageInfoKHR<'a> {
 impl Default for CopyDeviceMemoryImageInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            image: Default::default(),
+            region_count: Default::default(),
+            p_regions: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -100876,11 +104121,12 @@ impl<'a> MemoryRangeBarriersInfoKHR<'a> {
 impl Default for MemoryRangeBarriersInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            memory_range_barrier_count: Default::default(),
+            p_memory_range_barriers: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101007,11 +104253,18 @@ impl<'a> MemoryRangeBarrierKHR<'a> {
 impl Default for MemoryRangeBarrierKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            src_stage_mask: Default::default(),
+            src_access_mask: Default::default(),
+            dst_stage_mask: Default::default(),
+            dst_access_mask: Default::default(),
+            src_queue_family_index: Default::default(),
+            dst_queue_family_index: Default::default(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101084,11 +104337,11 @@ impl<'a> PhysicalDeviceDeviceAddressCommandsFeaturesKHR<'a> {
 impl Default for PhysicalDeviceDeviceAddressCommandsFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_address_commands: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101169,11 +104422,13 @@ impl<'a> ConditionalRenderingBeginInfo2EXT<'a> {
 impl Default for ConditionalRenderingBeginInfo2EXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101269,11 +104524,14 @@ impl<'a> AccelerationStructureCreateInfo2KHR<'a> {
 impl Default for AccelerationStructureCreateInfo2KHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            create_flags: Default::default(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            r#type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101354,11 +104612,13 @@ impl<'a> BindIndexBuffer3InfoKHR<'a> {
 impl Default for BindIndexBuffer3InfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            index_type: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101437,11 +104697,13 @@ impl<'a> BindVertexBuffer3InfoKHR<'a> {
 impl Default for BindVertexBuffer3InfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            set_stride: Default::default(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101520,11 +104782,13 @@ impl<'a> DrawIndirect2InfoKHR<'a> {
 impl Default for DrawIndirect2InfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            draw_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101621,11 +104885,15 @@ impl<'a> DrawIndirectCount2InfoKHR<'a> {
 impl Default for DrawIndirectCount2InfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            count_address_range: Default::default(),
+            count_address_flags: Default::default(),
+            max_draw_count: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101699,11 +104967,12 @@ impl<'a> DispatchIndirect2InfoKHR<'a> {
 impl Default for DispatchIndirect2InfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101771,11 +105040,12 @@ impl<'a> BindTransformFeedbackBuffer2InfoEXT<'a> {
 impl Default for BindTransformFeedbackBuffer2InfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            address_range: Default::default(),
+            address_flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101861,11 +105131,14 @@ impl<'a> MemoryMarkerInfoAMD<'a> {
 impl Default for MemoryMarkerInfoAMD<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            stage: Default::default(),
+            dst_range: Default::default(),
+            dst_flags: Default::default(),
+            marker: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101930,11 +105203,11 @@ impl<'a> PhysicalDeviceShaderConstantDataFeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderConstantDataFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_constant_data: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -101999,11 +105272,11 @@ impl<'a> PhysicalDeviceShaderAbortFeaturesKHR<'a> {
 impl Default for PhysicalDeviceShaderAbortFeaturesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_abort: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102068,11 +105341,11 @@ impl<'a> PhysicalDeviceShaderAbortPropertiesKHR<'a> {
 impl Default for PhysicalDeviceShaderAbortPropertiesKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_shader_abort_message_size: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102129,11 +105402,12 @@ pub struct DeviceFaultShaderAbortMessageInfoKHR<'a> {
 impl Default for DeviceFaultShaderAbortMessageInfoKHR<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            message_data_size: Default::default(),
+            p_message_data: core::ptr::null_mut(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102184,8 +105458,10 @@ pub struct DataGraphTOSANameQualityARM {
 impl Default for DataGraphTOSANameQualityARM {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        unsafe { core::mem::zeroed() }
+        Self {
+            name: [Default::default(); MAX_DATA_GRAPH_TOSA_NAME_SIZE_ARM],
+            quality_flags: Default::default(),
+        }
     }
 }
 
@@ -102238,11 +105514,15 @@ pub struct QueueFamilyDataGraphTOSAPropertiesARM<'a> {
 impl Default for QueueFamilyDataGraphTOSAPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            profile_count: Default::default(),
+            p_profiles: core::ptr::null(),
+            extension_count: Default::default(),
+            p_extensions: core::ptr::null(),
+            level: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102325,11 +105605,13 @@ impl<'a> DataGraphPipelineSingleNodeConnectionARM<'a> {
 impl Default for DataGraphPipelineSingleNodeConnectionARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            set: Default::default(),
+            binding: Default::default(),
+            connection: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102392,11 +105674,11 @@ impl<'a> PhysicalDeviceDataGraphOpticalFlowFeaturesARM<'a> {
 impl Default for PhysicalDeviceDataGraphOpticalFlowFeaturesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            data_graph_optical_flow: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102464,11 +105746,18 @@ pub struct QueueFamilyDataGraphOpticalFlowPropertiesARM<'a> {
 impl Default for QueueFamilyDataGraphOpticalFlowPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            supported_output_grid_sizes: Default::default(),
+            supported_hint_grid_sizes: Default::default(),
+            hint_supported: Default::default(),
+            cost_supported: Default::default(),
+            min_width: Default::default(),
+            min_height: Default::default(),
+            max_width: Default::default(),
+            max_height: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102541,11 +105830,11 @@ impl<'a> DataGraphOpticalFlowImageFormatInfoARM<'a> {
 impl Default for DataGraphOpticalFlowImageFormatInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            usage: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102599,11 +105888,11 @@ pub struct DataGraphOpticalFlowImageFormatPropertiesARM<'a> {
 impl Default for DataGraphOpticalFlowImageFormatPropertiesARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            format: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102679,11 +105968,13 @@ impl<'a> DataGraphPipelineSingleNodeCreateInfoARM<'a> {
 impl Default for DataGraphPipelineSingleNodeCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            node_type: Default::default(),
+            connection_count: Default::default(),
+            p_connections: core::ptr::null(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102823,11 +106114,19 @@ impl<'a> DataGraphPipelineOpticalFlowCreateInfoARM<'a> {
 impl Default for DataGraphPipelineOpticalFlowCreateInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            width: Default::default(),
+            height: Default::default(),
+            image_format: Default::default(),
+            flow_vector_format: Default::default(),
+            cost_format: Default::default(),
+            output_grid_size: Default::default(),
+            hint_grid_size: Default::default(),
+            performance_level: Default::default(),
+            flags: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102916,11 +106215,12 @@ impl<'a> DataGraphPipelineOpticalFlowDispatchInfoARM<'a> {
 impl Default for DataGraphPipelineOpticalFlowDispatchInfoARM<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            flags: Default::default(),
+            mean_flow_l1_norm_hint: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -102986,11 +106286,11 @@ impl<'a> PhysicalDeviceImageTilingControlFeaturesEXT<'a> {
 impl Default for PhysicalDeviceImageTilingControlFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            image_tiling_control: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -103055,11 +106355,11 @@ impl<'a> ImageTilingControlCreateInfoEXT<'a> {
 impl Default for ImageTilingControlCreateInfoEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null(),
+            tiling_control: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -103150,11 +106450,14 @@ impl<'a> PhysicalDeviceShaderOCPMicroscalingTypesFeaturesEXT<'a> {
 impl Default for PhysicalDeviceShaderOCPMicroscalingTypesFeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            shader_float4: Default::default(),
+            shader_float6: Default::default(),
+            shader_float8_unsigned_e8_m0: Default::default(),
+            shader_mx_int8: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -103261,11 +106564,15 @@ impl<'a> PhysicalDeviceCooperativeMatrixMaintenance1FeaturesEXT<'a> {
 impl Default for PhysicalDeviceCooperativeMatrixMaintenance1FeaturesEXT<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            cooperative_matrix_properties2: Default::default(),
+            cooperative_matrix_reductions: Default::default(),
+            cooperative_matrix_conversions: Default::default(),
+            cooperative_matrix_per_element_operations: Default::default(),
+            cooperative_matrix_get_coordinate: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -103338,11 +106645,11 @@ impl<'a> PhysicalDeviceBufferDeviceAddressAllocationAlignmentFeaturesVALVE<'a> {
 impl Default for PhysicalDeviceBufferDeviceAddressAllocationAlignmentFeaturesVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            buffer_device_address_allocation_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -103410,11 +106717,11 @@ impl<'a> PhysicalDeviceBufferDeviceAddressAllocationAlignmentPropertiesVALVE<'a>
 impl Default for PhysicalDeviceBufferDeviceAddressAllocationAlignmentPropertiesVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            max_buffer_device_address_allocation_alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -103481,11 +106788,11 @@ impl<'a> BufferDeviceAddressAlignmentAllocateInfoVALVE<'a> {
 impl Default for BufferDeviceAddressAlignmentAllocateInfoVALVE<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            alignment: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
@@ -103545,11 +106852,13 @@ pub struct PhysicalDeviceInfoPropertiesINTEL<'a> {
 impl Default for PhysicalDeviceInfoPropertiesINTEL<'_> {
     #[inline]
     fn default() -> Self {
-        // SAFETY: all-zero is a valid value of every field type.
-        let zeroed: Self = unsafe { core::mem::zeroed() };
         Self {
             s_type: Self::STRUCTURE_TYPE,
-            ..zeroed
+            p_next: core::ptr::null_mut(),
+            device_ip_version_arch: Default::default(),
+            device_ip_version_release: Default::default(),
+            device_ip_version_revision: Default::default(),
+            _marker: PhantomData,
         }
     }
 }
