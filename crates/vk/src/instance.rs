@@ -3,16 +3,18 @@
 use crate::device::Device;
 use crate::entry::Entry;
 use crate::generated::tables::InstanceTable;
-use crate::result;
+use crate::result::{self, Result};
 use crate::vk;
 use core::ffi::CStr;
-use core::fmt;
+use core::{fmt, ptr};
 
 /// A loaded `VkInstance`: its handle and the instance and physical-device commands. It does not
 /// destroy the instance when dropped (`destroy_instance` does).
 #[derive(Clone)]
 pub struct Instance {
+    /// The `VkInstance`.
     handle: vk::Instance,
+    /// Its instance and physical-device commands.
     table: InstanceTable,
 }
 
@@ -31,6 +33,20 @@ impl Instance {
             entry.table().get_instance_proc_addr,
             "vkGetInstanceProcAddr",
         );
+        // SAFETY: the caller guarantees `instance` was created through `get`'s loader.
+        unsafe { Instance::load_with(get, instance) }
+    }
+
+    /// Loads the instance commands of `instance` through `get`.
+    ///
+    /// # Safety
+    ///
+    /// `get` is a Vulkan loader's `vkGetInstanceProcAddr`, and `instance` a live instance created
+    /// through that loader.
+    pub(crate) unsafe fn load_with(
+        get: vk::PfnGetInstanceProcAddr,
+        instance: vk::Instance,
+    ) -> Instance {
         let load = |name: &CStr| {
             // SAFETY: `get` is the loader's `vkGetInstanceProcAddr`, `instance` is live and
             // `name` is NUL-terminated.
@@ -75,10 +91,7 @@ impl Instance {
         let f = crate::loaded(self.table.destroy_instance, "vkDestroyInstance");
         // SAFETY: the caller upholds the valid usage; the pointer comes from a live reference.
         unsafe {
-            f(
-                self.handle,
-                allocator.map_or(core::ptr::null(), core::ptr::from_ref),
-            );
+            f(self.handle, allocator.map_or(ptr::null(), ptr::from_ref));
         }
     }
 
@@ -90,14 +103,16 @@ impl Instance {
     ///
     /// # Panics
     ///
-    /// When `vkCreateDevice` or `vkGetDeviceProcAddr` is not loaded.
+    /// When `vkCreateDevice` or `vkGetDeviceProcAddr` is not loaded, before anything is created.
     pub unsafe fn create_device(
         &self,
         physical_device: vk::PhysicalDevice,
         create_info: &vk::DeviceCreateInfo<'_>,
         allocator: Option<&vk::AllocationCallbacks<'_>>,
-    ) -> crate::Result<Device> {
+    ) -> Result<Device> {
         let f = crate::loaded(self.table.create_device, "vkCreateDevice");
+        // Taken before the device exists: a missing loader must not leave a device nobody holds.
+        let get = crate::loaded(self.table.get_device_proc_addr, "vkGetDeviceProcAddr");
         let mut device = vk::Device::null();
         // SAFETY: the caller upholds the valid usage; every pointer comes from a live reference
         // or local.
@@ -105,13 +120,14 @@ impl Instance {
             f(
                 physical_device,
                 create_info,
-                allocator.map_or(core::ptr::null(), core::ptr::from_ref),
+                allocator.map_or(ptr::null(), ptr::from_ref),
                 &mut device,
             )
         };
         result::check(code)?;
-        // SAFETY: `device` was just created from this instance.
-        Ok(unsafe { Device::load(self, device) })
+        // SAFETY: `device` was just created from this instance, whose `vkGetDeviceProcAddr` is
+        // `get`.
+        Ok(unsafe { Device::load_with(get, device) })
     }
 }
 

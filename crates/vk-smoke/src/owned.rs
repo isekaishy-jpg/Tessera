@@ -10,8 +10,11 @@ use tessera_vk::{Device, Instance, vk};
 
 /// A handle created from `parent`, destroyed by `destroy` when dropped.
 pub struct Owned<'p, P, H: Copy> {
+    /// What the handle was created from.
     parent: &'p P,
+    /// The owned handle.
     handle: H,
+    /// Destroys the handle; called once, on drop.
     destroy: unsafe fn(&P, H),
 }
 
@@ -33,13 +36,6 @@ impl<'p, P, H: Copy> Owned<'p, P, H> {
     /// The handle, still owned.
     pub fn handle(&self) -> H {
         self.handle
-    }
-
-    /// The handle, released: the caller destroys it, before its parent is destroyed.
-    pub fn into_handle(self) -> H {
-        let handle = self.handle;
-        core::mem::forget(self);
-        handle
     }
 }
 
@@ -91,6 +87,7 @@ pub mod destroy {
 /// A device that waits for its work and is destroyed when dropped. Everything created from it
 /// must be dropped first.
 pub struct OwnedDevice {
+    /// The owned device.
     device: Device,
 }
 
@@ -108,7 +105,7 @@ impl OwnedDevice {
 impl Deref for OwnedDevice {
     type Target = Device;
 
-    fn deref(&self) -> &Device {
+    fn deref(&self) -> &Self::Target {
         &self.device
     }
 }
@@ -126,9 +123,11 @@ impl Drop for OwnedDevice {
 }
 
 /// An instance and its debug messenger, destroyed (messenger first) when dropped. It owns the
-/// messenger too: a separate guard would borrow the instance it is stored beside.
+/// messenger too: a separate owner would borrow the instance it is stored beside.
 pub struct OwnedInstance {
+    /// The owned instance.
     instance: Instance,
+    /// The owned debug messenger, once [`OwnedInstance::set_messenger`] gives it.
     messenger: Option<vk::DebugUtilsMessengerEXT>,
 }
 
@@ -168,7 +167,7 @@ impl OwnedInstance {
 impl Deref for OwnedInstance {
     type Target = Instance;
 
-    fn deref(&self) -> &Instance {
+    fn deref(&self) -> &Self::Target {
         &self.instance
     }
 }

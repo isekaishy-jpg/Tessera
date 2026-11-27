@@ -1,19 +1,20 @@
 //! The GPU: the first one with Vulkan 1.4, `VK_KHR_pipeline_binary` (feature `pipelineBinaries`)
 //! and a graphics queue; the device created on it; and the memory type for each use.
 
-use crate::failure::{Context, Failure, Outcome, fail};
+use crate::failure::{Context, Outcome, fail};
 use crate::owned::OwnedDevice;
 use crate::text;
-use tessera_vk::{Instance, vk};
+use tessera_vk::{Instance, fixed_str, vk};
 
 /// The chosen GPU.
 pub struct Gpu {
     /// Its handle.
-    pub physical: vk::PhysicalDevice,
+    physical: vk::PhysicalDevice,
     /// `deviceName`.
     pub name: String,
     /// The first queue family with graphics.
     pub queue_family: u32,
+    /// Its memory types and heaps ([`Gpu::memory_type`] searches them).
     memory: vk::PhysicalDeviceMemoryProperties,
 }
 
@@ -37,16 +38,16 @@ impl Gpu {
     /// `flags`.
     pub fn memory_type(&self, bits: u32, flags: vk::MemoryPropertyFlags) -> Outcome<u32> {
         let count = self.memory.memory_type_count as usize;
-        (0u32..)
+        let found = (0u32..)
             .zip(self.memory.memory_types.iter().take(count))
-            .find(|(i, t)| bits & (1 << i) != 0 && t.property_flags.contains(flags))
-            .map(|(i, _)| i)
-            .ok_or_else(|| {
-                Failure(format!(
-                    "{}: no memory type with {flags:?} in {bits:#b}",
-                    self.name
-                ))
-            })
+            .find(|(i, t)| bits & (1 << i) != 0 && t.property_flags.contains(flags));
+        let Some((index, _)) = found else {
+            return fail(format!(
+                "{}: no memory type with {flags:?} in {bits:#b}",
+                self.name
+            ));
+        };
+        Ok(index)
     }
 }
 
@@ -59,7 +60,7 @@ pub fn pick(instance: &Instance) -> Outcome<Gpu> {
     for physical in physicals {
         match qualify(instance, physical) {
             Ok(gpu) => return Ok(gpu),
-            Err(why) => rejected.push(why.0),
+            Err(why) => rejected.push(why.to_string()),
         }
     }
     fail(format!(
@@ -73,7 +74,7 @@ pub fn pick(instance: &Instance) -> Outcome<Gpu> {
 fn qualify(instance: &Instance, physical: vk::PhysicalDevice) -> Outcome<Gpu> {
     // SAFETY: `physical` was enumerated from the live `instance`.
     let properties = unsafe { instance.get_physical_device_properties(physical) };
-    let name = tessera_vk::fixed_str(&properties.device_name);
+    let name = fixed_str(&properties.device_name);
     if properties.api_version < vk::API_VERSION_1_4 {
         return fail(format!("{name}: Vulkan below 1.4"));
     }

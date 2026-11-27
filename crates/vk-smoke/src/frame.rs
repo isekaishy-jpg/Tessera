@@ -8,6 +8,7 @@
 use crate::failure::{Context, Outcome, fail};
 use crate::gpu::Gpu;
 use crate::owned::{DeviceOwned, Owned, destroy};
+use core::slice;
 use tessera_vk::{Device, vk};
 
 /// The image format; the pipeline renders to it.
@@ -49,22 +50,34 @@ const COLOR: vk::ImageSubresourceRange = vk::ImageSubresourceRange {
 /// A buffer or image and the memory bound to it at offset 0. Fields drop in order: the resource
 /// before its memory.
 struct Bound<'d, H: Copy> {
+    /// The buffer or image.
     resource: DeviceOwned<'d, H>,
+    /// Its memory.
     memory: DeviceOwned<'d, vk::DeviceMemory>,
 }
 
 /// Everything the frame owns. Fields drop in declaration order: fence, pool (which frees the
 /// command buffer), view, image, then the buffers.
 pub struct Frame<'d> {
+    /// The device every object belongs to.
     device: &'d Device,
+    /// Signalled when the submitted frame completes.
     fence: DeviceOwned<'d, vk::Fence>,
+    /// The command pool on the graphics queue family.
     pool: DeviceOwned<'d, vk::CommandPool>,
+    /// The one command buffer, freed with `pool`.
     commands: vk::CommandBuffer,
+    /// The colour attachment's view of `image`.
     view: DeviceOwned<'d, vk::ImageView>,
+    /// The colour image the triangle is rendered into.
     image: Bound<'d, vk::Image>,
+    /// Host-visible buffer the image is copied into.
     readback: Bound<'d, vk::Buffer>,
+    /// Device-local vertex buffer.
     vertex: Bound<'d, vk::Buffer>,
+    /// Host-visible buffer the vertices are written into.
     staging: Bound<'d, vk::Buffer>,
+    /// Queue 0 of the graphics queue family.
     queue: vk::Queue,
 }
 
@@ -393,8 +406,7 @@ impl<'d> Frame<'d> {
         let ptr = unsafe { self.device.map_memory2(&map) }.ctx("vkMapMemory2")?;
         // SAFETY: `ptr` maps `READBACK_BYTES` bytes of coherent memory that the completed
         // submit wrote (made visible to the host by its last barrier and the fence wait).
-        let pixels =
-            unsafe { core::slice::from_raw_parts(ptr.cast::<u8>(), READBACK_BYTES as usize) };
+        let pixels = unsafe { slice::from_raw_parts(ptr.cast::<u8>(), READBACK_BYTES as usize) };
         let centre = pixel(pixels, EXTENT.width / 2, EXTENT.height / 2);
         let corner = pixel(pixels, 0, 0);
         let unmap = vk::MemoryUnmapInfo::default().memory(memory);

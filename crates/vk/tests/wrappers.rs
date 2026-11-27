@@ -1,10 +1,14 @@
-//! The command wrappers' shape rules and protocol forms, on mock function tables built with
-//! `from_parts`: each mock records what it received in thread-local state (tests run in parallel
-//! threads).
+//! The command wrappers' shape rules and protocol forms, and the runtime's create commands, on
+//! mock function tables built with `from_parts`: each mock records what it received in
+//! thread-local state (tests run in parallel threads), and the tests assert on the records. A mock
+//! never asserts: a panic cannot unwind out of an `extern "system"` function, so it would abort
+//! every test in the binary.
 
+use core::cell::{Cell, RefCell};
 use core::ffi::{CStr, c_char, c_void};
-use std::cell::{Cell, RefCell};
-use tessera_vk::{Device, DeviceTable, Instance, InstanceTable, vk};
+use core::ptr;
+use std::panic::{self, AssertUnwindSafe};
+use tessera_vk::{Device, DeviceTable, Entry, EntryTable, Instance, InstanceTable, vk};
 
 thread_local! {
     /// Calls the current mock received.
@@ -15,10 +19,12 @@ thread_local! {
     static RECORDS: RefCell<Vec<u32>> = const { RefCell::new(Vec::new()) };
 }
 
+/// Calls the current mock received.
 fn calls() -> u32 {
     CALLS.with(Cell::get)
 }
 
+/// Counts a call; returns its number (1-based).
 fn call() -> u32 {
     CALLS.with(|c| {
         c.set(c.get() + 1);
@@ -26,19 +32,23 @@ fn call() -> u32 {
     })
 }
 
+/// Records `v`.
 fn see(v: u64) {
     SEEN.with(|s| s.borrow_mut().push(v));
 }
 
+/// The values recorded so far.
 fn seen() -> Vec<u64> {
     SEEN.with(|s| s.borrow().clone())
 }
 
+/// A device with handle `0x1000` over `table`.
 fn device(table: DeviceTable) -> Device {
     Device::from_parts(vk::Device::from_raw(0x1000), table)
 }
 
 /// Rule 1: count query, fill, and a repeat of both on `INCOMPLETE`; the result is truncated.
+/// Records the device handle on every call and the capacity each fill passes.
 unsafe extern "system" fn swapchain_images(
     device: vk::Device,
     _: vk::SwapchainKHR,
@@ -53,10 +63,13 @@ unsafe extern "system" fn swapchain_images(
             *count = 3;
             return vk::Result::SUCCESS;
         }
+        see(u64::from(*count));
         if n == 2 {
             return vk::Result::INCOMPLETE;
         }
-        assert_eq!(*count, 3, "the fill call passes the queried capacity");
+        if *count < 2 {
+            return vk::Result::ERROR_UNKNOWN;
+        }
         *count = 2;
         *images = vk::Image::from_raw(7);
         *images.add(1) = vk::Image::from_raw(8);
@@ -77,14 +90,16 @@ fn size_then_fill_repeats_on_incomplete_and_truncates() {
         Ok(vec![vk::Image::from_raw(7), vk::Image::from_raw(8)])
     );
     assert_eq!(calls(), 4, "query, fill (INCOMPLETE), query, fill");
-    assert!(
-        seen().iter().all(|&h| h == 0x1000),
-        "the device handle on every call"
+    assert_eq!(
+        seen(),
+        [0x1000, 0x1000, 3, 0x1000, 0x1000, 3],
+        "the device handle on every call; each fill passes the queried capacity"
     );
 }
 
 /// Rule 1 with an output before the size/data pair (`vkGetPipelineBinaryDataKHR`): the key and
-/// every other argument reach both calls unchanged.
+/// every other argument reach both calls unchanged. Records 1 on each call that gets both the
+/// info and the key (0 otherwise), and the size the fill passes.
 unsafe extern "system" fn binary_data(
     _: vk::Device,
     info: *const vk::PipelineBinaryDataInfoKHR<'_>,
@@ -93,19 +108,23 @@ unsafe extern "system" fn binary_data(
     data: *mut c_void,
 ) -> vk::Result {
     call();
-    assert!(
-        !info.is_null() && !key.is_null(),
-        "info and key on every call"
-    );
+    let given = !info.is_null() && !key.is_null();
+    see(u64::from(given));
+    if !given {
+        return vk::Result::ERROR_UNKNOWN;
+    }
     // SAFETY: the wrapper passes live pointers; `data` holds `*size` bytes when non-null.
     unsafe {
         (*key).key_size = 4;
         if data.is_null() {
             *size = 5;
-        } else {
-            assert_eq!(*size, 5, "the fill call passes the queried size, not zero");
-            core::ptr::copy_nonoverlapping([1u8, 2, 3, 4, 5].as_ptr(), data.cast(), 5);
+            return vk::Result::SUCCESS;
         }
+        see(*size as u64);
+        if *size != 5 {
+            return vk::Result::ERROR_UNKNOWN;
+        }
+        ptr::copy_nonoverlapping([1u8, 2, 3, 4, 5].as_ptr(), data.cast(), 5);
     }
     vk::Result::SUCCESS
 }
@@ -123,6 +142,11 @@ fn size_then_fill_passes_other_arguments_to_both_calls() {
     assert_eq!(data, Ok(vec![1, 2, 3, 4, 5]));
     assert_eq!(key.key_size, 4);
     assert_eq!(calls(), 2);
+    assert_eq!(
+        seen(),
+        [1, 1, 5],
+        "info and key on both calls; the fill passes the queried size, not zero"
+    );
 }
 
 /// Rule 2 (a trailing output without `sType` returned by value) with rule 3 (`SUBOPTIMAL_KHR`
@@ -141,6 +165,7 @@ unsafe extern "system" fn acquire(
     vk::Result::SUBOPTIMAL_KHR
 }
 
+/// `vkGetBufferMemoryRequirements` writing a size of 256.
 unsafe extern "system" fn requirements(
     _: vk::Device,
     _: vk::Buffer,
@@ -172,6 +197,7 @@ fn trailing_outputs_are_returned_and_success_codes_kept() {
     }
 }
 
+/// `vkWaitForFences` recording the count, the second fence and `waitAll`; returns `TIMEOUT`.
 unsafe extern "system" fn wait(
     _: vk::Device,
     count: u32,
@@ -186,14 +212,17 @@ unsafe extern "system" fn wait(
     vk::Result::TIMEOUT
 }
 
+/// `vkGetFenceStatus` returning `NOT_READY`.
 unsafe extern "system" fn fence_status(_: vk::Device, _: vk::Fence) -> vk::Result {
     vk::Result::NOT_READY
 }
 
+/// `vkGetFenceStatus` returning `ERROR_DEVICE_LOST`.
 unsafe extern "system" fn lost(_: vk::Device, _: vk::Fence) -> vk::Result {
     vk::Result::ERROR_DEVICE_LOST
 }
 
+/// `vkCreateBuffer` returning `NOT_READY`, a code its registry entry does not list.
 unsafe extern "system" fn create_buffer_positive(
     _: vk::Device,
     _: *const vk::BufferCreateInfo<'_>,
@@ -236,6 +265,7 @@ fn success_codes_are_returned_and_errors_are_err() {
     assert_eq!(status, Err(vk::Result::ERROR_DEVICE_LOST));
 }
 
+/// `vkCmdBindVertexBuffers` recording the first binding, the count and the second entries.
 unsafe extern "system" fn bind_vertex_buffers(
     _: vk::CommandBuffer,
     first: u32,
@@ -252,6 +282,7 @@ unsafe extern "system" fn bind_vertex_buffers(
     }
 }
 
+/// `vkCmdBindVertexBuffers2` recording the count and whether sizes and strides are null.
 unsafe extern "system" fn bind_vertex_buffers2(
     _: vk::CommandBuffer,
     _: u32,
@@ -266,6 +297,7 @@ unsafe extern "system" fn bind_vertex_buffers2(
     see(u64::from(strides.is_null()));
 }
 
+/// `vkCmdPushConstants` recording the size and the third `u32`.
 unsafe extern "system" fn push_constants(
     _: vk::CommandBuffer,
     _: vk::PipelineLayout,
@@ -279,6 +311,7 @@ unsafe extern "system" fn push_constants(
     see(u64::from(unsafe { *values.cast::<u32>().add(2) }));
 }
 
+/// A device with the three command-buffer mocks above.
 fn command_device() -> Device {
     device(DeviceTable {
         cmd_bind_vertex_buffers: Some(bind_vertex_buffers),
@@ -323,6 +356,7 @@ fn arrays_sharing_a_count_must_agree() {
     unsafe { d.cmd_bind_vertex_buffers(vk::CommandBuffer::from_raw(9), 0, &buffers, &[0]) };
 }
 
+/// `vkAllocateCommandBuffers` writing handle 5 into the second entry.
 unsafe extern "system" fn allocate(
     _: vk::Device,
     _: *const vk::CommandBufferAllocateInfo<'_>,
@@ -333,6 +367,7 @@ unsafe extern "system" fn allocate(
     vk::Result::SUCCESS
 }
 
+/// `vkCmdSetSampleMaskEXT` recording whether the mask is null.
 unsafe extern "system" fn sample_mask(
     _: vk::CommandBuffer,
     _: vk::SampleCountFlagBits,
@@ -386,6 +421,7 @@ fn an_expression_length_mismatch_panics() {
     unsafe { d.cmd_set_sample_mask_ext(cb, vk::SampleCountFlags::COUNT_4, Some(&[0, 0])) };
 }
 
+/// `vkMapMemory2` recording the size and returning address `0x4000`.
 unsafe extern "system" fn map(
     _: vk::Device,
     info: *const vk::MemoryMapInfo<'_>,
@@ -394,13 +430,13 @@ unsafe extern "system" fn map(
     // SAFETY: the wrapper passes a live info and a live output.
     unsafe {
         see((*info).size);
-        *data = core::ptr::without_provenance_mut(0x4000);
+        *data = ptr::without_provenance_mut(0x4000);
     }
     vk::Result::SUCCESS
 }
 
 #[test]
-fn references_and_void_pointer_outputs() {
+fn a_void_pointer_output_is_returned() {
     let d = device(DeviceTable {
         map_memory2: Some(map),
         ..Default::default()
@@ -408,10 +444,11 @@ fn references_and_void_pointer_outputs() {
     let info = vk::MemoryMapInfo::default().size(512);
     // SAFETY: the mock reads the info and writes the output pointer.
     let mapped = unsafe { d.map_memory2(&info) };
-    assert_eq!(mapped.map(|p| p as usize), Ok(0x4000));
+    assert_eq!(mapped.map(|p| p.addr()), Ok(0x4000));
     assert_eq!(seen(), [512]);
 }
 
+/// `vkGetPhysicalDeviceSurfaceSupportKHR` writing `VK_TRUE`.
 unsafe extern "system" fn surface_support(
     _: vk::PhysicalDevice,
     _: u32,
@@ -453,6 +490,7 @@ unsafe extern "system" fn device_proc_addr(
     (name == c"vkCmdDrawIndirectCountKHR").then_some(void as vk::PfnVoidFunction)
 }
 
+/// A command that does nothing, for the table to hold.
 unsafe extern "system" fn void() {}
 
 #[test]
@@ -472,6 +510,61 @@ fn device_commands_load_through_the_instance_with_alias_fallback() {
     );
     assert!(d.table().cmd_draw.is_none());
     assert_eq!(d.handle(), vk::Device::from_raw(2));
+}
+
+/// `vkCreateInstance` counting the call and creating instance `0x10`.
+unsafe extern "system" fn create_instance(
+    _: *const vk::InstanceCreateInfo<'_>,
+    _: *const vk::AllocationCallbacks<'_>,
+    out: *mut vk::Instance,
+) -> vk::Result {
+    call();
+    // SAFETY: the runtime passes a live output.
+    unsafe { *out = vk::Instance::from_raw(0x10) };
+    vk::Result::SUCCESS
+}
+
+/// `vkCreateDevice` counting the call and creating device `0x20`.
+unsafe extern "system" fn create_device(
+    _: vk::PhysicalDevice,
+    _: *const vk::DeviceCreateInfo<'_>,
+    _: *const vk::AllocationCallbacks<'_>,
+    out: *mut vk::Device,
+) -> vk::Result {
+    call();
+    // SAFETY: the runtime passes a live output.
+    unsafe { *out = vk::Device::from_raw(0x20) };
+    vk::Result::SUCCESS
+}
+
+#[test]
+fn a_missing_loader_panics_before_anything_is_created() {
+    let entry = Entry::from_parts(EntryTable {
+        create_instance: Some(create_instance),
+        ..Default::default()
+    });
+    // SAFETY: the runtime panics before calling the mock, which writes only its output.
+    let created = panic::catch_unwind(AssertUnwindSafe(|| unsafe {
+        entry.create_instance(&vk::InstanceCreateInfo::default(), None)
+    }));
+    assert!(created.is_err(), "no vkGetInstanceProcAddr: a panic");
+    let instance = Instance::from_parts(
+        vk::Instance::from_raw(1),
+        InstanceTable {
+            create_device: Some(create_device),
+            ..Default::default()
+        },
+    );
+    // SAFETY: as above.
+    let created = panic::catch_unwind(AssertUnwindSafe(|| unsafe {
+        instance.create_device(
+            vk::PhysicalDevice::from_raw(2),
+            &vk::DeviceCreateInfo::default(),
+            None,
+        )
+    }));
+    assert!(created.is_err(), "no vkGetDeviceProcAddr: a panic");
+    assert_eq!(calls(), 0, "neither object was created");
 }
 
 #[test]
@@ -632,6 +725,7 @@ fn an_extensible_query_keeps_the_callers_chains() {
     assert_eq!(calls(), 2, "the count query, then one fill");
 }
 
+/// `vkGetQueryPoolResults` writing nothing.
 unsafe extern "system" fn query_results(
     _: vk::Device,
     _: vk::QueryPool,
@@ -701,6 +795,7 @@ fn misaligned_64_bit_query_results_panic() {
     };
 }
 
+/// `vkCmdUpdateBuffer` recording the size.
 unsafe extern "system" fn update_buffer(
     _: vk::CommandBuffer,
     _: vk::Buffer,

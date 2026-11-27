@@ -1,10 +1,11 @@
 //! The program's one error type: a message naming the step or call that failed.
 
+use core::error::Error;
 use core::fmt;
 
-/// A failed step.
+/// A failed step. It is built with [`fail`] or [`Context::ctx`] and read through `Display`.
 #[derive(Debug)]
-pub struct Failure(pub String);
+pub struct Failure(String);
 
 /// A step's result.
 pub type Outcome<T> = Result<T, Failure>;
@@ -20,14 +21,16 @@ impl fmt::Display for Failure {
     }
 }
 
+impl Error for Failure {}
+
 /// Names the call behind an error: `vkCreateBuffer: ERROR_OUT_OF_DEVICE_MEMORY: ...`.
 pub trait Context<T> {
     /// The error as a [`Failure`] prefixed with `what`.
-    fn ctx(self, what: &str) -> Outcome<T>;
+    fn ctx(self, what: impl fmt::Display) -> Outcome<T>;
 }
 
 impl<T, E: fmt::Display> Context<T> for Result<T, E> {
-    fn ctx(self, what: &str) -> Outcome<T> {
+    fn ctx(self, what: impl fmt::Display) -> Outcome<T> {
         self.map_err(|e| Failure(format!("{what}: {e}")))
     }
 }

@@ -2,9 +2,11 @@
 //! None-08499`) whatever the allocator does with byte buffers: this test binary's global
 //! allocator returns odd addresses for every alignment-1 request, where a `Vec<u8>` would land.
 
+use core::alloc::{GlobalAlloc, Layout};
 use core::ffi::c_void;
-use std::alloc::{GlobalAlloc, Layout, System};
-use std::sync::atomic::{AtomicBool, Ordering};
+use core::ptr;
+use core::sync::atomic::{AtomicBool, Ordering};
+use std::alloc::System;
 use tessera_vk::{AlignedBytes, Device, DeviceTable, vk};
 
 /// Wraps `System`; an alignment-1 request gets the byte after a 2-aligned block, so it is odd.
@@ -27,7 +29,7 @@ unsafe impl GlobalAlloc for Misaligning {
             return unsafe { System.alloc(layout) };
         }
         let Some(padded) = Self::padded(layout) else {
-            return core::ptr::null_mut();
+            return ptr::null_mut();
         };
         // SAFETY: `padded` has a non-zero size.
         let block = unsafe { System.alloc(padded) };
@@ -38,16 +40,16 @@ unsafe impl GlobalAlloc for Misaligning {
         unsafe { block.add(1) }
     }
 
-    unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
+    unsafe fn dealloc(&self, pointer: *mut u8, layout: Layout) {
         if layout.align() != 1 {
-            // SAFETY: `ptr` came from `System.alloc(layout)`.
-            return unsafe { System.dealloc(ptr, layout) };
+            // SAFETY: `pointer` came from `System.alloc(layout)`.
+            return unsafe { System.dealloc(pointer, layout) };
         }
         let Some(padded) = Self::padded(layout) else {
             return;
         };
-        // SAFETY: `ptr` is one byte into a block allocated with `padded`.
-        unsafe { System.dealloc(ptr.sub(1), padded) };
+        // SAFETY: `pointer` is one byte into a block allocated with `padded`.
+        unsafe { System.dealloc(pointer.sub(1), padded) };
     }
 }
 
@@ -103,7 +105,13 @@ fn shader_binaries_are_written_to_aligned_storage() {
     let binary = unsafe { device.get_shader_binary_data_ext(vk::ShaderEXT::from_raw(2)) }
         .expect("the mock succeeds");
     assert!(!MISALIGNED.load(Ordering::SeqCst), "pData is aligned to 16");
-    assert!(binary.as_bytes().as_ptr().addr().is_multiple_of(16));
+    assert!(
+        binary
+            .as_bytes()
+            .as_ptr()
+            .addr()
+            .is_multiple_of(AlignedBytes::ALIGN)
+    );
     assert_eq!(binary.as_bytes(), heap.as_slice());
     assert_eq!(binary, AlignedBytes::from_bytes(&heap));
 }
@@ -116,7 +124,13 @@ fn aligned_bytes_keep_their_length_and_alignment() {
     assert_eq!(bytes.len(), 33);
     bytes.as_mut_bytes()[32] = 7;
     assert_eq!(bytes.as_bytes()[32], 7);
-    assert!(bytes.as_bytes().as_ptr().addr().is_multiple_of(16));
+    assert!(
+        bytes
+            .as_bytes()
+            .as_ptr()
+            .addr()
+            .is_multiple_of(AlignedBytes::ALIGN)
+    );
     assert_eq!(format!("{bytes:?}"), "AlignedBytes { len: 33 }");
     assert_eq!(bytes.clone(), bytes);
 }

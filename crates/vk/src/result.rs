@@ -1,10 +1,12 @@
 //! Results: `vk::Result` as the error type, the result checks wrappers use, and `LoadError`.
 
 use crate::vk;
+use core::error::Error;
 use core::fmt;
 
-/// A Vulkan result: `Err` holds the failing `vk::Result` code.
-pub type Result<T> = core::result::Result<T, vk::Result>;
+/// A Vulkan result: `Err` holds the failing `vk::Result` code unless `E` names another error
+/// (`Entry::load` returns `Result<Entry, LoadError>`).
+pub type Result<T, E = vk::Result> = core::result::Result<T, E>;
 
 impl fmt::Display for vk::Result {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -16,7 +18,7 @@ impl fmt::Display for vk::Result {
     }
 }
 
-impl std::error::Error for vk::Result {}
+impl Error for vk::Result {}
 
 /// `Ok` only on `SUCCESS`: the check of commands whose only success code is `SUCCESS`. Any other
 /// code, an unexpected positive one included, is an error, so no code is dropped.
@@ -66,4 +68,4 @@ impl fmt::Display for LoadError {
     }
 }
 
-impl std::error::Error for LoadError {}
+impl Error for LoadError {}

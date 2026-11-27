@@ -7,15 +7,15 @@ use crate::failure::{Context, Outcome, fail};
 use crate::owned::OwnedInstance;
 use crate::text;
 use core::ffi::{CStr, c_char, c_void};
-use std::io::Write;
-use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use core::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use std::io::{self, Write};
 use tessera_vk::{Entry, vk};
 
 /// The Khronos validation layer.
 const LAYER: &CStr = c"VK_LAYER_KHRONOS_validation";
 
 /// The message id of the hazard [`probe`] expects: two writes with no dependency between them.
-pub const HAZARD: &CStr = c"SYNC-HAZARD-WRITE-AFTER-WRITE";
+const HAZARD: &CStr = c"SYNC-HAZARD-WRITE-AFTER-WRITE";
 
 /// Messages counted against the gate.
 static GATE: AtomicU32 = AtomicU32::new(0);
@@ -31,7 +31,7 @@ pub fn messages() -> u32 {
 }
 
 /// Runs `record` with probing on, then requires that it succeeded, that the layer reported
-/// [`HAZARD`] exactly once, and that it reported nothing else meanwhile.
+/// `HAZARD` exactly once, and that it reported nothing else meanwhile.
 pub fn probe(record: impl FnOnce() -> Outcome<()>) -> Outcome<()> {
     HAZARDS.store(0, Ordering::SeqCst);
     let gate = messages();
@@ -69,7 +69,7 @@ unsafe extern "system" fn on_message(
         (!p.is_null()).then(|| unsafe { CStr::from_ptr(p) })
     };
     let id = data.and_then(|d| text_of(d.p_message_id_name));
-    let text = data
+    let message = data
         .and_then(|d| text_of(d.p_message))
         .map_or("<no message>".into(), CStr::to_string_lossy);
     let expected = PROBING.load(Ordering::SeqCst) && id == Some(HAZARD);
@@ -81,8 +81,8 @@ unsafe extern "system" fn on_message(
         "validation"
     };
     let _ = writeln!(
-        std::io::stderr().lock(),
-        "{label} {severity:?} {types:?}: {text}"
+        io::stderr().lock(),
+        "{label} {severity:?} {types:?}: {message}"
     );
     vk::FALSE
 }
@@ -111,10 +111,7 @@ pub fn create_instance(entry: &Entry) -> Outcome<OwnedInstance> {
     let layers = unsafe { entry.enumerate_instance_layer_properties() }
         .ctx("vkEnumerateInstanceLayerProperties")?;
     let layer = LAYER.to_string_lossy();
-    if !layers
-        .iter()
-        .any(|l| tessera_vk::fixed_str(&l.layer_name) == layer)
-    {
+    if !text::has_layer(&layers, LAYER) {
         return fail(format!("{layer} is not installed: install the Vulkan SDK"));
     }
     // SAFETY: as above; `LAYER` is a listed layer.

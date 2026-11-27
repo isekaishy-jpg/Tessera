@@ -4,7 +4,11 @@
 //! `Default`.
 
 use core::ffi::c_void;
-use tessera_vk::vk;
+use core::ptr;
+use tessera_vk::{AlignedBytes, vk};
+
+/// The first word of every SPIR-V module: shader code the setters store by pointer.
+const SPIRV_MAGIC: u32 = 0x0723_0203;
 
 #[test]
 fn default_sets_the_structure_type_and_zeroes_the_rest() {
@@ -13,7 +17,7 @@ fn default_sets_the_structure_type_and_zeroes_the_rest() {
     assert!(info.p_next.is_null());
     assert_eq!(info.size, 0);
     assert_eq!(
-        <vk::BufferCreateInfo as vk::TaggedStructure>::STRUCTURE_TYPE,
+        <vk::BufferCreateInfo<'_> as vk::TaggedStructure>::STRUCTURE_TYPE,
         vk::StructureType::BUFFER_CREATE_INFO
     );
 }
@@ -61,7 +65,7 @@ fn an_optional_array_in_a_group_is_an_option() {
 #[test]
 fn an_alternative_nulls_its_siblings() {
     let geometries = [vk::AccelerationStructureGeometryKHR::default()];
-    let pointers = [core::ptr::from_ref(&geometries[0]); 2];
+    let pointers = [ptr::from_ref(&geometries[0]); 2];
     let info = vk::AccelerationStructureBuildGeometryInfoKHR::default()
         .geometries(&geometries)
         .pp_geometries(&pointers);
@@ -153,17 +157,17 @@ fn a_sample_mask_of_the_wrong_length_panics() {
 
 #[test]
 fn shader_code_sets_its_type_size_and_pointer() {
-    let words = [0x0723_0203u32; 3];
+    let words = [SPIRV_MAGIC; 3];
     let spirv = vk::ShaderCreateInfoEXT::default().code_spirv(&words);
     assert_eq!(spirv.code_type, vk::ShaderCodeTypeEXT::SPIRV);
     assert_eq!(spirv.code_size, 12);
     assert_eq!(spirv.p_code, words.as_ptr().cast::<c_void>());
-    let bytes = tessera_vk::AlignedBytes::from_bytes(&[7; 20]);
+    let bytes = AlignedBytes::from_bytes(&[7; 20]);
     let binary = spirv.code_binary(&bytes);
     assert_eq!(binary.code_type, vk::ShaderCodeTypeEXT::BINARY);
     assert_eq!(binary.code_size, 20);
     assert_eq!(binary.p_code, bytes.as_bytes().as_ptr().cast::<c_void>());
-    assert!(binary.p_code.addr().is_multiple_of(16));
+    assert!(binary.p_code.addr().is_multiple_of(AlignedBytes::ALIGN));
 }
 
 #[test]
@@ -180,7 +184,7 @@ fn layer_setting_values_are_counted_in_elements() {
 }
 
 #[test]
-fn strings_bytes_and_expression_lengths() {
+fn strings_bytes_and_expression_lengths_set_their_counts() {
     let name = c"tessera";
     let app = vk::ApplicationInfo::default().application_name(name);
     assert_eq!(app.p_application_name, name.as_ptr());
@@ -193,7 +197,7 @@ fn strings_bytes_and_expression_lengths() {
     );
     assert_eq!(spec.p_data, data.as_ptr().cast::<c_void>());
 
-    let code = [0x0723_0203u32; 4];
+    let code = [SPIRV_MAGIC; 4];
     let module = vk::ShaderModuleCreateInfo::default().code(&code);
     assert_eq!(
         module.code_size, 16,
@@ -210,17 +214,17 @@ fn strings_bytes_and_expression_lengths() {
 fn push_next_links_each_struct_right_after_the_head() {
     let mut vulkan12 = vk::PhysicalDeviceVulkan12Features::default().buffer_device_address(true);
     let mut vulkan13 = vk::PhysicalDeviceVulkan13Features::default().synchronization2(true);
-    let a: *mut c_void = core::ptr::from_mut(&mut vulkan12).cast();
-    let b: *mut c_void = core::ptr::from_mut(&mut vulkan13).cast();
+    let a: *mut c_void = ptr::from_mut(&mut vulkan12).cast();
+    let b: *mut c_void = ptr::from_mut(&mut vulkan13).cast();
     let info = vk::DeviceCreateInfo::default()
         .push_next(&mut vulkan12)
         .push_next(&mut vulkan13);
     assert_eq!(info.p_next, b.cast_const(), "the last pushed is first");
     // SAFETY: both structs are alive; `push_next` linked them.
-    let second = unsafe { (*b.cast::<vk::PhysicalDeviceVulkan13Features>()).p_next };
+    let second = unsafe { (*b.cast::<vk::PhysicalDeviceVulkan13Features<'_>>()).p_next };
     assert_eq!(second, a);
     // SAFETY: as above.
-    let end = unsafe { (*a.cast::<vk::PhysicalDeviceVulkan12Features>()).p_next };
+    let end = unsafe { (*a.cast::<vk::PhysicalDeviceVulkan12Features<'_>>()).p_next };
     assert!(end.is_null());
 }
 

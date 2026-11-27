@@ -1,7 +1,7 @@
 //! Byte storage: [`Plain`], the types whose values may be read from or written as raw bytes, and
 //! [`AlignedBytes`], a byte buffer aligned to 16.
 
-use core::fmt;
+use core::{fmt, slice};
 
 /// A type whose values are plain bytes: byte parameters and byte setters take `&[T]` for any
 /// `T: Plain`, and driver output written into such a slice is a valid value.
@@ -13,7 +13,7 @@ use core::fmt;
 /// # Safety
 ///
 /// Every bit pattern of `size_of::<Self>()` bytes is a valid value of the type, and the type has
-/// no padding bytes (so its bytes are always initialized). `bool`, references, `NonZero*`,
+/// no padding bytes (so its bytes are always initialised). `bool`, references, `NonZero*`,
 /// `char`, enums with invalid discriminants and types with padding do not qualify.
 pub unsafe trait Plain: Copy + 'static {}
 
@@ -45,17 +45,17 @@ unsafe impl Plain for f64 {}
 // theirs) and accepts every bit pattern its elements accept.
 unsafe impl<T: Plain, const N: usize> Plain for [T; N] {}
 
-/// One 16-byte block, aligned to 16.
+/// One block of [`AlignedBytes::ALIGN`] bytes, aligned to it (`align` takes only a literal).
 #[repr(C, align(16))]
 #[derive(Clone, Copy)]
-struct Block([u8; 16]);
+struct Block([u8; AlignedBytes::ALIGN]);
 
 /// A byte buffer whose first byte is aligned to [`AlignedBytes::ALIGN`] (16), for data that
 /// must be aligned: `get_shader_binary_data_ext` returns one, and a shader object's binary code
 /// is read from one.
 #[derive(Clone)]
 pub struct AlignedBytes {
-    /// The storage: `len.div_ceil(16)` blocks.
+    /// The storage: `len.div_ceil(ALIGN)` blocks.
     blocks: Vec<Block>,
     /// The length in bytes.
     len: usize,
@@ -68,7 +68,7 @@ impl AlignedBytes {
     /// `len` zero bytes.
     pub fn zeroed(len: usize) -> AlignedBytes {
         AlignedBytes {
-            blocks: vec![Block([0; 16]); len.div_ceil(Self::ALIGN)],
+            blocks: vec![Block([0; Self::ALIGN]); len.div_ceil(Self::ALIGN)],
             len,
         }
     }
@@ -81,26 +81,30 @@ impl AlignedBytes {
     }
 
     /// The length in bytes.
+    #[inline]
     pub fn len(&self) -> usize {
         self.len
     }
 
     /// True when there are no bytes.
+    #[inline]
     pub fn is_empty(&self) -> bool {
         self.len == 0
     }
 
     /// The bytes.
+    #[inline]
     pub fn as_bytes(&self) -> &[u8] {
-        // SAFETY: `Block` is `repr(C)` over `[u8; 16]`, so the blocks are
-        // `len.div_ceil(16) * 16 >= len` initialized, contiguous bytes, borrowed for `self`.
-        unsafe { core::slice::from_raw_parts(self.blocks.as_ptr().cast(), self.len) }
+        // SAFETY: `Block` is `repr(C)` over `[u8; ALIGN]`, so the blocks are
+        // `len.div_ceil(ALIGN) * ALIGN >= len` initialised, contiguous bytes, borrowed for `self`.
+        unsafe { slice::from_raw_parts(self.blocks.as_ptr().cast(), self.len) }
     }
 
     /// The bytes, mutable.
+    #[inline]
     pub fn as_mut_bytes(&mut self) -> &mut [u8] {
         // SAFETY: as in `as_bytes`, borrowed mutably for `self`.
-        unsafe { core::slice::from_raw_parts_mut(self.blocks.as_mut_ptr().cast(), self.len) }
+        unsafe { slice::from_raw_parts_mut(self.blocks.as_mut_ptr().cast(), self.len) }
     }
 
     /// The first byte, for a driver to write `len` bytes into. Aligned to 16; dangling (but
@@ -123,7 +127,7 @@ impl AlignedBytes {
 }
 
 impl PartialEq for AlignedBytes {
-    fn eq(&self, other: &AlignedBytes) -> bool {
+    fn eq(&self, other: &Self) -> bool {
         self.as_bytes() == other.as_bytes()
     }
 }

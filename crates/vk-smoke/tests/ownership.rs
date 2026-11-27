@@ -6,15 +6,15 @@
 //! The mocks keep their state in thread-locals (tests run in parallel threads) and record faults
 //! instead of panicking: a panic cannot unwind out of an `extern "system"` function.
 
+use core::cell::{Cell, RefCell};
 use core::ffi::c_void;
-use std::cell::{Cell, RefCell};
 use std::collections::BTreeMap;
 use tessera_vk::{Device, DeviceTable, Instance, InstanceTable, vk};
 use tessera_vk_smoke::frame::Frame;
 use tessera_vk_smoke::gpu::Gpu;
-use tessera_vk_smoke::owned::{Owned, OwnedDevice, OwnedInstance, destroy};
+use tessera_vk_smoke::owned::{OwnedDevice, OwnedInstance};
 use tessera_vk_smoke::pipeline::{self, Recipe};
-use tessera_vk_smoke::shader::Shaders;
+use tessera_vk_smoke::shader::{SPIRV_MAGIC, Shaders};
 
 /// More fallible calls than any function under test makes.
 const MAX_CALLS: u32 = 100;
@@ -42,6 +42,7 @@ fn arm(n: u32) {
     FAIL_AT.with(|f| f.set(n));
 }
 
+/// Fallible calls made since the last [`arm`].
 fn calls() -> u32 {
     CALLS.with(Cell::get)
 }
@@ -80,14 +81,17 @@ fn destroyed(kind: &'static str, handle: u64) {
     }
 }
 
+/// The live handles and their kinds.
 fn live() -> BTreeMap<u64, &'static str> {
     LIVE.with(|l| l.borrow().clone())
 }
 
+/// The faults recorded so far.
 fn faults() -> Vec<String> {
     FAULTS.with(|f| f.borrow().clone())
 }
 
+/// The teardown calls recorded so far, in order.
 fn teardown() -> Vec<&'static str> {
     TEARDOWN.with(|t| t.borrow().clone())
 }
@@ -185,6 +189,7 @@ unsafe fn requirements(out: *mut vk::MemoryRequirements) {
     }
 }
 
+/// `vkGetBufferMemoryRequirements` writing [`requirements`].
 unsafe extern "system" fn buffer_requirements(
     _: vk::Device,
     _: vk::Buffer,
@@ -194,6 +199,7 @@ unsafe extern "system" fn buffer_requirements(
     unsafe { requirements(out) };
 }
 
+/// `vkGetImageMemoryRequirements` writing [`requirements`].
 unsafe extern "system" fn image_requirements(
     _: vk::Device,
     _: vk::Image,
@@ -203,6 +209,7 @@ unsafe extern "system" fn image_requirements(
     unsafe { requirements(out) };
 }
 
+/// `vkBindBufferMemory`, a fallible call.
 unsafe extern "system" fn bind_buffer(
     _: vk::Device,
     _: vk::Buffer,
@@ -212,6 +219,7 @@ unsafe extern "system" fn bind_buffer(
     if fails() { FAILED } else { vk::Result::SUCCESS }
 }
 
+/// `vkBindImageMemory`, a fallible call.
 unsafe extern "system" fn bind_image(
     _: vk::Device,
     _: vk::Image,
@@ -235,6 +243,7 @@ unsafe extern "system" fn allocate_command_buffers(
     vk::Result::SUCCESS
 }
 
+/// `vkGetDeviceQueue` writing queue `0xa000`.
 unsafe extern "system" fn get_device_queue(_: vk::Device, _: u32, _: u32, out: *mut vk::Queue) {
     // SAFETY: the wrapper passes a live output.
     unsafe { *out = vk::Queue::from_raw(0xa000) };
@@ -315,6 +324,7 @@ unsafe extern "system" fn pipeline_binary_data(
     vk::Result::SUCCESS
 }
 
+/// `vkReleaseCapturedPipelineDataKHR`, a fallible call.
 unsafe extern "system" fn release_captured_data(
     _: vk::Device,
     _: *const vk::ReleaseCapturedPipelineDataInfoKHR<'_>,
@@ -323,15 +333,18 @@ unsafe extern "system" fn release_captured_data(
     if fails() { FAILED } else { vk::Result::SUCCESS }
 }
 
+/// `vkDeviceWaitIdle`, recorded as teardown.
 unsafe extern "system" fn device_wait_idle(_: vk::Device) -> vk::Result {
     TEARDOWN.with(|t| t.borrow_mut().push("wait idle"));
     vk::Result::SUCCESS
 }
 
+/// `vkDestroyDevice`, recorded as teardown.
 unsafe extern "system" fn destroy_device(_: vk::Device, _: *const vk::AllocationCallbacks<'_>) {
     TEARDOWN.with(|t| t.borrow_mut().push("destroy device"));
 }
 
+/// `vkDestroyDebugUtilsMessengerEXT`, recorded as teardown.
 unsafe extern "system" fn destroy_messenger(
     _: vk::Instance,
     _: vk::DebugUtilsMessengerEXT,
@@ -340,6 +353,7 @@ unsafe extern "system" fn destroy_messenger(
     TEARDOWN.with(|t| t.borrow_mut().push("destroy messenger"));
 }
 
+/// `vkDestroyInstance`, recorded as teardown.
 unsafe extern "system" fn destroy_instance(_: vk::Instance, _: *const vk::AllocationCallbacks<'_>) {
     TEARDOWN.with(|t| t.borrow_mut().push("destroy instance"));
 }
@@ -393,14 +407,19 @@ fn gpu() -> Gpu {
     memory.memory_types[0].property_flags = vk::MemoryPropertyFlags::HOST_VISIBLE
         | vk::MemoryPropertyFlags::HOST_COHERENT
         | vk::MemoryPropertyFlags::DEVICE_LOCAL;
-    Gpu::new(vk::PhysicalDevice::from_raw(1), "mock".into(), 0, memory)
+    Gpu::new(
+        vk::PhysicalDevice::from_raw(1),
+        "mock".to_string(),
+        0,
+        memory,
+    )
 }
 
 /// Two one-word modules (the mock does not read them).
 fn shaders() -> Shaders {
     Shaders {
-        vertex: vec![0x0723_0203],
-        fragment: vec![0x0723_0203],
+        vertex: vec![SPIRV_MAGIC],
+        fragment: vec![SPIRV_MAGIC],
     }
 }
 
@@ -467,26 +486,13 @@ fn rebuild_cleans_up_on_every_failure() {
 }
 
 #[test]
-fn into_handle_releases_ownership() {
-    let device = device();
-    let buffer = vk::Buffer::from_raw(create("buffer"));
-    // SAFETY: the mock buffer is live and owned only here.
-    let owned = unsafe { Owned::new(&device, buffer, destroy::buffer) };
-    assert_eq!(owned.into_handle(), buffer);
-    assert_eq!(live().len(), 1, "released, not destroyed");
-    // SAFETY: the released buffer is live and destroyed only here.
-    unsafe { destroy::buffer(&device, buffer) };
-    assert!(live().is_empty());
-    assert_eq!(faults(), Vec::<String>::new());
-}
-
-#[test]
 fn owned_device_waits_then_destroys() {
     // SAFETY: the mock device is owned only here.
     drop(unsafe { OwnedDevice::new(device()) });
     assert_eq!(teardown(), ["wait idle", "destroy device"]);
 }
 
+/// An instance whose table holds the messenger and instance teardown mocks.
 fn instance() -> Instance {
     Instance::from_parts(
         vk::Instance::from_raw(0x2000),

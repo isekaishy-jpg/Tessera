@@ -27,7 +27,7 @@ A missing piece fails with its name; nothing is skipped.
 1. Compiles `src/smoke.slang` with `slangc` into one SPIR-V module per stage (entries `vertexMain` and `fragmentMain`, each emitted as `main`) in a temp directory. No SPIR-V is committed, and building the workspace does not need the SDK.
 2. Creates a Vulkan 1.4 instance with the layer, requests `validate_sync` through `VK_EXT_layer_settings` (the lowest-priority source), and creates a debug messenger counting every WARNING and ERROR (one is also chained into instance creation, so creation and destruction are covered).
 3. Picks the first qualifying GPU and creates the device (`dynamicRendering`, `synchronization2`, `maintenance5`, `pipelineBinaries`).
-4. Probe: records two staging → vertex buffer copies with no barrier (never submitted) and requires exactly one `SYNC-HAZARD-WRITE-AFTER-WRITE` and no other message. Only then prints `ok sync validation live`.
+4. Probe: records two staging → vertex buffer copies with no barrier (never submitted) and requires exactly one `SYNC-HAZARD-WRITE-AFTER-WRITE` and no other message. Only then prints `ok sync validation live (probe hazard reported)`.
 5. Checks that a zero-timeout `wait_for_fences` returns `TIMEOUT` and `get_fence_status` returns `NOT_READY` on an unsignalled fence.
 6. Writes the triangle into a staging buffer through `map_memory2`.
 7. Pipeline binaries: creates the graphics pipeline with `CAPTURE_DATA_KHR`, fetches each binary's key and bytes, releases the captured data and destroys the binaries and the pipeline, then rebuilds the binaries from the keys and bytes alone and creates the pipeline the frame renders with from them.
@@ -48,7 +48,7 @@ A missing piece fails with its name; nothing is skipped.
 | `src/shader.rs`, `src/smoke.slang` | Shader source and its compilation |
 | `src/pipeline.rs` | Pipelines and the binary round trip |
 | `src/frame.rs` | Buffers, image, commands, the probe's recording, readback and pixel check |
-| `src/text.rs` | Extension lookup by name in fixed-size C name arrays |
+| `src/text.rs` | Extension and layer lookup by name in fixed-size C name arrays |
 
 ## Known
 

@@ -1,5 +1,6 @@
 //! `Debug` helpers for generated types, and the `spec!` doc-link macro.
 
+use crate::text;
 use core::ffi::c_char;
 use core::fmt;
 
@@ -64,11 +65,11 @@ pub(crate) fn enum_value(
     }
 }
 
-/// A fixed `char` array, printed as its text ([`crate::fixed_str`]).
+/// A fixed `char` array, printed as its text ([`text::fixed_str`]).
 pub(crate) struct CharArray<'a>(pub(crate) &'a [c_char]);
 
 impl fmt::Debug for CharArray<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt::Debug::fmt(&crate::fixed_str(self.0), f)
+        fmt::Debug::fmt(&text::fixed_str(self.0), f)
     }
 }

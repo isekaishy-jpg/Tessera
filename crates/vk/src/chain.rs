@@ -4,6 +4,7 @@
 
 use crate::vk;
 use core::ffi::c_void;
+use core::ptr;
 
 /// A struct that starts with `sType` and `pNext`, laid out as `VkBaseOutStructure`.
 ///
@@ -39,7 +40,7 @@ macro_rules! extends {
 /// Panics when `next` already has a chain: pushing it would follow a pointer the caller may have
 /// written by hand.
 pub(crate) fn link<T: TaggedStructure>(rest: *mut c_void, next: &mut T) -> *mut c_void {
-    let header = core::ptr::from_mut(next).cast::<vk::BaseOutStructure<'static>>();
+    let header = ptr::from_mut(next).cast::<vk::BaseOutStructure<'static>>();
     // SAFETY: `T: TaggedStructure`, so `next` starts with `sType` and `pNext` laid out as
     // `BaseOutStructure`, and `header` comes from a live `&mut T`.
     let chained = unsafe { (*header).p_next };

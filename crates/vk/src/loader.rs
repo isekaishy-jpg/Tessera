@@ -1,9 +1,10 @@
 //! Loading the Vulkan library (`vulkan-1.dll` on Windows; other platforms are an extension point)
 //! and looking commands up by any of their names.
 
-use crate::result::LoadError;
+use crate::result::{LoadError, Result};
 use crate::vk;
 use core::ffi::CStr;
+use core::mem;
 
 /// The first of `names` that `get` resolves.
 pub(crate) fn first(
@@ -21,14 +22,11 @@ pub(crate) fn first(
 #[inline]
 pub(crate) unsafe fn cast<F: Copy>(f: Option<vk::PfnVoidFunction>) -> Option<F> {
     const {
-        assert!(
-            core::mem::size_of::<Option<F>>()
-                == core::mem::size_of::<Option<vk::PfnVoidFunction>>()
-        );
+        assert!(size_of::<Option<F>>() == size_of::<Option<vk::PfnVoidFunction>>());
     }
     // SAFETY: `F` is a function pointer type with `f`'s signature (the caller's contract), so
     // both `Option`s are one nullable function pointer of the same size (asserted above).
-    unsafe { core::mem::transmute_copy::<Option<vk::PfnVoidFunction>, Option<F>>(&f) }
+    unsafe { mem::transmute_copy::<Option<vk::PfnVoidFunction>, Option<F>>(&f) }
 }
 
 /// `vkGetInstanceProcAddr` of the system's Vulkan library. The library stays loaded for the life
@@ -66,11 +64,11 @@ pub(crate) unsafe fn library() -> Result<vk::PfnGetInstanceProcAddr, LoadError> 
     // SAFETY: `module` is a loaded library and the name is NUL-terminated.
     let get = unsafe { get_proc_address(module, c"vkGetInstanceProcAddr".as_ptr()) };
     match get {
-        // SAFETY: the library's `vkGetInstanceProcAddr` has the signature
-        // `PfnGetInstanceProcAddr`; both are one function pointer.
-        Some(f) => Ok(unsafe {
-            core::mem::transmute::<vk::PfnVoidFunction, vk::PfnGetInstanceProcAddr>(f)
-        }),
+        Some(f) => {
+            // SAFETY: the library's `vkGetInstanceProcAddr` has the signature
+            // `PfnGetInstanceProcAddr`; both are one function pointer.
+            Ok(unsafe { mem::transmute::<vk::PfnVoidFunction, vk::PfnGetInstanceProcAddr>(f) })
+        }
         None => Err(LoadError::Symbol),
     }
 }

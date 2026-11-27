@@ -7,8 +7,9 @@
 //! settings file or working-directory file from outside the test reaches the layer. What the
 //! test cannot remove (per-user configuration) is caught by the program's probe step.
 
-use std::fs;
-use std::process::Command;
+use std::path::PathBuf;
+use std::process::{self, Command};
+use std::{env, fs};
 
 /// The start of each `ok` line, in run order.
 const STEPS: [&str; 12] = [
@@ -29,17 +30,26 @@ const STEPS: [&str; 12] = [
 /// The layer settings file the program runs with: synchronization validation on.
 const SETTINGS: &str = "khronos_validation.validate_sync = true\n";
 
+/// A temporary directory, removed when dropped (also when the test panics).
+struct TempDir(PathBuf);
+
+impl Drop for TempDir {
+    fn drop(&mut self) {
+        let _ = fs::remove_dir_all(&self.0);
+    }
+}
+
 #[test]
 fn runs_clean_under_validation() {
-    let dir = std::env::temp_dir().join(format!("tessera-vk-smoke-launch-{}", std::process::id()));
-    let _ = fs::remove_dir_all(&dir);
-    fs::create_dir_all(&dir).expect("the launch directory is created");
-    let settings = dir.join("vk_layer_settings.txt");
+    let dir = TempDir(env::temp_dir().join(format!("tessera-vk-smoke-launch-{}", process::id())));
+    let _ = fs::remove_dir_all(&dir.0);
+    fs::create_dir_all(&dir.0).expect("the launch directory is created");
+    let settings = dir.0.join("vk_layer_settings.txt");
     fs::write(&settings, SETTINGS).expect("the settings file is written");
 
     let mut command = Command::new(env!("CARGO_BIN_EXE_tessera-vk-smoke"));
-    command.current_dir(&dir);
-    for (name, _) in std::env::vars_os() {
+    command.current_dir(&dir.0);
+    for (name, _) in env::vars_os() {
         // Windows variable names are case-insensitive.
         if name
             .to_string_lossy()
@@ -51,7 +61,7 @@ fn runs_clean_under_validation() {
     }
     command.env("VK_LAYER_SETTINGS_PATH", &settings);
     let out = command.output();
-    let _ = fs::remove_dir_all(&dir);
+    drop(dir);
     let out = out.expect("tessera-vk-smoke runs");
 
     let stdout = String::from_utf8_lossy(&out.stdout);

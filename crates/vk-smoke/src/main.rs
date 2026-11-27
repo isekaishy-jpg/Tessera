@@ -14,6 +14,7 @@ use std::process::ExitCode;
 use tessera_vk::Entry;
 use tessera_vk_smoke::failure::{Context, Outcome};
 use tessera_vk_smoke::frame::Frame;
+use tessera_vk_smoke::pipeline::{Captured, Recipe};
 use tessera_vk_smoke::{gpu, pipeline, shader, validation};
 
 fn main() -> ExitCode {
@@ -42,7 +43,7 @@ fn run() -> Outcome<()> {
     Ok(())
 }
 
-/// Every step, in order. Each object is owned by a guard declared after its parent, so every
+/// Every step, in order. Each object is held by an owner declared after its parent, so every
 /// return, early or not, destroys them in reverse order of creation.
 fn steps() -> Outcome<()> {
     let shaders = shader::compile()?;
@@ -52,12 +53,12 @@ fn steps() -> Outcome<()> {
     let entry = unsafe { Entry::load() }.ctx("loading the Vulkan library")?;
     let instance = validation::create_instance(&entry)?;
     ok("instance with validation");
-    let gpu = gpu::pick(&instance)?;
-    ok(&format!("gpu {}", gpu.name));
-    let device = gpu::create_device(&instance, &gpu)?;
+    let chosen = gpu::pick(&instance)?;
+    ok(&format!("gpu {}", chosen.name));
+    let device = gpu::create_device(&instance, &chosen)?;
     ok("device");
 
-    let frame = Frame::create(&device, &gpu)?;
+    let frame = Frame::create(&device, &chosen)?;
     // SAFETY: the frame's command buffer is new, in the initial state.
     validation::probe(|| unsafe { frame.record_hazard() })?;
     ok("sync validation live (probe hazard reported)");
@@ -67,9 +68,9 @@ fn steps() -> Outcome<()> {
     unsafe { frame.stage() }?;
     ok("staged vertex buffer (map_memory2)");
 
-    let recipe = pipeline::Recipe::create(&device, &shaders)?;
+    let recipe = Recipe::create(&device, &shaders)?;
     let mut captured = pipeline::capture(&device, &recipe)?;
-    let bytes: usize = captured.iter().map(pipeline::Captured::size).sum();
+    let bytes: usize = captured.iter().map(Captured::size).sum();
     ok(&format!(
         "pipeline binaries captured: {}, {bytes} bytes",
         captured.len()

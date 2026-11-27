@@ -14,14 +14,19 @@ use tessera_vk::{Device, vk};
 /// What both pipelines are built from: one shader module per stage and an empty pipeline
 /// layout. Fields drop in declaration order.
 pub struct Recipe<'d> {
+    /// The empty pipeline layout.
     layout: DeviceOwned<'d, vk::PipelineLayout>,
+    /// The fragment stage's module.
     fragment: DeviceOwned<'d, vk::ShaderModule>,
+    /// The vertex stage's module.
     vertex: DeviceOwned<'d, vk::ShaderModule>,
 }
 
 /// One captured pipeline binary: its key and its bytes.
 pub struct Captured {
+    /// The binary's key.
     key: vk::PipelineBinaryKeyKHR<'static>,
+    /// The binary's bytes.
     data: Vec<u8>,
 }
 

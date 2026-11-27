@@ -2,15 +2,16 @@
 
 use crate::generated::tables::EntryTable;
 use crate::instance::Instance;
-use crate::result::{self, LoadError};
+use crate::result::{self, LoadError, Result};
 use crate::{loader, vk};
 use core::ffi::CStr;
-use core::fmt;
+use core::{fmt, ptr};
 
 /// The Vulkan entry point: the global commands, loaded from the system's Vulkan library or from
 /// a given `vkGetInstanceProcAddr`.
 #[derive(Clone)]
 pub struct Entry {
+    /// The global commands.
     table: EntryTable,
 }
 
@@ -21,7 +22,7 @@ impl Entry {
     /// # Safety
     ///
     /// Loading the library runs its initialisation code.
-    pub unsafe fn load() -> core::result::Result<Entry, LoadError> {
+    pub unsafe fn load() -> Result<Entry, LoadError> {
         // SAFETY: the caller accepts the library's initialisation code running.
         let get_instance_proc_addr = unsafe { loader::library()? };
         // SAFETY: the pointer is the library's own `vkGetInstanceProcAddr`.
@@ -64,26 +65,31 @@ impl Entry {
     ///
     /// # Panics
     ///
-    /// When the command is not loaded.
+    /// When `vkCreateInstance` or `vkGetInstanceProcAddr` is not loaded, before anything is
+    /// created.
     pub unsafe fn create_instance(
         &self,
         create_info: &vk::InstanceCreateInfo<'_>,
         allocator: Option<&vk::AllocationCallbacks<'_>>,
-    ) -> crate::Result<Instance> {
+    ) -> Result<Instance> {
         let f = crate::loaded(self.table.create_instance, "vkCreateInstance");
+        // Taken before the instance exists: a missing loader must not leave an instance nobody
+        // holds.
+        let get = crate::loaded(self.table.get_instance_proc_addr, "vkGetInstanceProcAddr");
         let mut instance = vk::Instance::null();
         // SAFETY: the caller upholds the valid usage; every pointer comes from a live reference
         // or local.
         let code = unsafe {
             f(
                 create_info,
-                allocator.map_or(core::ptr::null(), core::ptr::from_ref),
+                allocator.map_or(ptr::null(), ptr::from_ref),
                 &mut instance,
             )
         };
         result::check(code)?;
-        // SAFETY: `instance` was just created through this entry's `vkGetInstanceProcAddr`.
-        Ok(unsafe { Instance::load(self, instance) })
+        // SAFETY: `instance` was just created through this entry's loader, whose
+        // `vkGetInstanceProcAddr` is `get`.
+        Ok(unsafe { Instance::load_with(get, instance) })
     }
 }
 

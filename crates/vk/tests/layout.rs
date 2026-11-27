@@ -7,16 +7,21 @@
 //! naming whichever is missing.
 
 #[path = "layout/rust_layout.rs"]
+#[allow(
+    elided_lifetimes_in_paths,
+    reason = "generated: elided lifetime arguments keep the longest names within 100 columns"
+)]
 mod rust_layout;
 
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{self, Command};
+use std::{env, fs};
 
 /// The SDK's include directory.
 fn sdk_include() -> PathBuf {
-    let sdk = std::env::var_os("VULKAN_SDK")
+    let sdk = env::var_os("VULKAN_SDK")
         .filter(|s| !s.is_empty())
-        .expect("VULKAN_SDK is not set: the layout check compiles against the SDK's headers");
+        .expect("VULKAN_SDK is set (the layout check compiles against the SDK's headers)");
     let include = PathBuf::from(sdk).join("Include");
     assert!(
         include.join("vulkan").join("vulkan_core.h").is_file(),
@@ -28,8 +33,8 @@ fn sdk_include() -> PathBuf {
 
 /// `vcvars64.bat` of the newest Visual Studio with the C++ tools.
 fn vcvars() -> PathBuf {
-    let program_files = std::env::var_os("ProgramFiles(x86)")
-        .expect("ProgramFiles(x86) is not set: the layout check needs Windows and MSVC");
+    let program_files = env::var_os("ProgramFiles(x86)")
+        .expect("ProgramFiles(x86) is set (the layout check needs Windows and MSVC)");
     let vswhere = PathBuf::from(program_files)
         .join("Microsoft Visual Studio")
         .join("Installer")
@@ -50,7 +55,7 @@ fn vcvars() -> PathBuf {
             "installationPath",
         ])
         .output()
-        .expect("vswhere.exe did not run");
+        .expect("vswhere.exe runs");
     let install = String::from_utf8_lossy(&out.stdout).trim().to_string();
     assert!(
         !install.is_empty(),
@@ -73,7 +78,7 @@ fn c_lines(dir: &Path) -> Vec<String> {
         .join("layout.c");
     let exe = dir.join("layout.exe");
     let script = dir.join("build.bat");
-    std::fs::write(
+    fs::write(
         &script,
         format!(
             "@call \"{}\" >nul\r\n\
@@ -86,19 +91,19 @@ fn c_lines(dir: &Path) -> Vec<String> {
             source.display()
         ),
     )
-    .expect("write build.bat");
+    .expect("build.bat is written");
     let build = Command::new("cmd")
         .arg("/C")
         .arg(&script)
         .output()
-        .expect("cmd did not run");
+        .expect("cmd runs");
     assert!(
         build.status.success(),
         "cl failed:\n{}{}",
         String::from_utf8_lossy(&build.stdout),
         String::from_utf8_lossy(&build.stderr)
     );
-    let run = Command::new(&exe).output().expect("layout.exe did not run");
+    let run = Command::new(&exe).output().expect("layout.exe runs");
     assert!(run.status.success(), "layout.exe failed");
     String::from_utf8_lossy(&run.stdout)
         .lines()
@@ -111,15 +116,14 @@ struct TempDir(PathBuf);
 
 impl Drop for TempDir {
     fn drop(&mut self) {
-        let _ = std::fs::remove_dir_all(&self.0);
+        let _ = fs::remove_dir_all(&self.0);
     }
 }
 
 #[test]
 fn layout_matches_msvc() {
-    let dir =
-        TempDir(std::env::temp_dir().join(format!("tessera-vk-layout-{}", std::process::id())));
-    std::fs::create_dir_all(&dir.0).expect("create the build directory");
+    let dir = TempDir(env::temp_dir().join(format!("tessera-vk-layout-{}", process::id())));
+    fs::create_dir_all(&dir.0).expect("the build directory is created");
     let c = c_lines(&dir.0);
     drop(dir);
     let rust = rust_layout::lines();

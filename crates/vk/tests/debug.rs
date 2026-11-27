@@ -1,8 +1,9 @@
 //! `Debug` and `Display` of generated types: enum and flag names, unknown values, structs with
 //! string fields, handles and `vk::Result`; the text of fixed `char` arrays.
 
+use core::error::Error;
 use core::ffi::c_char;
-use tessera_vk::vk;
+use tessera_vk::{fixed_str, vk};
 
 #[test]
 fn enums_print_their_name_or_their_raw_value() {
@@ -26,7 +27,7 @@ fn flags_print_known_bits_by_name_and_the_rest_in_hex() {
 }
 
 #[test]
-fn flag_operations() {
+fn flag_operations_combine_and_test_bits() {
     let a = vk::ImageUsageFlags::SAMPLED | vk::ImageUsageFlags::STORAGE;
     assert!(a.contains(vk::ImageUsageFlags::SAMPLED));
     assert!(!a.contains(vk::ImageUsageFlags::SAMPLED | vk::ImageUsageFlags::TRANSFER_DST));
@@ -60,11 +61,11 @@ fn structs_list_their_fields_with_strings_readable() {
 #[test]
 fn fixed_str_reads_up_to_the_first_nul() {
     let chars = |bytes: &[u8]| -> Vec<c_char> { bytes.iter().map(|&b| b as c_char).collect() };
-    assert_eq!(tessera_vk::fixed_str(&chars(b"VK_LAYER\0junk")), "VK_LAYER");
-    assert_eq!(tessera_vk::fixed_str(&chars(b"no nul")), "no nul");
-    assert_eq!(tessera_vk::fixed_str(&chars(b"\0")), "");
+    assert_eq!(fixed_str(&chars(b"VK_LAYER\0junk")), "VK_LAYER");
+    assert_eq!(fixed_str(&chars(b"no nul")), "no nul");
+    assert_eq!(fixed_str(&chars(b"\0")), "");
     assert_eq!(
-        tessera_vk::fixed_str(&chars(b"\xc3\xa9\xff\0")),
+        fixed_str(&chars(b"\xc3\xa9\xff\0")),
         "\u{e9}\u{fffd}",
         "UTF-8 decodes, invalid bytes are replaced"
     );
@@ -88,12 +89,12 @@ fn results_display_their_name_and_description() {
         vk::Result::from_raw(12345).to_string(),
         "unknown VkResult 12345"
     );
-    let error: &dyn std::error::Error = &vk::Result::ERROR_DEVICE_LOST;
+    let error: &dyn Error = &vk::Result::ERROR_DEVICE_LOST;
     assert!(error.to_string().starts_with("ERROR_DEVICE_LOST"));
 }
 
 #[test]
-fn api_versions() {
+fn api_versions_pack_and_unpack() {
     let v = vk::make_api_version(0, 1, 4, 363);
     assert_eq!(
         (
