@@ -7,41 +7,45 @@
 
 use crate::failure::{Context, Outcome, fail};
 use crate::frame::{EXTENT, FORMAT, VERTEX_FORMAT, VERTEX_STRIDE};
-use crate::owned::{DeviceOwned, Owned, destroy};
+use crate::owned::{Owned, OwnedDevice, destroy};
 use crate::shader::Shaders;
-use tessera_vk::{Device, vk};
+use tessera_vk::vk;
 
 /// What both pipelines are built from: one shader module per stage and an empty pipeline
-/// layout. Fields drop in declaration order.
+/// layout, on one device. Owned fields drop in declaration order.
 pub struct Recipe<'d> {
+    /// The device every object belongs to.
+    device: &'d OwnedDevice<'d>,
     /// The empty pipeline layout.
-    layout: DeviceOwned<'d, vk::PipelineLayout>,
+    layout: Owned<'d, vk::PipelineLayout>,
     /// The fragment stage's module.
-    fragment: DeviceOwned<'d, vk::ShaderModule>,
+    fragment: Owned<'d, vk::ShaderModule>,
     /// The vertex stage's module.
-    vertex: DeviceOwned<'d, vk::ShaderModule>,
+    vertex: Owned<'d, vk::ShaderModule>,
+}
+
+/// The binaries captured from a recipe's pipeline, as keys and bytes only: no binary handle
+/// outlives [`Recipe::capture`].
+pub struct Captured<'r> {
+    /// The recipe the binaries were captured from, and rebuild with.
+    recipe: &'r Recipe<'r>,
+    /// One entry per binary, in the order the capture returned them.
+    binaries: Vec<Binary>,
 }
 
 /// One captured pipeline binary: its key and its bytes.
-pub struct Captured {
+struct Binary {
     /// The binary's key.
     key: vk::PipelineBinaryKeyKHR<'static>,
     /// The binary's bytes.
     data: Vec<u8>,
 }
 
-impl Captured {
-    /// The binary's size in bytes.
-    pub fn size(&self) -> usize {
-        self.data.len()
-    }
-}
-
 impl<'d> Recipe<'d> {
-    /// The modules of `shaders` and an empty pipeline layout.
-    pub fn create(device: &'d Device, shaders: &Shaders) -> Outcome<Recipe<'d>> {
-        let vertex = module(device, &shaders.vertex)?;
-        let fragment = module(device, &shaders.fragment)?;
+    /// The modules of `shaders` and an empty pipeline layout, on `device`.
+    pub fn create(device: &'d OwnedDevice<'d>, shaders: &Shaders) -> Outcome<Recipe<'d>> {
+        let vertex = module(device, shaders.vertex())?;
+        let fragment = module(device, shaders.fragment())?;
         let layout_info = vk::PipelineLayoutCreateInfo::default();
         // SAFETY: `device` is live; the layout is empty.
         let layout = unsafe { device.create_pipeline_layout(&layout_info, None) }
@@ -49,17 +53,107 @@ impl<'d> Recipe<'d> {
         // SAFETY: `layout` was just created on `device`; only this owner destroys it.
         let layout = unsafe { Owned::new(device, layout, destroy::pipeline_layout) };
         Ok(Recipe {
+            device,
             layout,
             fragment,
             vertex,
         })
     }
+
+    /// Creates the pipeline with binary capture, fetches each binary's key and bytes, then
+    /// releases the captured data; the binaries and the pipeline are destroyed on return.
+    pub fn capture(&self) -> Outcome<Captured<'_>> {
+        let device = self.device;
+        // SAFETY: there are no binaries.
+        let pipeline = unsafe { create(self, None, true) }?;
+        let info = vk::PipelineBinaryCreateInfoKHR::default().pipeline(pipeline.handle());
+        let mut count = vk::PipelineBinaryHandlesInfoKHR::default();
+        // SAFETY: `pipeline` was created with capture; a null array asks for the count and
+        // creates nothing.
+        let code = unsafe { device.create_pipeline_binaries_khr(&info, None, &mut count) }
+            .ctx("vkCreatePipelineBinariesKHR (count)")?;
+        expect_success(code, "vkCreatePipelineBinariesKHR (count)")?;
+        if count.pipeline_binary_count == 0 {
+            return fail("the capturing pipeline has no binaries");
+        }
+        let mut created = vec![vk::PipelineBinaryKHR::null(); count.pipeline_binary_count as usize];
+        let mut handles =
+            vk::PipelineBinaryHandlesInfoKHR::default().pipeline_binaries(&mut created);
+        // SAFETY: as above; `handles` has room for the reported count.
+        let result = unsafe { device.create_pipeline_binaries_khr(&info, None, &mut handles) };
+        let owned = own_binaries(device, &created);
+        let code = result.ctx("vkCreatePipelineBinariesKHR")?;
+        expect_success(code, "vkCreatePipelineBinariesKHR")?;
+
+        let mut binaries = Vec::with_capacity(owned.len());
+        for binary in &owned {
+            let mut key = vk::PipelineBinaryKeyKHR::default();
+            let data_info =
+                vk::PipelineBinaryDataInfoKHR::default().pipeline_binary(binary.handle());
+            // SAFETY: `binary` is live on `device`.
+            let data = unsafe { device.get_pipeline_binary_data_khr(&data_info, &mut key) }
+                .ctx("vkGetPipelineBinaryDataKHR")?;
+            binaries.push(Binary { key, data });
+        }
+        let release = vk::ReleaseCapturedPipelineDataInfoKHR::default().pipeline(pipeline.handle());
+        // SAFETY: `pipeline` was created with capture and its data has not been released.
+        unsafe { device.release_captured_pipeline_data_khr(&release, None) }
+            .ctx("vkReleaseCapturedPipelineDataKHR")?;
+        Ok(Captured {
+            recipe: self,
+            binaries,
+        })
+    }
+}
+
+impl<'r> Captured<'r> {
+    /// The number of binaries.
+    pub fn count(&self) -> usize {
+        self.binaries.len()
+    }
+
+    /// The binaries' total size in bytes.
+    pub fn size(&self) -> usize {
+        self.binaries.iter().map(|b| b.data.len()).sum()
+    }
+
+    /// Rebuilds the binaries from their keys and bytes alone and creates the pipeline from them,
+    /// without capture, on the recipe's device. The binaries are destroyed on return, after the
+    /// pipeline exists.
+    pub fn rebuild(&mut self) -> Outcome<Owned<'r, vk::Pipeline>> {
+        let recipe = self.recipe;
+        let device = recipe.device;
+        let keys: Vec<vk::PipelineBinaryKeyKHR<'static>> =
+            self.binaries.iter().map(|b| b.key).collect();
+        let data: Vec<vk::PipelineBinaryDataKHR<'_>> = self
+            .binaries
+            .iter_mut()
+            .map(|b| vk::PipelineBinaryDataKHR::default().data(&mut b.data))
+            .collect();
+        let keys_and_data =
+            vk::PipelineBinaryKeysAndDataKHR::default().pipeline_binary_keys(&keys, &data);
+        let info = vk::PipelineBinaryCreateInfoKHR::default().keys_and_data_info(&keys_and_data);
+        let mut created = vec![vk::PipelineBinaryKHR::null(); keys.len()];
+        let mut handles =
+            vk::PipelineBinaryHandlesInfoKHR::default().pipeline_binaries(&mut created);
+        // SAFETY: `device` is live; every key and byte span came from
+        // `vkGetPipelineBinaryDataKHR` on this device and outlives the call; `handles` has room
+        // for every binary.
+        let result = unsafe { device.create_pipeline_binaries_khr(&info, None, &mut handles) };
+        // Held until return, so the binaries outlive the pipeline's creation.
+        let _binaries = own_binaries(device, &created);
+        let code = result.ctx("vkCreatePipelineBinariesKHR (from data)")?;
+        expect_success(code, "vkCreatePipelineBinariesKHR (from data)")?;
+        // SAFETY: the binaries were just created on the recipe's device, in the order the
+        // capture returned them (every entry is non-null after a `SUCCESS`).
+        unsafe { create(recipe, Some(created.as_slice()), false) }
+    }
 }
 
 /// The shader module of `spirv`.
-fn module<'d>(device: &'d Device, spirv: &[u32]) -> Outcome<DeviceOwned<'d, vk::ShaderModule>> {
+fn module<'d>(device: &'d OwnedDevice<'d>, spirv: &[u32]) -> Outcome<Owned<'d, vk::ShaderModule>> {
     let info = vk::ShaderModuleCreateInfo::default().code(spirv);
-    // SAFETY: `device` is live; `spirv` is a whole SPIR-V module (checked by `shader`).
+    // SAFETY: `device` is live; `spirv` is a module the device accepts (`Shaders`' contract).
     let module = unsafe { device.create_shader_module(&info, None) }.ctx("vkCreateShaderModule")?;
     // SAFETY: `module` was just created on `device`; only this owner destroys it.
     Ok(unsafe { Owned::new(device, module, destroy::shader_module) })
@@ -67,9 +161,9 @@ fn module<'d>(device: &'d Device, spirv: &[u32]) -> Outcome<DeviceOwned<'d, vk::
 
 /// Owns every non-null entry of `binaries`, created on `device` by one batch call.
 fn own_binaries<'d>(
-    device: &'d Device,
+    device: &'d OwnedDevice<'d>,
     binaries: &[vk::PipelineBinaryKHR],
-) -> Vec<DeviceOwned<'d, vk::PipelineBinaryKHR>> {
+) -> Vec<Owned<'d, vk::PipelineBinaryKHR>> {
     binaries
         .iter()
         .filter(|b| !b.is_null())
@@ -81,19 +175,19 @@ fn own_binaries<'d>(
         .collect()
 }
 
-/// Creates the triangle pipeline from `recipe`: capturing binary data when `capture`, or from
-/// `binaries` when given. Every other field is the same for both pipelines, as
-/// `VkPipelineBinaryInfoKHR` requires.
+/// Creates the triangle pipeline from `recipe` on its device: capturing binary data when
+/// `capture`, or from `binaries` when given. Every other field is the same for both pipelines,
+/// as `VkPipelineBinaryInfoKHR` requires.
 ///
 /// # Safety
 ///
-/// `device` created `recipe` and every binary.
+/// Every binary was created on the recipe's device.
 unsafe fn create<'d>(
-    device: &'d Device,
     recipe: &Recipe<'d>,
     binaries: Option<&[vk::PipelineBinaryKHR]>,
     capture: bool,
-) -> Outcome<DeviceOwned<'d, vk::Pipeline>> {
+) -> Outcome<Owned<'d, vk::Pipeline>> {
+    let device = recipe.device;
     let stages = [
         vk::PipelineShaderStageCreateInfo::default()
             .stage(vk::ShaderStageFlags::VERTEX)
@@ -169,9 +263,9 @@ unsafe fn create<'d>(
         info = info.push_next(&mut binary_info);
     }
     let mut pipelines = [vk::Pipeline::null()];
-    // SAFETY: the caller guarantees `device` created `recipe` and the binaries; every pointer
-    // in `info` borrows a local that outlives the call; the cache is null, as capture and
-    // binaries require.
+    // SAFETY: the recipe's objects are its device's, and the caller guarantees the binaries
+    // are too; every pointer in `info` borrows a local that outlives the call; the cache is
+    // null, as capture and binaries require.
     let result = unsafe {
         device.create_graphics_pipelines(vk::PipelineCache::null(), &[info], None, &mut pipelines)
     };
@@ -185,74 +279,6 @@ unsafe fn create<'d>(
         Some(pipeline) if code == vk::Result::SUCCESS => Ok(pipeline),
         _ => fail(format!("vkCreateGraphicsPipelines returned {code}")),
     }
-}
-
-/// Creates the pipeline with binary capture, fetches each binary's key and bytes, then releases
-/// the captured data; the binaries and the pipeline are destroyed on return.
-pub fn capture<'d>(device: &'d Device, recipe: &Recipe<'d>) -> Outcome<Vec<Captured>> {
-    // SAFETY: `device` created `recipe`; there are no binaries.
-    let pipeline = unsafe { create(device, recipe, None, true) }?;
-    let info = vk::PipelineBinaryCreateInfoKHR::default().pipeline(pipeline.handle());
-    let mut count = vk::PipelineBinaryHandlesInfoKHR::default();
-    // SAFETY: `pipeline` was created with capture; a null array asks for the count and creates
-    // nothing.
-    let code = unsafe { device.create_pipeline_binaries_khr(&info, None, &mut count) }
-        .ctx("vkCreatePipelineBinariesKHR (count)")?;
-    expect_success(code, "vkCreatePipelineBinariesKHR (count)")?;
-    if count.pipeline_binary_count == 0 {
-        return fail("the capturing pipeline has no binaries");
-    }
-    let mut created = vec![vk::PipelineBinaryKHR::null(); count.pipeline_binary_count as usize];
-    let mut handles = vk::PipelineBinaryHandlesInfoKHR::default().pipeline_binaries(&mut created);
-    // SAFETY: as above; `handles` has room for the reported count.
-    let result = unsafe { device.create_pipeline_binaries_khr(&info, None, &mut handles) };
-    let binaries = own_binaries(device, &created);
-    let code = result.ctx("vkCreatePipelineBinariesKHR")?;
-    expect_success(code, "vkCreatePipelineBinariesKHR")?;
-
-    let mut captured = Vec::with_capacity(binaries.len());
-    for binary in &binaries {
-        let mut key = vk::PipelineBinaryKeyKHR::default();
-        let data_info = vk::PipelineBinaryDataInfoKHR::default().pipeline_binary(binary.handle());
-        // SAFETY: `binary` is live on `device`.
-        let data = unsafe { device.get_pipeline_binary_data_khr(&data_info, &mut key) }
-            .ctx("vkGetPipelineBinaryDataKHR")?;
-        captured.push(Captured { key, data });
-    }
-    let release = vk::ReleaseCapturedPipelineDataInfoKHR::default().pipeline(pipeline.handle());
-    // SAFETY: `pipeline` was created with capture and its data has not been released.
-    unsafe { device.release_captured_pipeline_data_khr(&release, None) }
-        .ctx("vkReleaseCapturedPipelineDataKHR")?;
-    Ok(captured)
-}
-
-/// Rebuilds the binaries from `captured` (keys and bytes only) and creates the pipeline from
-/// them, without capture. The binaries are destroyed on return, after the pipeline exists.
-pub fn rebuild<'d>(
-    device: &'d Device,
-    recipe: &Recipe<'d>,
-    captured: &mut [Captured],
-) -> Outcome<DeviceOwned<'d, vk::Pipeline>> {
-    let keys: Vec<vk::PipelineBinaryKeyKHR<'static>> = captured.iter().map(|c| c.key).collect();
-    let data: Vec<vk::PipelineBinaryDataKHR<'_>> = captured
-        .iter_mut()
-        .map(|c| vk::PipelineBinaryDataKHR::default().data(&mut c.data))
-        .collect();
-    let keys_and_data =
-        vk::PipelineBinaryKeysAndDataKHR::default().pipeline_binary_keys(&keys, &data);
-    let info = vk::PipelineBinaryCreateInfoKHR::default().keys_and_data_info(&keys_and_data);
-    let mut created = vec![vk::PipelineBinaryKHR::null(); keys.len()];
-    let mut handles = vk::PipelineBinaryHandlesInfoKHR::default().pipeline_binaries(&mut created);
-    // SAFETY: `device` is live; every key and byte span came from `vkGetPipelineBinaryDataKHR`
-    // on this device and outlives the call; `handles` has room for every binary.
-    let result = unsafe { device.create_pipeline_binaries_khr(&info, None, &mut handles) };
-    // Held until return, so the binaries outlive the pipeline's creation.
-    let _binaries = own_binaries(device, &created);
-    let code = result.ctx("vkCreatePipelineBinariesKHR (from data)")?;
-    expect_success(code, "vkCreatePipelineBinariesKHR (from data)")?;
-    // SAFETY: `device` created `recipe` and the binaries, in the order capture returned them
-    // (every entry is non-null after a `SUCCESS`).
-    unsafe { create(device, recipe, Some(created.as_slice()), false) }
 }
 
 /// `code` must be `SUCCESS`: the other success codes of `vkCreatePipelineBinariesKHR`

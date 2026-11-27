@@ -6,10 +6,9 @@
 //! no ownership transfer.
 
 use crate::failure::{Context, Outcome, fail};
-use crate::gpu::Gpu;
-use crate::owned::{DeviceOwned, Owned, destroy};
-use core::slice;
-use tessera_vk::{Device, vk};
+use crate::owned::{Owned, OwnedDevice, destroy};
+use core::{ptr, slice};
+use tessera_vk::vk;
 
 /// The image format; the pipeline renders to it.
 pub const FORMAT: vk::Format = vk::Format::R8G8B8A8_UNORM;
@@ -51,24 +50,24 @@ const COLOR: vk::ImageSubresourceRange = vk::ImageSubresourceRange {
 /// before its memory.
 struct Bound<'d, H: Copy> {
     /// The buffer or image.
-    resource: DeviceOwned<'d, H>,
+    resource: Owned<'d, H>,
     /// Its memory.
-    memory: DeviceOwned<'d, vk::DeviceMemory>,
+    memory: Owned<'d, vk::DeviceMemory>,
 }
 
 /// Everything the frame owns. Fields drop in declaration order: fence, pool (which frees the
 /// command buffer), view, image, then the buffers.
 pub struct Frame<'d> {
     /// The device every object belongs to.
-    device: &'d Device,
+    device: &'d OwnedDevice<'d>,
     /// Signalled when the submitted frame completes.
-    fence: DeviceOwned<'d, vk::Fence>,
+    fence: Owned<'d, vk::Fence>,
     /// The command pool on the graphics queue family.
-    pool: DeviceOwned<'d, vk::CommandPool>,
+    pool: Owned<'d, vk::CommandPool>,
     /// The one command buffer, freed with `pool`.
     commands: vk::CommandBuffer,
     /// The colour attachment's view of `image`.
-    view: DeviceOwned<'d, vk::ImageView>,
+    view: Owned<'d, vk::ImageView>,
     /// The colour image the triangle is rendered into.
     image: Bound<'d, vk::Image>,
     /// Host-visible buffer the image is copied into.
@@ -82,23 +81,23 @@ pub struct Frame<'d> {
 }
 
 impl<'d> Frame<'d> {
-    /// Creates every object of the frame on `device` (created on `gpu`). Each is owned before
-    /// the next fallible call, so a failure destroys what was created.
-    pub fn create(device: &'d Device, gpu: &Gpu) -> Outcome<Frame<'d>> {
+    /// Creates every object of the frame on `device`, with memory types and the queue family of
+    /// its GPU. Each is owned before the next fallible call, so a failure destroys what was
+    /// created.
+    pub fn create(device: &'d OwnedDevice<'d>) -> Outcome<Frame<'d>> {
         let host = vk::MemoryPropertyFlags::HOST_VISIBLE | vk::MemoryPropertyFlags::HOST_COHERENT;
         let local = vk::MemoryPropertyFlags::DEVICE_LOCAL;
+        let queue_family = device.gpu().queue_family();
         let staging = buffer(
             device,
-            gpu,
             VERTEX_BYTES,
             vk::BufferUsageFlags::TRANSFER_SRC,
             host,
         )?;
         let vertex_usage = vk::BufferUsageFlags::TRANSFER_DST | vk::BufferUsageFlags::VERTEX_BUFFER;
-        let vertex = buffer(device, gpu, VERTEX_BYTES, vertex_usage, local)?;
+        let vertex = buffer(device, VERTEX_BYTES, vertex_usage, local)?;
         let readback = buffer(
             device,
-            gpu,
             READBACK_BYTES,
             vk::BufferUsageFlags::TRANSFER_DST,
             host,
@@ -124,7 +123,7 @@ impl<'d> Frame<'d> {
         let image = unsafe { Owned::new(device, image, destroy::image) };
         // SAFETY: `image` is live on `device`.
         let requirements = unsafe { device.get_image_memory_requirements(image.handle()) };
-        let image_memory = allocate(device, gpu, requirements, local)?;
+        let image_memory = allocate(device, requirements, local)?;
         // SAFETY: `image_memory` was allocated for `image`'s requirements; neither is bound.
         unsafe { device.bind_image_memory(image.handle(), image_memory.handle(), 0) }
             .ctx("vkBindImageMemory")?;
@@ -143,8 +142,8 @@ impl<'d> Frame<'d> {
         // SAFETY: `view` was just created on `device`; only this owner destroys it.
         let view = unsafe { Owned::new(device, view, destroy::image_view) };
 
-        let pool_info = vk::CommandPoolCreateInfo::default().queue_family_index(gpu.queue_family);
-        // SAFETY: `device` has a queue in `gpu.queue_family`.
+        let pool_info = vk::CommandPoolCreateInfo::default().queue_family_index(queue_family);
+        // SAFETY: `device` has a queue in `queue_family` (`OwnedDevice::new`).
         let pool =
             unsafe { device.create_command_pool(&pool_info, None) }.ctx("vkCreateCommandPool")?;
         // SAFETY: `pool` was just created on `device`; only this owner destroys it, which also
@@ -163,8 +162,8 @@ impl<'d> Frame<'d> {
             .ctx("vkCreateFence")?;
         // SAFETY: `fence` was just created on `device`; only this owner destroys it.
         let fence = unsafe { Owned::new(device, fence, destroy::fence) };
-        // SAFETY: the device was created with one queue in `gpu.queue_family`.
-        let queue = unsafe { device.get_device_queue(gpu.queue_family, 0) };
+        // SAFETY: the device was created with one queue in `queue_family` (`OwnedDevice::new`).
+        let queue = unsafe { device.get_device_queue(queue_family, 0) };
         Ok(Frame {
             device,
             fence,
@@ -259,17 +258,28 @@ impl<'d> Frame<'d> {
         }
     }
 
-    /// Records and submits the frame, then waits for its fence: copy staging to vertex buffer,
-    /// render the triangle with `pipeline` over a black clear, copy the image to the readback
-    /// buffer. It returns with no work in flight, also on failure: after a successful submit, a
-    /// failed fence wait waits for the queue before returning.
+    /// Records the frame and submits it through [`OwnedDevice::submit_and_wait`]: copy staging to
+    /// vertex buffer, render the triangle with `pipeline` over a black clear, copy the image to
+    /// the readback buffer. It returns with no work in flight, or with the instance abandoned
+    /// when completion could not be established.
     ///
     /// # Safety
     ///
-    /// `pipeline` was created on the frame's device, and the frame's command buffer is in the
-    /// initial state.
-    pub unsafe fn render(&self, pipeline: vk::Pipeline) -> Outcome<()> {
+    /// `pipeline` renders [`FORMAT`] with the frame's vertex layout ([`VERTEX_FORMAT`] and
+    /// [`VERTEX_STRIDE`] at binding 0, location 0, as [`crate::pipeline::Captured::rebuild`]
+    /// builds it); the frame's command buffer is in the initial state; and `render` has not run
+    /// on this frame before, so its fence is unsignalled.
+    ///
+    /// # Panics
+    ///
+    /// When `pipeline` belongs to another device, before any Vulkan call.
+    pub unsafe fn render(&self, pipeline: &Owned<'d, vk::Pipeline>) -> Outcome<()> {
+        assert!(
+            ptr::eq(pipeline.device(), self.device),
+            "the pipeline belongs to another device"
+        );
         let device = self.device;
+        let pipeline = pipeline.handle();
         let cmd = self.commands;
         let (staging, vertex) = (
             self.staging.resource.handle(),
@@ -345,10 +355,10 @@ impl<'d> Frame<'d> {
             .size(vk::WHOLE_SIZE)];
         let before_read = vk::DependencyInfo::default().buffer_memory_barriers(&to_host);
 
-        // SAFETY: every object is the frame's own (the caller guarantees `pipeline` and that
-        // `cmd` is in the initial state); every pointer borrows a local that outlives its call;
-        // each barrier orders the accesses on both sides of it (staging write → vertex read,
-        // clear and draw → copy → host read).
+        // SAFETY: every object is the frame's own, `pipeline` too (asserted above), and the
+        // caller guarantees its layout and that `cmd` is in the initial state; every pointer
+        // borrows a local that outlives its call; each barrier orders the accesses on both sides
+        // of it (staging write → vertex read, clear and draw → copy → host read).
         unsafe {
             device
                 .begin_command_buffer(cmd, &begin)
@@ -373,22 +383,9 @@ impl<'d> Frame<'d> {
         }
         let command_infos = [vk::CommandBufferSubmitInfo::default().command_buffer(cmd)];
         let submits = [vk::SubmitInfo2::default().command_buffer_infos(&command_infos)];
-        let fence = self.fence.handle();
-        // SAFETY: `cmd` is recorded, the queue and fence belong to the frame's device, and the
-        // fence is unsignalled. A failed submit leaves nothing pending.
-        unsafe { device.queue_submit2(self.queue, &submits, fence) }.ctx("vkQueueSubmit2")?;
-        // SAFETY: the fence is live; the wait makes the results visible before this returns.
-        let waited = unsafe { device.wait_for_fences(&[fence], true, u64::MAX) };
-        if waited == Ok(vk::Result::SUCCESS) {
-            return Ok(());
-        }
-        // SAFETY: the queue is live. The result is ignored: the wait's failure is the one
-        // reported, and `ERROR_DEVICE_LOST` still ends the queue's work.
-        let _ = unsafe { device.queue_wait_idle(self.queue) };
-        match waited {
-            Ok(code) => fail(format!("vkWaitForFences after the submit returned {code}")),
-            Err(e) => fail(format!("vkWaitForFences after the submit: {e}")),
-        }
+        // SAFETY: `cmd` was recorded on the frame's device; the queue and fence are the
+        // device's, and the fence is unsignalled (`render` has not run before).
+        unsafe { device.submit_and_wait(self.queue, &submits, self.fence.handle()) }
     }
 
     /// Maps the readback buffer through `vkMapMemory2` and checks a centre pixel (the green
@@ -430,8 +427,7 @@ fn pixel(pixels: &[u8], x: u32, y: u32) -> [u8; 4] {
 
 /// A buffer of `size` bytes with `usage`, bound to memory with `flags`.
 fn buffer<'d>(
-    device: &'d Device,
-    gpu: &Gpu,
+    device: &'d OwnedDevice<'d>,
     size: vk::DeviceSize,
     usage: vk::BufferUsageFlags,
     flags: vk::MemoryPropertyFlags,
@@ -443,7 +439,7 @@ fn buffer<'d>(
     let buffer = unsafe { Owned::new(device, buffer, destroy::buffer) };
     // SAFETY: `buffer` is live on `device`.
     let requirements = unsafe { device.get_buffer_memory_requirements(buffer.handle()) };
-    let memory = allocate(device, gpu, requirements, flags)?;
+    let memory = allocate(device, requirements, flags)?;
     // SAFETY: `memory` was allocated for `buffer`'s requirements; neither is bound.
     unsafe { device.bind_buffer_memory(buffer.handle(), memory.handle(), 0) }
         .ctx("vkBindBufferMemory")?;
@@ -455,16 +451,17 @@ fn buffer<'d>(
 
 /// Memory for `requirements` in the first allowed type with `flags`.
 fn allocate<'d>(
-    device: &'d Device,
-    gpu: &Gpu,
+    device: &'d OwnedDevice<'d>,
     requirements: vk::MemoryRequirements,
     flags: vk::MemoryPropertyFlags,
-) -> Outcome<DeviceOwned<'d, vk::DeviceMemory>> {
-    let index = gpu.memory_type(requirements.memory_type_bits, flags)?;
+) -> Outcome<Owned<'d, vk::DeviceMemory>> {
+    let index = device
+        .gpu()
+        .memory_type(requirements.memory_type_bits, flags)?;
     let info = vk::MemoryAllocateInfo::default()
         .allocation_size(requirements.size)
         .memory_type_index(index);
-    // SAFETY: `device` was created on `gpu`, so `index` is one of its memory types.
+    // SAFETY: `device` was created on its GPU, so `index` is one of its memory types.
     let memory = unsafe { device.allocate_memory(&info, None) }.ctx("vkAllocateMemory")?;
     // SAFETY: `memory` was just allocated on `device`; only this owner frees it.
     Ok(unsafe { Owned::new(device, memory, destroy::memory) })

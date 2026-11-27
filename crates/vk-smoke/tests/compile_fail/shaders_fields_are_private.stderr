@@ -1,0 +1,9 @@
+error[E0451]: fields `vertex` and `fragment` of struct `Shaders` are private
+ --> tests/compile_fail/shaders_fields_are_private.rs:7:9
+  |
+6 |     let _shaders = Shaders {
+  |                    ------- in this type
+7 |         vertex: Vec::new(),
+  |         ^^^^^^ private field
+8 |         fragment: Vec::new(),
+  |         ^^^^^^^^ private field

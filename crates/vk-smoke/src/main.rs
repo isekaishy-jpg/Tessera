@@ -11,11 +11,12 @@
 //! 1 on any failure or message.
 
 use std::process::ExitCode;
-use tessera_vk::Entry;
-use tessera_vk_smoke::failure::{Context, Outcome};
+use tessera_vk_smoke::failure::{Outcome, fail};
 use tessera_vk_smoke::frame::Frame;
-use tessera_vk_smoke::pipeline::{Captured, Recipe};
-use tessera_vk_smoke::{gpu, pipeline, shader, validation};
+use tessera_vk_smoke::owned::{OwnedDevice, OwnedInstance};
+use tessera_vk_smoke::pipeline::Recipe;
+use tessera_vk_smoke::shader::{self, Shaders};
+use tessera_vk_smoke::{gpu, validation};
 
 fn main() -> ExitCode {
     let result = run();
@@ -44,21 +45,35 @@ fn run() -> Outcome<()> {
 }
 
 /// Every step, in order. Each object is held by an owner declared after its parent, so every
-/// return, early or not, destroys them in reverse order of creation.
+/// return, early or not, destroys them in reverse order of creation, unless completion of the
+/// device's work could not be established: then nothing more is destroyed, and the run fails.
 fn steps() -> Outcome<()> {
     let shaders = shader::compile()?;
     ok("shader compiled");
-    // SAFETY: loading the system's Vulkan loader runs its initialisation code, which this
+    // SAFETY: loading the system's Vulkan library runs its initialisation code, which this
     // program accepts.
-    let entry = unsafe { Entry::load() }.ctx("loading the Vulkan library")?;
-    let instance = validation::create_instance(&entry)?;
+    let instance = unsafe { validation::create_instance() }?;
     ok("instance with validation");
-    let chosen = gpu::pick(&instance)?;
-    ok(&format!("gpu {}", chosen.name));
-    let device = gpu::create_device(&instance, &chosen)?;
-    ok("device");
+    on_device(&instance, &shaders)
+}
 
-    let frame = Frame::create(&device, &chosen)?;
+/// The steps on the device, then its close; a failed close is reported with the steps' result.
+fn on_device(instance: &OwnedInstance, shaders: &Shaders) -> Outcome<()> {
+    let chosen = gpu::pick(instance)?;
+    ok(&format!("gpu {}", chosen.name()));
+    let device = chosen.create_device()?;
+    ok("device");
+    let result = frame_steps(&device, shaders);
+    match (result, device.close()) {
+        (Ok(()), closed) => closed,
+        (Err(failure), Ok(())) => Err(failure),
+        (Err(failure), Err(close)) => fail(format!("{failure}; {close}")),
+    }
+}
+
+/// The steps on the device's objects; they are destroyed on return, before the device.
+fn frame_steps(device: &OwnedDevice<'_>, shaders: &Shaders) -> Outcome<()> {
+    let frame = Frame::create(device)?;
     // SAFETY: the frame's command buffer is new, in the initial state.
     validation::probe(|| unsafe { frame.record_hazard() })?;
     ok("sync validation live (probe hazard reported)");
@@ -68,19 +83,19 @@ fn steps() -> Outcome<()> {
     unsafe { frame.stage() }?;
     ok("staged vertex buffer (map_memory2)");
 
-    let recipe = Recipe::create(&device, &shaders)?;
-    let mut captured = pipeline::capture(&device, &recipe)?;
-    let bytes: usize = captured.iter().map(Captured::size).sum();
+    let recipe = Recipe::create(device, shaders)?;
+    let mut captured = recipe.capture()?;
     ok(&format!(
-        "pipeline binaries captured: {}, {bytes} bytes",
-        captured.len()
+        "pipeline binaries captured: {}, {} bytes",
+        captured.count(),
+        captured.size()
     ));
-    let rebuilt = pipeline::rebuild(&device, &recipe, &mut captured)?;
+    let rebuilt = captured.rebuild()?;
     ok("pipeline rebuilt from binaries");
 
-    // SAFETY: `rebuilt` was created on the frame's device; the probe reset the command buffer
-    // to the initial state.
-    unsafe { frame.render(rebuilt.handle()) }?;
+    // SAFETY: `rebuild` builds the pipeline with the frame's format and vertex layout; the
+    // probe reset the command buffer to the initial state; `render` has not run on this frame.
+    unsafe { frame.render(&rebuilt) }?;
     ok("rendered and read back");
     // SAFETY: `render` completed (it waited for its submit).
     unsafe { frame.check_pixels() }?;

@@ -9,5 +9,8 @@ publish.workspace = true
 [dependencies]
 tessera-vk = { path = "../vk" }
 
+[dev-dependencies]
+trybuild = "1"
+
 [lints]
 workspace = true

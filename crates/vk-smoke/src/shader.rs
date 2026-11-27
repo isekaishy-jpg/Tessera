@@ -17,12 +17,36 @@ const SOURCE: &str = include_str!("smoke.slang");
 /// The first word of every SPIR-V module.
 pub const SPIRV_MAGIC: u32 = 0x0723_0203;
 
-/// The compiled stages, each a SPIR-V module whose entry point is `main`.
+/// The two stages, each a SPIR-V module whose entry point is `main`. They come from [`compile`]
+/// or the vouching [`Shaders::from_spirv`].
 pub struct Shaders {
-    /// `vertexMain`.
-    pub vertex: Vec<u32>,
-    /// `fragmentMain`.
-    pub fragment: Vec<u32>,
+    /// The vertex stage (`vertexMain`).
+    vertex: Vec<u32>,
+    /// The fragment stage (`fragmentMain`).
+    fragment: Vec<u32>,
+}
+
+impl Shaders {
+    /// Stages given by the caller.
+    ///
+    /// # Safety
+    ///
+    /// Every device [`crate::pipeline::Recipe::create`] passes them to accepts each as its
+    /// stage's module with entry point `main`. A real device requires valid SPIR-V
+    /// (VUID-VkShaderModuleCreateInfo-pCode-08737); a mock that never reads them qualifies.
+    pub unsafe fn from_spirv(vertex: Vec<u32>, fragment: Vec<u32>) -> Shaders {
+        Shaders { vertex, fragment }
+    }
+
+    /// The vertex stage's module.
+    pub fn vertex(&self) -> &[u32] {
+        &self.vertex
+    }
+
+    /// The fragment stage's module.
+    pub fn fragment(&self) -> &[u32] {
+        &self.fragment
+    }
 }
 
 /// Compiles both stages of `smoke.slang` in a fresh temp directory that is removed afterwards
@@ -58,7 +82,8 @@ fn slangc() -> Outcome<PathBuf> {
     Ok(path)
 }
 
-/// Writes the source into `dir` and compiles both stages there with `slangc`.
+/// Writes the source into `dir` and compiles both stages there with `slangc`, whose output is
+/// trusted to be valid SPIR-V (only its length and magic are checked).
 fn compile_in(slangc: &Path, dir: &Path) -> Outcome<Shaders> {
     fs::create_dir_all(dir).ctx(dir.display())?;
     let source = dir.join("smoke.slang");

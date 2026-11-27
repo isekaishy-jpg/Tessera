@@ -102,11 +102,19 @@ fn messenger_info() -> vk::DebugUtilsMessengerCreateInfoEXT<'static> {
         .pfn_user_callback(Some(on_message))
 }
 
-/// Creates the instance (Vulkan 1.4) with the validation layer and a messenger, requesting
-/// synchronization validation (`validate_sync` through `VK_EXT_layer_settings`, the
-/// lowest-priority source; [`probe`] proves it is live). A messenger is also chained into the
-/// create info, so instance creation and destruction are counted too.
-pub fn create_instance(entry: &Entry) -> Outcome<OwnedInstance> {
+/// Loads the system's Vulkan library and creates the instance (Vulkan 1.4) with the validation
+/// layer and a messenger, requesting synchronization validation (`validate_sync` through
+/// `VK_EXT_layer_settings`, the lowest-priority source; [`probe`] proves it is live). A
+/// messenger is also chained into the create info, so instance creation and destruction are
+/// counted too.
+///
+/// # Safety
+///
+/// Loading the library runs its initialisation code. The library is never freed, so every table
+/// loaded through it stays valid.
+pub unsafe fn create_instance() -> Outcome<OwnedInstance> {
+    // SAFETY: the caller accepts the library's initialisation code running.
+    let entry = unsafe { Entry::load() }.ctx("loading the Vulkan library")?;
     // SAFETY: global enumerations with no preconditions.
     let layers = unsafe { entry.enumerate_instance_layer_properties() }
         .ctx("vkEnumerateInstanceLayerProperties")?;
@@ -146,7 +154,9 @@ pub fn create_instance(entry: &Entry) -> Outcome<OwnedInstance> {
     // SAFETY: every pointer in `info` borrows a local that outlives the call; the layer and its
     // extension were checked above, and `VK_EXT_debug_utils` is a loader extension.
     let instance = unsafe { entry.create_instance(&info, None) }.ctx("vkCreateInstance")?;
-    // SAFETY: `instance` was just created, and only this owner destroys it.
+    // SAFETY: `instance` was just created for Vulkan 1.4, so every command `pick`,
+    // `Gpu::create_device` and the drop call is valid on it; its table comes from a library that
+    // stays loaded for the life of the process (`Entry::load`); only this owner destroys it.
     let mut instance = unsafe { OwnedInstance::new(instance) };
     // SAFETY: `instance` is live and enables `VK_EXT_debug_utils`.
     let messenger = unsafe { instance.create_debug_utils_messenger_ext(&messenger_info(), None) }

@@ -149,6 +149,7 @@ name = "tessera-vk-smoke"
 version = "0.1.0"
 dependencies = [
  "tessera-vk",
+ "trybuild",
 ]
 
 [[package]]
