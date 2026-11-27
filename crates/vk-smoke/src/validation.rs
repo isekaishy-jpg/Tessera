@@ -1,22 +1,55 @@
-//! The validation layer: the instance enables `VK_LAYER_KHRONOS_validation` with synchronization
-//! validation on, and every warning or error message it (or the loader) reports is counted.
+//! The validation layer: the instance enables `VK_LAYER_KHRONOS_validation` and requests
+//! synchronization validation; every warning or error message it (or the loader) reports is
+//! counted against the gate. [`probe`] proves synchronization validation is live: it records one
+//! known hazard and requires the layer to report exactly that.
 
 use crate::failure::{Context, Outcome, fail};
+use crate::owned::OwnedInstance;
 use crate::text;
-use core::ffi::{CStr, c_void};
+use core::ffi::{CStr, c_char, c_void};
 use std::io::Write;
-use std::sync::atomic::{AtomicU32, Ordering};
-use tessera_vk::{Entry, Instance, vk};
+use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use tessera_vk::{Entry, vk};
 
 /// The Khronos validation layer.
 const LAYER: &CStr = c"VK_LAYER_KHRONOS_validation";
 
-/// Warning and error messages reported so far.
-static MESSAGES: AtomicU32 = AtomicU32::new(0);
+/// The message id of the hazard [`probe`] expects: two writes with no dependency between them.
+pub const HAZARD: &CStr = c"SYNC-HAZARD-WRITE-AFTER-WRITE";
 
-/// Warning and error messages reported so far.
+/// Messages counted against the gate.
+static GATE: AtomicU32 = AtomicU32::new(0);
+/// True while [`probe`] runs its recording.
+static PROBING: AtomicBool = AtomicBool::new(false);
+/// [`HAZARD`] messages seen while probing.
+static HAZARDS: AtomicU32 = AtomicU32::new(0);
+
+/// Warning and error messages counted against the gate so far (every message except the one
+/// hazard a probe expects).
 pub fn messages() -> u32 {
-    MESSAGES.load(Ordering::SeqCst)
+    GATE.load(Ordering::SeqCst)
+}
+
+/// Runs `record` with probing on, then requires that it succeeded, that the layer reported
+/// [`HAZARD`] exactly once, and that it reported nothing else meanwhile.
+pub fn probe(record: impl FnOnce() -> Outcome<()>) -> Outcome<()> {
+    HAZARDS.store(0, Ordering::SeqCst);
+    let gate = messages();
+    PROBING.store(true, Ordering::SeqCst);
+    let recorded = record();
+    PROBING.store(false, Ordering::SeqCst);
+    recorded?;
+    let others = messages() - gate;
+    if others != 0 {
+        return fail(format!("the probe raised {others} other messages"));
+    }
+    match HAZARDS.load(Ordering::SeqCst) {
+        1 => Ok(()),
+        hazards => fail(format!(
+            "the probe's hazard was reported {hazards} times, expected once: synchronization \
+             validation (validate_sync, syncval_record_time_validation) is not live"
+        )),
+    }
 }
 
 /// Counts the message and writes it to stderr. It must not panic: a panic cannot unwind out of
@@ -28,17 +61,28 @@ unsafe extern "system" fn on_message(
     data: *const vk::DebugUtilsMessengerCallbackDataEXT<'_>,
     _user_data: *mut c_void,
 ) -> vk::Bool32 {
-    MESSAGES.fetch_add(1, Ordering::SeqCst);
     // SAFETY: the layer passes callback data valid for this call, or null.
-    let message = unsafe { data.as_ref() }
-        .map(|d| d.p_message)
-        .filter(|p| !p.is_null())
-        // SAFETY: a non-null `pMessage` is a NUL-terminated string valid for this call.
-        .map(|p| unsafe { CStr::from_ptr(p) }.to_string_lossy());
-    let text = message.as_deref().unwrap_or("<no message>");
+    let data = unsafe { data.as_ref() };
+    let text_of = |p: *const c_char| {
+        // SAFETY: a non-null `pMessage` or `pMessageIdName` is a NUL-terminated string valid
+        // for this call.
+        (!p.is_null()).then(|| unsafe { CStr::from_ptr(p) })
+    };
+    let id = data.and_then(|d| text_of(d.p_message_id_name));
+    let text = data
+        .and_then(|d| text_of(d.p_message))
+        .map_or("<no message>".into(), CStr::to_string_lossy);
+    let expected = PROBING.load(Ordering::SeqCst) && id == Some(HAZARD);
+    let label = if expected {
+        HAZARDS.fetch_add(1, Ordering::SeqCst);
+        "probe (expected)"
+    } else {
+        GATE.fetch_add(1, Ordering::SeqCst);
+        "validation"
+    };
     let _ = writeln!(
         std::io::stderr().lock(),
-        "validation {severity:?} {types:?}: {text}"
+        "{label} {severity:?} {types:?}: {text}"
     );
     vk::FALSE
 }
@@ -58,10 +102,11 @@ fn messenger_info() -> vk::DebugUtilsMessengerCreateInfoEXT<'static> {
         .pfn_user_callback(Some(on_message))
 }
 
-/// Creates the instance (Vulkan 1.4) with the validation layer, synchronization validation on
-/// (`validate_sync` through `VK_EXT_layer_settings`) and a messenger. A messenger is also
-/// chained into the create info, so instance creation and destruction are counted too.
-pub fn create_instance(entry: &Entry) -> Outcome<(Instance, vk::DebugUtilsMessengerEXT)> {
+/// Creates the instance (Vulkan 1.4) with the validation layer and a messenger, requesting
+/// synchronization validation (`validate_sync` through `VK_EXT_layer_settings`, the
+/// lowest-priority source; [`probe`] proves it is live). A messenger is also chained into the
+/// create info, so instance creation and destruction are counted too.
+pub fn create_instance(entry: &Entry) -> Outcome<OwnedInstance> {
     // SAFETY: global enumerations with no preconditions.
     let layers = unsafe { entry.enumerate_instance_layer_properties() }
         .ctx("vkEnumerateInstanceLayerProperties")?;
@@ -104,8 +149,12 @@ pub fn create_instance(entry: &Entry) -> Outcome<(Instance, vk::DebugUtilsMessen
     // SAFETY: every pointer in `info` borrows a local that outlives the call; the layer and its
     // extension were checked above, and `VK_EXT_debug_utils` is a loader extension.
     let instance = unsafe { entry.create_instance(&info, None) }.ctx("vkCreateInstance")?;
+    // SAFETY: `instance` was just created, and only this owner destroys it.
+    let mut instance = unsafe { OwnedInstance::new(instance) };
     // SAFETY: `instance` is live and enables `VK_EXT_debug_utils`.
     let messenger = unsafe { instance.create_debug_utils_messenger_ext(&messenger_info(), None) }
         .ctx("vkCreateDebugUtilsMessengerEXT")?;
-    Ok((instance, messenger))
+    // SAFETY: `messenger` was just created from `instance`, and only it destroys it.
+    unsafe { instance.set_messenger(messenger) };
+    Ok(instance)
 }

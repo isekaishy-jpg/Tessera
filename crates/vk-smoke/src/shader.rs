@@ -24,7 +24,7 @@ pub struct Shaders {
     pub fragment: Vec<u32>,
 }
 
-/// Compiles both stages of [`SOURCE`] in a fresh temp directory that is removed afterwards
+/// Compiles both stages of `smoke.slang` in a fresh temp directory that is removed afterwards
 /// (also on failure).
 pub fn compile() -> Outcome<Shaders> {
     let slangc = slangc()?;

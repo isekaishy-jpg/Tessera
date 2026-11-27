@@ -2,8 +2,9 @@
 //! and a graphics queue; the device created on it; and the memory type for each use.
 
 use crate::failure::{Context, Failure, Outcome, fail};
+use crate::owned::OwnedDevice;
 use crate::text;
-use tessera_vk::{Device, Instance, vk};
+use tessera_vk::{Instance, vk};
 
 /// The chosen GPU.
 pub struct Gpu {
@@ -17,6 +18,21 @@ pub struct Gpu {
 }
 
 impl Gpu {
+    /// A GPU described by the caller (tests, or a caller that picks its own GPU).
+    pub fn new(
+        physical: vk::PhysicalDevice,
+        name: String,
+        queue_family: u32,
+        memory: vk::PhysicalDeviceMemoryProperties,
+    ) -> Gpu {
+        Gpu {
+            physical,
+            name,
+            queue_family,
+            memory,
+        }
+    }
+
     /// The first memory type allowed by `bits` (a `memoryTypeBits` mask) that has every flag in
     /// `flags`.
     pub fn memory_type(&self, bits: u32, flags: vk::MemoryPropertyFlags) -> Outcome<u32> {
@@ -86,17 +102,12 @@ fn qualify(instance: &Instance, physical: vk::PhysicalDevice) -> Outcome<Gpu> {
     };
     // SAFETY: as above.
     let memory = unsafe { instance.get_physical_device_memory_properties(physical) };
-    Ok(Gpu {
-        physical,
-        name,
-        queue_family,
-        memory,
-    })
+    Ok(Gpu::new(physical, name, queue_family, memory))
 }
 
 /// The device: one queue of `gpu.queue_family`, `VK_KHR_pipeline_binary`, and the features the
 /// smoke test uses (`dynamicRendering`, `synchronization2`, `maintenance5`, `pipelineBinaries`).
-pub fn create_device(instance: &Instance, gpu: &Gpu) -> Outcome<Device> {
+pub fn create_device(instance: &Instance, gpu: &Gpu) -> Outcome<OwnedDevice> {
     let priorities = [1.0];
     let queues = [vk::DeviceQueueCreateInfo::default()
         .queue_family_index(gpu.queue_family)
@@ -116,5 +127,8 @@ pub fn create_device(instance: &Instance, gpu: &Gpu) -> Outcome<Device> {
     // SAFETY: `gpu.physical` belongs to the live `instance` and supports everything enabled
     // (checked in `qualify`; the Vulkan 1.3 and 1.4 features are required by 1.4); every
     // pointer in `info` borrows a local that outlives the call.
-    unsafe { instance.create_device(gpu.physical, &info, None) }.ctx("vkCreateDevice")
+    let device =
+        unsafe { instance.create_device(gpu.physical, &info, None) }.ctx("vkCreateDevice")?;
+    // SAFETY: `device` was just created, and only the returned owner destroys it.
+    Ok(unsafe { OwnedDevice::new(device) })
 }
