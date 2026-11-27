@@ -38,7 +38,8 @@ macro_rules! extends {
 /// Links `next` in front of the chain `rest` and returns `next` as the new link.
 ///
 /// Panics when `next` already has a chain: pushing it would follow a pointer the caller may have
-/// written by hand.
+/// written by hand. The panic names the caller of `push_next`.
+#[track_caller]
 pub(crate) fn link<T: TaggedStructure>(rest: *mut c_void, next: &mut T) -> *mut c_void {
     let header = ptr::from_mut(next).cast::<vk::BaseOutStructure<'static>>();
     // SAFETY: `T: TaggedStructure`, so `next` starts with `sType` and `pNext` laid out as

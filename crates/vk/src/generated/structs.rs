@@ -1080,6 +1080,7 @@ impl<'a> DeviceQueueCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -1211,6 +1212,7 @@ impl<'a> DeviceCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -1342,6 +1344,7 @@ impl<'a> InstanceCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -1552,6 +1555,7 @@ impl<'a> MemoryAllocateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -2340,6 +2344,7 @@ impl<'a> WriteDescriptorSet<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -2690,6 +2695,7 @@ impl<'a> BufferCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -2816,6 +2822,7 @@ impl<'a> BufferViewCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -3310,6 +3317,7 @@ impl<'a> BufferMemoryBarrier<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -3478,6 +3486,7 @@ impl<'a> ImageMemoryBarrier<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -3684,6 +3693,7 @@ impl<'a> ImageCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -4081,6 +4091,7 @@ impl<'a> ImageViewCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -4691,6 +4702,7 @@ impl<'a> BindSparseInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -5708,6 +5720,7 @@ impl<'a> ShaderModuleCreateInfo<'a> {
     /// Sets `p_code` and `code_size` (`codeSize / 4` elements): `code_size` is the slice's size in
     /// bytes.
     #[inline]
+    #[track_caller]
     pub fn code(mut self, value: &'a [u32]) -> Self {
         self.code_size = core::mem::size_of_val(value);
         self.p_code = value.as_ptr();
@@ -5717,6 +5730,7 @@ impl<'a> ShaderModuleCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -5926,6 +5940,7 @@ impl<'a> DescriptorSetLayoutCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -6082,6 +6097,7 @@ impl<'a> DescriptorPoolCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -6174,6 +6190,7 @@ impl<'a> DescriptorSetAllocateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -6450,6 +6467,7 @@ impl<'a> PipelineShaderStageCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -6577,6 +6595,7 @@ impl<'a> ComputePipelineCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -7039,6 +7058,7 @@ impl<'a> PipelineVertexInputStateCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -7214,6 +7234,7 @@ impl<'a> PipelineTessellationStateCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -7332,6 +7353,7 @@ impl<'a> PipelineViewportStateCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -7505,6 +7527,7 @@ impl<'a> PipelineRasterizationStateCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -7679,6 +7702,7 @@ impl<'a> PipelineMultisampleStateCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -7960,6 +7984,7 @@ impl<'a> PipelineColorBlendStateCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -8598,6 +8623,7 @@ impl<'a> GraphicsPipelineCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -9937,6 +9963,7 @@ impl<'a> SamplerCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -10062,6 +10089,7 @@ impl<'a> CommandPoolCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -10274,6 +10302,7 @@ impl<'a> CommandBufferInheritanceInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -10371,6 +10400,7 @@ impl<'a> CommandBufferBeginInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -10477,6 +10507,7 @@ impl<'a> RenderPassBeginInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -11233,6 +11264,7 @@ impl<'a> RenderPassCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -11379,6 +11411,7 @@ impl<'a> FenceCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -13165,6 +13198,7 @@ impl<'a> SemaphoreCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -13257,6 +13291,7 @@ impl<'a> QueryPoolCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -13387,6 +13422,7 @@ impl<'a> FramebufferCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -13912,6 +13948,7 @@ impl<'a> SubmitInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -14473,6 +14510,7 @@ impl<'a> DisplaySurfaceCreateInfoKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -15143,6 +15181,7 @@ impl<'a> SwapchainCreateInfoKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -15308,6 +15347,7 @@ impl<'a> PresentInfoKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -20161,6 +20201,7 @@ impl<'a> IndirectCommandsLayoutTokenNV<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -20797,6 +20838,7 @@ impl<'a> PhysicalDeviceFeatures2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -20858,6 +20900,7 @@ impl<'a> PhysicalDeviceProperties2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -20914,6 +20957,7 @@ impl<'a> FormatProperties2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -20970,6 +21014,7 @@ impl<'a> ImageFormatProperties2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -21075,6 +21120,7 @@ impl<'a> PhysicalDeviceImageFormatInfo2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -21149,6 +21195,7 @@ impl<'a> QueueFamilyProperties2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -21211,6 +21258,7 @@ impl<'a> PhysicalDeviceMemoryProperties2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -21368,6 +21416,7 @@ impl<'a> PhysicalDeviceSparseImageFormatInfo2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -22175,6 +22224,7 @@ impl<'a> PhysicalDeviceExternalBufferInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -23213,6 +23263,7 @@ impl<'a> PhysicalDeviceExternalSemaphoreInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -25387,6 +25438,7 @@ impl<'a> BindBufferMemoryInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -25556,6 +25608,7 @@ impl<'a> BindImageMemoryInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -28436,6 +28489,7 @@ impl<'a> HdrMetadataEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -29671,6 +29725,7 @@ impl<'a> PhysicalDeviceSurfaceInfo2KHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -29727,6 +29782,7 @@ impl<'a> SurfaceCapabilities2KHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -29789,6 +29845,7 @@ impl<'a> SurfaceFormat2KHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -29949,6 +30006,7 @@ impl<'a> DisplayModeProperties2KHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -30761,6 +30819,7 @@ impl<'a> ImageMemoryRequirementsInfo2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -30951,6 +31010,7 @@ impl<'a> MemoryRequirements2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -31677,6 +31737,7 @@ impl<'a> SamplerYcbcrConversionCreateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -34974,6 +35035,7 @@ impl<'a> PhysicalDeviceLayeredApiPropertiesKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -35737,6 +35799,7 @@ impl<'a> DescriptorSetLayoutSupport<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -37031,6 +37094,7 @@ impl<'a> DebugUtilsMessengerCallbackDataEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -37681,6 +37745,7 @@ impl<'a> CalibratedTimestampInfoKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -38832,6 +38897,7 @@ impl<'a> AttachmentDescription2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -38945,6 +39011,7 @@ impl<'a> AttachmentReference2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -39106,6 +39173,7 @@ impl<'a> SubpassDescription2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -39270,6 +39338,7 @@ impl<'a> SubpassDependency2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -39418,6 +39487,7 @@ impl<'a> RenderPassCreateInfo2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -39561,6 +39631,7 @@ impl<'a> SubpassEndInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -44554,6 +44625,7 @@ impl<'a> RayTracingPipelineCreateInfoNV<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -44753,6 +44825,7 @@ impl<'a> RayTracingPipelineCreateInfoKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -45390,6 +45463,7 @@ impl<'a> AccelerationStructureCreateInfoNV<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -49369,6 +49443,7 @@ impl<'a> FramebufferAttachmentImageInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -58026,6 +58101,7 @@ impl<'a> AccelerationStructureGeometryTrianglesDataKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -58629,6 +58705,7 @@ impl<'a> AccelerationStructureGeometryKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -59012,6 +59089,7 @@ impl<'a> AccelerationStructureCreateInfoKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -61779,6 +61857,7 @@ impl<'a> PartitionedAccelerationStructureInstancesInputNV<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -62748,6 +62827,7 @@ impl<'a> PhysicalDeviceClusterCullingShaderFeaturesHUAWEI<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -63131,6 +63211,7 @@ impl<'a> ImageBlit2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -63262,6 +63343,7 @@ impl<'a> BufferImageCopy2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -63715,6 +63797,7 @@ impl<'a> BlitImageInfo2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -64053,6 +64136,7 @@ impl<'a> ResolveImageInfo2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -66327,6 +66411,7 @@ impl<'a> GeneratedCommandsMemoryRequirementsInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -66815,6 +66900,7 @@ impl<'a> GeneratedCommandsInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -67098,6 +67184,7 @@ impl<'a> IndirectCommandsLayoutCreateInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -67200,6 +67287,7 @@ impl<'a> IndirectCommandsLayoutTokenEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -68666,6 +68754,7 @@ impl<'a> ImageMemoryBarrier2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -68834,6 +68923,7 @@ impl<'a> BufferMemoryBarrier2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -69053,6 +69143,7 @@ impl<'a> DependencyInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -69246,6 +69337,7 @@ impl<'a> CommandBufferSubmitInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -69360,6 +69452,7 @@ impl<'a> SubmitInfo2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -71818,6 +71911,7 @@ impl<'a> CuModuleCreateInfoNVX<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -72686,6 +72780,7 @@ impl<'a> DescriptorBufferBindingInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -72835,6 +72930,7 @@ impl<'a> DescriptorGetInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -75490,6 +75586,7 @@ impl<'a> RenderingInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -75571,6 +75668,7 @@ impl<'a> RenderingEndInfoKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -75691,6 +75789,7 @@ impl<'a> RenderingAttachmentInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -78368,6 +78467,7 @@ impl<'a> SubresourceLayout2<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -82616,6 +82716,7 @@ impl<'a> OpticalFlowSessionCreateInfoNV<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -83139,6 +83240,7 @@ impl<'a> DeviceFaultDebugInfoKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -83800,6 +83902,7 @@ impl<'a> DepthBiasInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -86713,6 +86816,7 @@ impl<'a> MemoryMapInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -87100,6 +87204,7 @@ impl<'a> ShaderCreateInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -88482,6 +88587,7 @@ impl<'a> BindDescriptorSetsInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -88601,6 +88707,7 @@ impl<'a> PushConstantsInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -88714,6 +88821,7 @@ impl<'a> PushDescriptorSetInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -88822,6 +88930,7 @@ impl<'a> PushDescriptorSetWithTemplateInfo<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -88936,6 +89045,7 @@ impl<'a> SetDescriptorBufferOffsetsInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -89038,6 +89148,7 @@ impl<'a> BindDescriptorBufferEmbeddedSamplersInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -95858,6 +95969,7 @@ impl<'a> TensorCreateInfoARM<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -95957,6 +96069,7 @@ impl<'a> TensorViewCreateInfoARM<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -98053,6 +98166,7 @@ impl<'a> DataGraphPipelineConstantARM<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -98143,6 +98257,7 @@ impl<'a> DataGraphPipelineResourceInfoARM<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -98377,6 +98492,7 @@ impl<'a> DataGraphPipelineCreateInfoARM<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -98585,6 +98701,7 @@ impl<'a> DataGraphPipelineSessionCreateInfoARM<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -99213,6 +99330,7 @@ impl<'a> DataGraphPipelineDispatchInfoARM<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next, next);
         self
@@ -101239,6 +101357,7 @@ impl<'a> ResourceDescriptorInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -101398,6 +101517,7 @@ impl<'a> PushDataInfoEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -102368,6 +102488,7 @@ impl<'a> DescriptorSetAndBindingMappingEXT<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -103934,6 +104055,7 @@ impl<'a> DeviceMemoryImageCopyKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -104112,6 +104234,7 @@ impl<'a> MemoryRangeBarriersInfoKHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self
@@ -104515,6 +104638,7 @@ impl<'a> AccelerationStructureCreateInfo2KHR<'a> {
     /// Links `next` into this struct's `pNext` chain, right after the head. `next` must have
     /// no chain of its own (panics otherwise); push each struct of a chain on its own.
     #[inline]
+    #[track_caller]
     pub fn push_next<T: Extends<Self>>(mut self, next: &'a mut T) -> Self {
         self.p_next = crate::chain::link(self.p_next.cast_mut(), next).cast_const();
         self

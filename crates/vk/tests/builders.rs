@@ -3,8 +3,10 @@
 //! lengths), `bool` for `VkBool32`, strings, byte lengths, `push_next`, packed bitfields and
 //! `Default`.
 
+use core::cell::RefCell;
 use core::ffi::c_void;
 use core::ptr;
+use std::panic::{self, UnwindSafe};
 use tessera_vk::{AlignedBytes, vk};
 
 /// The first word of every SPIR-V module: shader code the setters store by pointer.
@@ -241,6 +243,38 @@ fn push_next_refuses_a_struct_with_a_chain() {
     let mut inner = vk::PhysicalDeviceVulkan11Features::default();
     let mut outer = vk::PhysicalDeviceFeatures2::default().push_next(&mut inner);
     let _ = vk::DeviceCreateInfo::default().push_next(&mut outer);
+}
+
+thread_local! {
+    /// The file the last panic on this thread named, recorded by [`panic_file`]'s hook.
+    static PANIC_FILE: RefCell<Option<String>> = const { RefCell::new(None) };
+}
+
+/// The source file the panic of `f` names. The hook records each panic on its own thread, so
+/// panics of tests running beside this one leave this thread's record alone.
+fn panic_file(f: impl FnOnce() + UnwindSafe) -> Option<String> {
+    let previous = panic::take_hook();
+    panic::set_hook(Box::new(|info| {
+        let file = info.location().map(|l| l.file().to_string());
+        PANIC_FILE.with(|p| *p.borrow_mut() = file);
+    }));
+    let result = panic::catch_unwind(f);
+    panic::set_hook(previous);
+    assert!(result.is_err(), "the call panics");
+    PANIC_FILE.with(|p| p.borrow_mut().take())
+}
+
+#[test]
+fn a_push_next_panic_names_the_callers_file() {
+    let file = panic_file(|| {
+        let mut inner = vk::PhysicalDeviceVulkan11Features::default();
+        let mut outer = vk::PhysicalDeviceFeatures2::default().push_next(&mut inner);
+        let _ = vk::DeviceCreateInfo::default().push_next(&mut outer);
+    });
+    assert!(
+        file.as_deref().is_some_and(|f| f.ends_with("builders.rs")),
+        "the panic names the caller, not the bindings: {file:?}"
+    );
 }
 
 #[test]
