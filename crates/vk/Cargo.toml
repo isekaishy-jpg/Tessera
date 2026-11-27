@@ -12,10 +12,10 @@ name = "tessera_vk"
 [dev-dependencies]
 trybuild = "1"
 
-# wg's full gate runs every other test target under Miri; these spawn processes, which Miri
-# cannot run.
+# wg's full gate runs every other test target under Miri; these spawn processes (and `loader`
+# calls the OS loader), which Miri cannot run.
 [package.metadata.miri]
-skip = ["compile_fail", "layout"]
+skip = ["compile_fail", "layout", "loader"]
 
 [lints]
 workspace = true

@@ -5,6 +5,8 @@
 //! - [`Entry`], [`Instance`], [`Device`]: loaded dispatch objects; every command is an
 //!   `unsafe fn` on the one its first parameter belongs to.
 //! - [`EntryTable`], [`InstanceTable`], [`DeviceTable`]: the raw function tables.
+//! - [`system_library`], [`Library`]: the one library-loading policy (bare file names, the
+//!   system directory only, never freed), which [`Entry::load`] uses for `vulkan-1.dll`.
 //! - [`fixed_str`]: the text in a fixed-size `char` array (`vk::LayerProperties::layer_name`).
 //! - [`Plain`]: the types byte parameters accept; [`AlignedBytes`]: a byte buffer aligned to 16.
 //!
@@ -37,6 +39,7 @@ pub use device::Device;
 pub use entry::Entry;
 pub use generated::tables::{DeviceTable, EntryTable, InstanceTable};
 pub use instance::Instance;
+pub use loader::{Library, system_library};
 pub use result::{LoadError, Result};
 pub use text::fixed_str;
 

@@ -42,16 +42,20 @@ pub(crate) fn check_code(code: vk::Result) -> Result<vk::Result> {
     }
 }
 
-/// Why the Vulkan library could not be loaded.
+/// Why a library could not be loaded (`system_library`, `Entry::load`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LoadError {
-    /// The system could not load the library; `code` is the OS error (`GetLastError`).
+    /// The system could not load the library from the system directory; `code` is the OS error
+    /// (`GetLastError`).
     Library {
         /// OS error code.
         code: u32,
     },
-    /// The library does not export `vkGetInstanceProcAddr`.
+    /// The Vulkan library does not export `vkGetInstanceProcAddr`.
     Symbol,
+    /// The library name is not a bare file name (it holds a path separator, a drive colon or a
+    /// NUL, or is empty, `.` or `..`): libraries load from the system directory only.
+    Name,
     /// There is no loader for this platform yet (the Linux loader is an extension point).
     Unsupported,
 }
@@ -59,11 +63,13 @@ pub enum LoadError {
 impl fmt::Display for LoadError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            LoadError::Library { code } => {
-                write!(f, "cannot load the Vulkan library (OS error {code})")
-            }
+            LoadError::Library { code } => write!(
+                f,
+                "cannot load the library from the system directory (OS error {code})"
+            ),
             LoadError::Symbol => f.write_str("the Vulkan library has no vkGetInstanceProcAddr"),
-            LoadError::Unsupported => f.write_str("no Vulkan loader for this platform yet"),
+            LoadError::Name => f.write_str("the library name is not a bare file name"),
+            LoadError::Unsupported => f.write_str("no library loader for this platform yet"),
         }
     }
 }

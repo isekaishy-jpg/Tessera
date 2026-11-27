@@ -5,7 +5,7 @@ use crate::instance::Instance;
 use crate::result::{self, LoadError, Result};
 use crate::{loader, vk};
 use core::ffi::CStr;
-use core::{fmt, ptr};
+use core::{fmt, mem, ptr};
 
 /// The Vulkan entry point: the global commands, loaded from the system's Vulkan library or from
 /// a given `vkGetInstanceProcAddr`.
@@ -16,16 +16,30 @@ pub struct Entry {
 }
 
 impl Entry {
-    /// Loads the system's Vulkan library (`vulkan-1.dll`) and the global commands. The library
-    /// stays loaded for the life of the process.
+    /// Loads the system's Vulkan library (`vulkan-1.dll`, from the system directory alone:
+    /// [`system_library`](crate::system_library)) and the global commands. The library stays
+    /// loaded for the life of the process.
+    ///
+    /// # Errors
+    ///
+    /// The [`LoadError`] of [`system_library`](crate::system_library), or
+    /// [`LoadError::Symbol`] when the library does not export `vkGetInstanceProcAddr`.
     ///
     /// # Safety
     ///
     /// Loading the library runs its initialisation code.
     pub unsafe fn load() -> Result<Entry, LoadError> {
         // SAFETY: the caller accepts the library's initialisation code running.
-        let get_instance_proc_addr = unsafe { loader::library()? };
-        // SAFETY: the pointer is the library's own `vkGetInstanceProcAddr`.
+        let library = unsafe { loader::system_library(loader::VULKAN)? };
+        let get = library
+            .symbol(c"vkGetInstanceProcAddr")
+            .ok_or(LoadError::Symbol)?;
+        // SAFETY: the library's `vkGetInstanceProcAddr` has the signature
+        // `PfnGetInstanceProcAddr`; both are one function pointer.
+        let get_instance_proc_addr =
+            unsafe { mem::transmute::<vk::PfnVoidFunction, vk::PfnGetInstanceProcAddr>(get) };
+        // SAFETY: the pointer is the library's own `vkGetInstanceProcAddr`, and the library is
+        // never freed.
         Ok(unsafe { Entry::from_proc_addr(get_instance_proc_addr) })
     }
 
