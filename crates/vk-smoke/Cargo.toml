@@ -12,5 +12,10 @@ tessera-vk = { path = "../vk" }
 [dev-dependencies]
 trybuild = "1"
 
+# wg's full gate runs every other test target under Miri; these spawn processes, which Miri
+# cannot run.
+[package.metadata.miri]
+skip = ["compile_fail", "smoke"]
+
 [lints]
 workspace = true

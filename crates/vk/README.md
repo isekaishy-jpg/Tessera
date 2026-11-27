@@ -147,6 +147,8 @@ vkgen refuses a size-then-fill command without a protocol, a protocol on any oth
 
 `cargo test -p tessera-vk`. The layout test needs `VULKAN_SDK` and MSVC (found through `vswhere.exe`) and fails naming whichever is missing. `tests/compile_fail.rs` runs the trybuild cases in `tests/compile_fail/` (`push_next` parents, `returnedonly` setters, `Plain` bounds) against their expected errors. `tests/alignment.rs` runs under a global allocator that misaligns byte buffers: a bump allocator over a static arena, with no `System` calls, so Miri can check it. `tests/defaults.rs` asserts each row of the generated `tests/generated/defaults.rs`. `cargo test -p tessera-vk-smoke` runs the driver smoke test (`crates/vk-smoke`, see its README); it needs the SDK and a GPU.
 
+wg's full gate (`wg check`, the pre-commit hook) also runs `alignment`, `builders`, `debug`, `defaults` and `wrappers`, and `tessera-vk-smoke`'s `ownership`, under Miri: Stacked Borrows and Tree Borrows, both with strict provenance. `compile_fail` and `layout` (and the smoke test) spawn processes, which Miri cannot run; `[package.metadata.miri]` in each package's manifest lists them under `skip`, and every other test target is covered. It needs the nightly toolchain with Miri (`rustup toolchain install nightly --component miri`).
+
 ## Extension points
 
 - **Linux**: add `xlib`, `xcb`, `wayland` to `pin.toml` `platforms`; map their types (`Display`, `Window`, `xcb_connection_t`, `wl_display`, ...) in vkgen's `platform.rs`; add a `cfg(unix)` loader (`dlopen("libvulkan.so.1")`) in `loader.rs`; run the layout check with gcc.
