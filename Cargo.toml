@@ -1,11 +1,16 @@
 [workspace]
-members = ["crates/*"]
+# One glob per layer that holds crates; add a layer's glob with its first crate (README.md, Layout).
+members = ["platform/*", "tests/*"]
 resolver = "3"
 
 [workspace.package]
 edition = "2024"
 rust-version = "1.95"
 publish = false
+
+# Every internal crate, once; dependents write `<package>.workspace = true`.
+[workspace.dependencies]
+tessera-vk = { path = "platform/vk" }
 
 [workspace.lints.rust]
 missing_docs = "warn"

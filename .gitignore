@@ -7,4 +7,17 @@
 !/README.md
 !/Cargo.toml
 !/Cargo.lock
-!/crates/
+# Layer folders (README.md, Layout).
+!/core/
+!/platform/
+!/servers/
+!/scene/
+!/modules/
+!/pipeline/
+!/authoring/
+!/apps/
+!/tests/
+!/thirdparty/
+# Build output inside a tracked folder: the thirdparty workspace's and each library's.
+/thirdparty/target/
+/thirdparty/*/build/

@@ -1,6 +1,6 @@
 # Written by `vkgen pin`: the Vulkan SDK the generated bindings come from.
 # `vkgen generate` refuses an SDK whose files differ from these hashes.
-# The pin routine is in crates/vk/README.md.
+# The pin routine is in platform/vk/README.md.
 
 sdk = "1.4.363.0"
 header_version = 363
