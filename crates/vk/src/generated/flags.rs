@@ -512,7 +512,7 @@ impl DescriptorSetLayoutCreateFlags {
     pub const PUSH_DESCRIPTOR: Self = Self(0x1);
     /// `VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR`
     ///
-    /// Descriptors are pushed via flink:vkCmdPushDescriptorSet
+    /// Descriptors are pushed via `vkCmdPushDescriptorSet`
     ///
     /// Another spelling of `VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT`.
     pub const PUSH_DESCRIPTOR_KHR: Self = Self::PUSH_DESCRIPTOR;

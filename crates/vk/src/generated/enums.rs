@@ -3372,7 +3372,9 @@ impl Result {
     pub const ERROR_INITIALIZATION_FAILED: Self = Self(-3);
     /// `VK_ERROR_DEVICE_LOST`
     ///
-    /// The logical device has been lost. See &lt;&lt;devsandqueues-lost-device&gt;&gt;
+    /// The logical device has been lost. See [devsandqueues-lost-device]
+    ///
+    #[doc = section!("devsandqueues-lost-device")]
     pub const ERROR_DEVICE_LOST: Self = Self(-4);
     /// `VK_ERROR_MEMORY_MAP_FAILED`
     ///
@@ -3578,7 +3580,10 @@ impl Result {
             -1 => Some("A host memory allocation has failed"),
             -2 => Some("A device memory allocation has failed"),
             -3 => Some("Initialization of an object has failed"),
-            -4 => Some("The logical device has been lost. See <<devsandqueues-lost-device>>"),
+            -4 => Some(concat!(
+                "The logical device has been lost. See the Vulkan ",
+                "specification's devsandqueues-lost-device section"
+            )),
             -5 => Some("Mapping of a memory object has failed"),
             -6 => Some("Layer specified does not exist"),
             -7 => Some("Extension specified does not exist"),
@@ -3586,12 +3591,14 @@ impl Result {
             -9 => Some("Unable to find a Vulkan driver"),
             -10 => Some("Too many objects of the type have already been created"),
             -11 => Some("Requested format is not supported on this device"),
-            -12 => Some(
-                "A requested pool allocation has failed due to fragmentation of the pool's memory",
-            ),
-            -13 => {
-                Some("An unknown error has occurred, due to an implementation or application bug")
-            }
+            -12 => Some(concat!(
+                "A requested pool allocation has failed due to fragmentation ",
+                "of the pool's memory"
+            )),
+            -13 => Some(concat!(
+                "An unknown error has occurred, due to an implementation or ",
+                "application bug"
+            )),
             _ => None,
         }
     }

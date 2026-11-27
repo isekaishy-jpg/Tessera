@@ -1,4 +1,5 @@
-//! `Debug` helpers for generated types, and the `spec!` doc-link macro.
+//! `Debug` helpers for generated types, and the doc-link macros `spec!` (a reference page) and
+//! `section!` (a section of the specification).
 
 use crate::text;
 use core::ffi::c_char;
@@ -13,6 +14,23 @@ macro_rules! spec {
             "`](https://registry.khronos.org/vulkan/specs/latest/man/html/",
             $name,
             ".html) in the Vulkan specification."
+        )
+    };
+}
+
+/// The Markdown link reference definition of a section of the specification, for
+/// `#[doc = section!("anchor")]`: `[anchor]` or `[text][anchor]` in the item's docs links to it.
+#[allow(
+    unused_macros,
+    reason = "generated docs use it only when a registry comment links a section"
+)]
+macro_rules! section {
+    ($anchor:literal) => {
+        concat!(
+            "[",
+            $anchor,
+            "]: https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#",
+            $anchor
         )
     };
 }
