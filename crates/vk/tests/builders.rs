@@ -214,18 +214,25 @@ fn strings_bytes_and_expression_lengths_set_their_counts() {
 fn push_next_links_each_struct_right_after_the_head() {
     let mut vulkan12 = vk::PhysicalDeviceVulkan12Features::default().buffer_device_address(true);
     let mut vulkan13 = vk::PhysicalDeviceVulkan13Features::default().synchronization2(true);
-    let a: *mut c_void = ptr::from_mut(&mut vulkan12).cast();
-    let b: *mut c_void = ptr::from_mut(&mut vulkan13).cast();
+    // Addresses only: the pushes reborrow both structs, so no pointer taken here may be read.
+    let vulkan12_addr = ptr::from_ref(&vulkan12).addr();
+    let vulkan13_addr = ptr::from_ref(&vulkan13).addr();
     let info = vk::DeviceCreateInfo::default()
         .push_next(&mut vulkan12)
         .push_next(&mut vulkan13);
-    assert_eq!(info.p_next, b.cast_const(), "the last pushed is first");
-    // SAFETY: both structs are alive; `push_next` linked them.
-    let second = unsafe { (*b.cast::<vk::PhysicalDeviceVulkan13Features<'_>>()).p_next };
-    assert_eq!(second, a);
-    // SAFETY: as above.
-    let end = unsafe { (*a.cast::<vk::PhysicalDeviceVulkan12Features<'_>>()).p_next };
-    assert!(end.is_null());
+    let first = info.p_next.cast::<vk::PhysicalDeviceVulkan13Features<'_>>();
+    assert_eq!(first.addr(), vulkan13_addr, "the last pushed is first");
+    // SAFETY: `first` is the link `push_next` made from `&mut vulkan13`; `vulkan13` is live and
+    // untouched since.
+    let second = unsafe { (*first).p_next }.cast::<vk::PhysicalDeviceVulkan12Features<'_>>();
+    assert_eq!(
+        second.addr(),
+        vulkan12_addr,
+        "the one pushed before follows"
+    );
+    // SAFETY: as above, for the link made from `&mut vulkan12`.
+    let end = unsafe { (*second).p_next };
+    assert!(end.is_null(), "the chain ends");
 }
 
 #[test]

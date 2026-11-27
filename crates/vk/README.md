@@ -145,7 +145,7 @@ vkgen refuses a size-then-fill command without a protocol, a protocol on any oth
 
 ## Tests
 
-`cargo test -p tessera-vk`. The layout test needs `VULKAN_SDK` and MSVC (found through `vswhere.exe`) and fails naming whichever is missing. `tests/compile_fail.rs` runs the trybuild cases in `tests/compile_fail/` (`push_next` parents, `returnedonly` setters, `Plain` bounds) against their expected errors. `tests/alignment.rs` runs under a global allocator that misaligns byte buffers. `tests/defaults.rs` asserts each row of the generated `tests/generated/defaults.rs`. `cargo test -p tessera-vk-smoke` runs the driver smoke test (`crates/vk-smoke`, see its README); it needs the SDK and a GPU.
+`cargo test -p tessera-vk`. The layout test needs `VULKAN_SDK` and MSVC (found through `vswhere.exe`) and fails naming whichever is missing. `tests/compile_fail.rs` runs the trybuild cases in `tests/compile_fail/` (`push_next` parents, `returnedonly` setters, `Plain` bounds) against their expected errors. `tests/alignment.rs` runs under a global allocator that misaligns byte buffers: a bump allocator over a static arena, with no `System` calls, so Miri can check it. `tests/defaults.rs` asserts each row of the generated `tests/generated/defaults.rs`. `cargo test -p tessera-vk-smoke` runs the driver smoke test (`crates/vk-smoke`, see its README); it needs the SDK and a GPU.
 
 ## Extension points
 

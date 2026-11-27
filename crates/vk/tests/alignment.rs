@@ -1,56 +1,74 @@
 //! `get_shader_binary_data_ext` passes a 16-aligned `pData` (`VUID-vkGetShaderBinaryDataEXT-
 //! None-08499`) whatever the allocator does with byte buffers: this test binary's global
 //! allocator returns odd addresses for every alignment-1 request, where a `Vec<u8>` would land.
+//! The allocator is a bump allocator over a static arena with no `System` calls, so Miri can
+//! check this binary.
 
 use core::alloc::{GlobalAlloc, Layout};
+use core::cell::UnsafeCell;
 use core::ffi::c_void;
 use core::ptr;
-use core::sync::atomic::{AtomicBool, Ordering};
-use std::alloc::System;
+use core::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use tessera_vk::{AlignedBytes, Device, DeviceTable, vk};
 
-/// Wraps `System`; an alignment-1 request gets the byte after a 2-aligned block, so it is odd.
+/// The arena's size: 34 times the most this binary was measured to allocate (30 544 bytes).
+const ARENA_SIZE: usize = 1 << 20;
+
+/// The memory every allocation of this binary comes from.
+struct Arena(UnsafeCell<[u8; ARENA_SIZE]>);
+
+// SAFETY: the bytes are reached only through the pointers `Misaligning::alloc` returns, and no
+// two of those ranges overlap.
+unsafe impl Sync for Arena {}
+
+/// The arena.
+static ARENA: Arena = Arena(UnsafeCell::new([0; ARENA_SIZE]));
+
+/// Bytes of `ARENA` handed out so far, alignment gaps included.
+static USED: AtomicUsize = AtomicUsize::new(0);
+
+/// A bump allocator over `ARENA`: an alignment-1 request gets an odd address, any other request
+/// an address aligned to its alignment. `dealloc` frees nothing, and a request that does not fit
+/// gets null.
 struct Misaligning;
 
-impl Misaligning {
-    /// The layout of the block behind an alignment-1 request of `layout.size()` bytes.
-    fn padded(layout: Layout) -> Option<Layout> {
-        Layout::from_size_align(layout.size().checked_add(1)?, 2).ok()
-    }
+/// Where a `layout` request goes when `used` bytes of the arena at address `base` are taken:
+/// `(start, end)` offsets with `end <= ARENA_SIZE`, or `None` when it does not fit.
+fn place(base: usize, used: usize, layout: Layout) -> Option<(usize, usize)> {
+    let next = base.checked_add(used)?;
+    let addr = if layout.align() == 1 {
+        next | 1
+    } else {
+        next.checked_next_multiple_of(layout.align())?
+    };
+    let start = addr - base;
+    let end = start.checked_add(layout.size())?;
+    (end <= ARENA_SIZE).then_some((start, end))
 }
 
-// SAFETY: every block comes from `System` with a valid layout, and `dealloc` frees it with that
-// same layout; an alignment-1 pointer is offset by one byte inside its block, which still holds
-// `layout.size()` bytes after it.
+// SAFETY: every pointer `alloc` returns is `base.add(start)`, carrying the arena's provenance,
+// with `start..start + layout.size()` inside the arena and aligned as `layout` asks (odd for
+// alignment 1, which any address meets). Each range is claimed by one successful
+// compare-exchange of `USED`, so no two overlap. `dealloc` frees nothing, so no range is reused.
+// `alloc` never panics: `place` uses checked arithmetic.
 unsafe impl GlobalAlloc for Misaligning {
     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-        if layout.align() != 1 {
-            // SAFETY: the caller's layout has a non-zero size.
-            return unsafe { System.alloc(layout) };
+        let base = ARENA.0.get().cast::<u8>();
+        let mut used = USED.load(Ordering::Relaxed);
+        loop {
+            let Some((start, end)) = place(base.addr(), used, layout) else {
+                return ptr::null_mut();
+            };
+            match USED.compare_exchange_weak(used, end, Ordering::Relaxed, Ordering::Relaxed) {
+                // SAFETY: `start <= end <= ARENA_SIZE`, so the pointer is inside the arena or
+                // one past its end.
+                Ok(_) => return unsafe { base.add(start) },
+                Err(now) => used = now,
+            }
         }
-        let Some(padded) = Self::padded(layout) else {
-            return ptr::null_mut();
-        };
-        // SAFETY: `padded` has a non-zero size.
-        let block = unsafe { System.alloc(padded) };
-        if block.is_null() {
-            return block;
-        }
-        // SAFETY: the block holds `layout.size() + 1` bytes.
-        unsafe { block.add(1) }
     }
 
-    unsafe fn dealloc(&self, pointer: *mut u8, layout: Layout) {
-        if layout.align() != 1 {
-            // SAFETY: `pointer` came from `System.alloc(layout)`.
-            return unsafe { System.dealloc(pointer, layout) };
-        }
-        let Some(padded) = Self::padded(layout) else {
-            return;
-        };
-        // SAFETY: `pointer` is one byte into a block allocated with `padded`.
-        unsafe { System.dealloc(pointer.sub(1), padded) };
-    }
+    unsafe fn dealloc(&self, _: *mut u8, _: Layout) {}
 }
 
 #[global_allocator]
