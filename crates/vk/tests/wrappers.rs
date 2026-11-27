@@ -1,5 +1,6 @@
-//! The command wrappers' shape rules, on mock function tables built with `from_parts`: each
-//! mock records what it received in thread-local state (tests run in parallel threads).
+//! The command wrappers' shape rules and protocol forms, on mock function tables built with
+//! `from_parts`: each mock records what it received in thread-local state (tests run in parallel
+//! threads).
 
 use core::ffi::{CStr, c_char, c_void};
 use std::cell::{Cell, RefCell};
@@ -10,6 +11,8 @@ thread_local! {
     static CALLS: Cell<u32> = const { Cell::new(0) };
     /// Values the current mock recorded.
     static SEEN: RefCell<Vec<u64>> = const { RefCell::new(Vec::new()) };
+    /// Records a consuming mock still holds, oldest first.
+    static RECORDS: RefCell<Vec<u32>> = const { RefCell::new(Vec::new()) };
 }
 
 fn calls() -> u32 {
@@ -477,4 +480,252 @@ fn an_unloaded_command_panics_with_its_name() {
     let d = device(DeviceTable::default());
     // SAFETY: the wrapper panics before any call.
     unsafe { d.cmd_draw(vk::CommandBuffer::from_raw(1), 3, 1, 0, 0) };
+}
+
+/// A consuming command (`vkGetPastPresentationTimingGOOGLE`): each call returns the oldest
+/// records that fit and forgets them; `INCOMPLETE` while more remain.
+unsafe extern "system" fn past_timing(
+    _: vk::Device,
+    _: vk::SwapchainKHR,
+    count: *mut u32,
+    timings: *mut vk::PastPresentationTimingGOOGLE,
+) -> vk::Result {
+    call();
+    RECORDS.with(|r| {
+        let mut records = r.borrow_mut();
+        // SAFETY: the wrapper passes a live count and an array of `*count` timings.
+        unsafe {
+            let n = records.len().min(*count as usize);
+            for (i, id) in records.drain(..n).enumerate() {
+                (*timings.add(i)).present_id = id;
+            }
+            *count = n as u32;
+        }
+        if records.is_empty() {
+            vk::Result::SUCCESS
+        } else {
+            vk::Result::INCOMPLETE
+        }
+    })
+}
+
+#[test]
+fn a_consuming_command_fills_caller_storage_once_per_call() {
+    RECORDS.with(|r| *r.borrow_mut() = vec![1, 2]);
+    let d = device(DeviceTable {
+        get_past_presentation_timing_google: Some(past_timing),
+        ..Default::default()
+    });
+    let swapchain = vk::SwapchainKHR::from_raw(1);
+    let mut timings = [vk::PastPresentationTimingGOOGLE::default()];
+    // SAFETY: the mock writes at most the slice's length of records.
+    let first = unsafe { d.get_past_presentation_timing_google_into(swapchain, &mut timings) };
+    assert_eq!(first, Ok((1, vk::Result::INCOMPLETE)));
+    assert_eq!(timings[0].present_id, 1);
+    // SAFETY: as above.
+    let second = unsafe { d.get_past_presentation_timing_google_into(swapchain, &mut timings) };
+    assert_eq!(second, Ok((1, vk::Result::SUCCESS)));
+    assert_eq!(timings[0].present_id, 2, "record 1 is not returned again");
+    assert_eq!(calls(), 2, "one call each, no count query, no retry");
+}
+
+#[test]
+#[should_panic(
+    expected = "pPresentationTimings: empty slice; it needs room for at least one record"
+)]
+fn empty_caller_storage_panics() {
+    let d = device(DeviceTable {
+        get_past_presentation_timing_google: Some(past_timing),
+        ..Default::default()
+    });
+    // SAFETY: the wrapper panics before calling the mock.
+    let _ =
+        unsafe { d.get_past_presentation_timing_google_into(vk::SwapchainKHR::null(), &mut []) };
+}
+
+/// A blocking consuming command (`vkGetDeviceFaultReportsKHR`) that times out with no reports.
+unsafe extern "system" fn fault_reports(
+    _: vk::Device,
+    timeout: u64,
+    count: *mut u32,
+    _: *mut vk::DeviceFaultInfoKHR<'_>,
+) -> vk::Result {
+    call();
+    see(timeout);
+    // SAFETY: the wrapper passes a live count.
+    unsafe { *count = 0 };
+    vk::Result::TIMEOUT
+}
+
+#[test]
+fn a_blocking_command_waits_once() {
+    let d = device(DeviceTable {
+        get_device_fault_reports_khr: Some(fault_reports),
+        ..Default::default()
+    });
+    let mut reports = [vk::DeviceFaultInfoKHR::default(); 2];
+    // SAFETY: the mock writes no report.
+    let got = unsafe { d.get_device_fault_reports_khr_into(7, &mut reports) };
+    assert_eq!(got, Ok((0, vk::Result::TIMEOUT)));
+    assert_eq!(seen(), [7], "the timeout is passed once");
+    assert_eq!(calls(), 1, "a timeout is returned, never retried");
+}
+
+/// `vkGetPhysicalDeviceQueueFamilyProperties2` with two families: the count, or as many families
+/// as fit, each writing a priority count through the caller's `pNext`.
+unsafe extern "system" fn family_properties(
+    _: vk::PhysicalDevice,
+    count: *mut u32,
+    properties: *mut vk::QueueFamilyProperties2<'_>,
+) {
+    call();
+    // SAFETY: the wrapper passes a live count and, when non-null, `*count` properties whose
+    // `pNext` the caller set.
+    unsafe {
+        if properties.is_null() {
+            *count = 2;
+            return;
+        }
+        let n = (*count).min(2);
+        for i in 0..n as usize {
+            let p = &mut *properties.add(i);
+            p.queue_family_properties.queue_count = 4;
+            let next = p
+                .p_next
+                .cast::<vk::QueueFamilyGlobalPriorityProperties<'_>>();
+            if !next.is_null() {
+                (*next).priority_count = 3;
+            }
+        }
+        *count = n;
+    }
+}
+
+#[test]
+fn an_extensible_query_keeps_the_callers_chains() {
+    let instance = Instance::from_parts(
+        vk::Instance::from_raw(1),
+        InstanceTable {
+            get_physical_device_queue_family_properties2: Some(family_properties),
+            ..Default::default()
+        },
+    );
+    let gpu = vk::PhysicalDevice::from_raw(2);
+    // SAFETY: the mock writes only the count.
+    let len = unsafe { instance.get_physical_device_queue_family_properties2_len(gpu) };
+    assert_eq!(len, 2);
+    let mut priority = vk::QueueFamilyGlobalPriorityProperties::default();
+    let written = {
+        let mut properties = [vk::QueueFamilyProperties2::default().push_next(&mut priority)];
+        // SAFETY: the mock writes one family and its chained struct.
+        let written = unsafe {
+            instance.get_physical_device_queue_family_properties2_into(gpu, &mut properties)
+        };
+        assert_eq!(properties[0].queue_family_properties.queue_count, 4);
+        written
+    };
+    assert_eq!(written, 1, "as many as the storage holds");
+    assert_eq!(
+        priority.priority_count, 3,
+        "written through the caller's pNext"
+    );
+    assert_eq!(calls(), 2, "the count query, then one fill");
+}
+
+unsafe extern "system" fn query_results(
+    _: vk::Device,
+    _: vk::QueryPool,
+    _: u32,
+    _: u32,
+    _: usize,
+    _: *mut c_void,
+    _: vk::DeviceSize,
+    _: vk::QueryResultFlags,
+) -> vk::Result {
+    vk::Result::SUCCESS
+}
+
+/// Four `u32`s aligned to 8: the second is aligned to 4 only.
+#[repr(C, align(8))]
+struct Results([u32; 4]);
+
+#[test]
+fn query_results_are_aligned_as_their_flags_require() {
+    let d = device(DeviceTable {
+        get_query_pool_results: Some(query_results),
+        ..Default::default()
+    });
+    let mut results = Results([0; 4]);
+    let pool = vk::QueryPool::from_raw(1);
+    // SAFETY: the mock reads nothing.
+    unsafe {
+        let four = d.get_query_pool_results(
+            pool,
+            0,
+            1,
+            &mut results.0[1..],
+            4,
+            vk::QueryResultFlags::empty(),
+        );
+        assert_eq!(four, Ok(vk::Result::SUCCESS), "4-aligned 32-bit results");
+        let eight = d.get_query_pool_results(
+            pool,
+            0,
+            1,
+            &mut results.0[..2],
+            8,
+            vk::QueryResultFlags::RESULT_64,
+        );
+        assert_eq!(eight, Ok(vk::Result::SUCCESS), "8-aligned 64-bit results");
+    }
+}
+
+#[test]
+#[should_panic(expected = "pData: address not aligned to 8 bytes with VK_QUERY_RESULT_64_BIT")]
+fn misaligned_64_bit_query_results_panic() {
+    let d = device(DeviceTable {
+        get_query_pool_results: Some(query_results),
+        ..Default::default()
+    });
+    let mut results = Results([0; 4]);
+    // SAFETY: the wrapper panics before calling the mock.
+    let _ = unsafe {
+        d.get_query_pool_results(
+            vk::QueryPool::from_raw(1),
+            0,
+            1,
+            &mut results.0[1..3],
+            8,
+            vk::QueryResultFlags::RESULT_64,
+        )
+    };
+}
+
+unsafe extern "system" fn update_buffer(
+    _: vk::CommandBuffer,
+    _: vk::Buffer,
+    _: vk::DeviceSize,
+    size: vk::DeviceSize,
+    _: *const c_void,
+) {
+    see(size);
+}
+
+#[test]
+fn generated_plain_structs_are_byte_data() {
+    let d = device(DeviceTable {
+        cmd_update_buffer: Some(update_buffer),
+        ..Default::default()
+    });
+    let draws = [vk::DrawIndexedIndirectCommand::default().index_count(3); 2];
+    // SAFETY: the mock reads only the size.
+    unsafe {
+        d.cmd_update_buffer(
+            vk::CommandBuffer::from_raw(1),
+            vk::Buffer::from_raw(2),
+            0,
+            &draws,
+        );
+    }
+    assert_eq!(seen(), [40], "two 20-byte commands");
 }

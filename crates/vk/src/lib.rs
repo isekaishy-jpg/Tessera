@@ -6,12 +6,14 @@
 //!   `unsafe fn` on the one its first parameter belongs to.
 //! - [`EntryTable`], [`InstanceTable`], [`DeviceTable`]: the raw function tables.
 //! - [`fixed_str`]: the text in a fixed-size `char` array (`vk::LayerProperties::layer_name`).
+//! - [`Plain`]: the types byte parameters accept; [`AlignedBytes`]: a byte buffer aligned to 16.
 //!
 //! Command wrappers follow fixed rules (see `README.md`): success codes are never dropped,
-//! count+array pairs are slices, size-then-fill commands return a `Vec`, and one trailing output
-//! is returned by value. Struct setters borrow what they point to, and `push_next` builds `pNext`
-//! chains with type checks. Valid usage is the caller's contract: wrappers check only what they
-//! compute themselves (slice lengths).
+//! count+array pairs are slices, size-then-fill commands return a `Vec` (or fill caller storage
+//! with `foo_into`, the only form of a command whose records are returned once), and one trailing
+//! output is returned by value. Struct setters borrow what they point to, and `push_next` builds
+//! `pNext` chains with type checks. Valid usage is the caller's contract: wrappers check only what
+//! they compute themselves (slice lengths, the addresses of byte slices that must be aligned).
 
 #[macro_use]
 mod fmt;
@@ -19,6 +21,7 @@ mod fmt;
 mod flags;
 #[macro_use]
 mod chain;
+mod bytes;
 mod device;
 mod entry;
 mod generated;
@@ -29,6 +32,7 @@ mod result;
 mod text;
 pub mod vk;
 
+pub use bytes::{AlignedBytes, Plain};
 pub use device::Device;
 pub use entry::Entry;
 pub use generated::tables::{DeviceTable, EntryTable, InstanceTable};

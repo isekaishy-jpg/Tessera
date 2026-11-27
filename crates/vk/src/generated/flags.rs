@@ -26,6 +26,9 @@ impl core::fmt::Debug for FramebufferCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FramebufferCreateFlags {}
+
 #[doc = spec!("VkFramebufferCreateFlagBits")]
 ///
 /// The single bits of [`FramebufferCreateFlags`]; the same type.
@@ -50,6 +53,9 @@ impl core::fmt::Debug for QueryPoolCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "RESET_KHR")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for QueryPoolCreateFlags {}
 
 #[doc = spec!("VkQueryPoolCreateFlagBits")]
 ///
@@ -86,6 +92,9 @@ impl core::fmt::Debug for RenderPassCreateFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for RenderPassCreateFlags {}
 
 #[doc = spec!("VkRenderPassCreateFlagBits")]
 ///
@@ -130,6 +139,9 @@ impl core::fmt::Debug for SamplerCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SamplerCreateFlags {}
+
 #[doc = spec!("VkSamplerCreateFlagBits")]
 ///
 /// The single bits of [`SamplerCreateFlags`]; the same type.
@@ -160,6 +172,9 @@ impl core::fmt::Debug for PipelineLayoutCreateFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineLayoutCreateFlags {}
 
 #[doc = spec!("VkPipelineLayoutCreateFlagBits")]
 ///
@@ -198,6 +213,9 @@ impl core::fmt::Debug for PipelineCacheCreateFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineCacheCreateFlags {}
 
 #[doc = spec!("VkPipelineCacheCreateFlagBits")]
 ///
@@ -261,6 +279,9 @@ impl core::fmt::Debug for PipelineDepthStencilStateCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineDepthStencilStateCreateFlags {}
+
 #[doc = spec!("VkPipelineDepthStencilStateCreateFlagBits")]
 ///
 /// The single bits of [`PipelineDepthStencilStateCreateFlags`]; the same type.
@@ -280,6 +301,9 @@ impl core::fmt::Debug for PipelineDynamicStateCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineDynamicStateCreateFlags {}
 
 #[doc = spec!("VkPipelineColorBlendStateCreateFlags")]
 ///
@@ -311,6 +335,9 @@ impl core::fmt::Debug for PipelineColorBlendStateCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineColorBlendStateCreateFlags {}
+
 #[doc = spec!("VkPipelineColorBlendStateCreateFlagBits")]
 ///
 /// The single bits of [`PipelineColorBlendStateCreateFlags`]; the same type.
@@ -331,6 +358,9 @@ impl core::fmt::Debug for PipelineMultisampleStateCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineMultisampleStateCreateFlags {}
+
 #[doc = spec!("VkPipelineRasterizationStateCreateFlags")]
 ///
 /// Provided by Vulkan 1.0.
@@ -345,6 +375,9 @@ impl core::fmt::Debug for PipelineRasterizationStateCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineRasterizationStateCreateFlags {}
 
 #[doc = spec!("VkPipelineViewportStateCreateFlags")]
 ///
@@ -361,6 +394,9 @@ impl core::fmt::Debug for PipelineViewportStateCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineViewportStateCreateFlags {}
+
 #[doc = spec!("VkPipelineTessellationStateCreateFlags")]
 ///
 /// Provided by Vulkan 1.0.
@@ -375,6 +411,9 @@ impl core::fmt::Debug for PipelineTessellationStateCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineTessellationStateCreateFlags {}
 
 #[doc = spec!("VkPipelineInputAssemblyStateCreateFlags")]
 ///
@@ -391,6 +430,9 @@ impl core::fmt::Debug for PipelineInputAssemblyStateCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineInputAssemblyStateCreateFlags {}
+
 #[doc = spec!("VkPipelineVertexInputStateCreateFlags")]
 ///
 /// Provided by Vulkan 1.0.
@@ -405,6 +447,9 @@ impl core::fmt::Debug for PipelineVertexInputStateCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineVertexInputStateCreateFlags {}
 
 #[doc = spec!("VkPipelineShaderStageCreateFlags")]
 ///
@@ -442,6 +487,9 @@ impl core::fmt::Debug for PipelineShaderStageCreateFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineShaderStageCreateFlags {}
 
 #[doc = spec!("VkPipelineShaderStageCreateFlagBits")]
 ///
@@ -506,6 +554,9 @@ impl core::fmt::Debug for DescriptorSetLayoutCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DescriptorSetLayoutCreateFlags {}
+
 #[doc = spec!("VkDescriptorSetLayoutCreateFlagBits")]
 ///
 /// The single bits of [`DescriptorSetLayoutCreateFlags`]; the same type.
@@ -525,6 +576,9 @@ impl core::fmt::Debug for BufferViewCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BufferViewCreateFlags {}
 
 #[doc = spec!("VkInstanceCreateFlags")]
 ///
@@ -546,6 +600,9 @@ impl core::fmt::Debug for InstanceCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for InstanceCreateFlags {}
+
 #[doc = spec!("VkInstanceCreateFlagBits")]
 ///
 /// The single bits of [`InstanceCreateFlags`]; the same type.
@@ -565,6 +622,9 @@ impl core::fmt::Debug for DeviceCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceCreateFlags {}
 
 #[doc = spec!("VkDeviceQueueCreateFlags")]
 ///
@@ -593,6 +653,9 @@ impl core::fmt::Debug for DeviceQueueCreateFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceQueueCreateFlags {}
 
 #[doc = spec!("VkDeviceQueueCreateFlagBits")]
 ///
@@ -652,6 +715,9 @@ impl core::fmt::Debug for QueueFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for QueueFlags {}
 
 #[doc = spec!("VkQueueFlagBits")]
 ///
@@ -721,6 +787,9 @@ impl core::fmt::Debug for MemoryPropertyFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for MemoryPropertyFlags {}
+
 #[doc = spec!("VkMemoryPropertyFlagBits")]
 ///
 /// The single bits of [`MemoryPropertyFlags`]; the same type.
@@ -765,6 +834,9 @@ impl core::fmt::Debug for MemoryHeapFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for MemoryHeapFlags {}
 
 #[doc = spec!("VkMemoryHeapFlagBits")]
 ///
@@ -942,6 +1014,9 @@ impl core::fmt::Debug for AccessFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccessFlags {}
+
 #[doc = spec!("VkAccessFlagBits")]
 ///
 /// The single bits of [`AccessFlags`]; the same type.
@@ -1073,6 +1148,9 @@ impl core::fmt::Debug for BufferUsageFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BufferUsageFlags {}
+
 #[doc = spec!("VkBufferUsageFlagBits")]
 ///
 /// The single bits of [`BufferUsageFlags`]; the same type.
@@ -1135,6 +1213,9 @@ impl core::fmt::Debug for BufferCreateFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BufferCreateFlags {}
 
 #[doc = spec!("VkBufferCreateFlagBits")]
 ///
@@ -1248,6 +1329,9 @@ impl core::fmt::Debug for ShaderStageFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShaderStageFlags {}
+
 #[doc = spec!("VkShaderStageFlagBits")]
 ///
 /// The single bits of [`ShaderStageFlags`]; the same type.
@@ -1352,6 +1436,9 @@ impl core::fmt::Debug for ImageUsageFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageUsageFlags {}
 
 #[doc = spec!("VkImageUsageFlagBits")]
 ///
@@ -1494,6 +1581,9 @@ impl core::fmt::Debug for ImageCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageCreateFlags {}
+
 #[doc = spec!("VkImageCreateFlagBits")]
 ///
 /// The single bits of [`ImageCreateFlags`]; the same type.
@@ -1530,6 +1620,9 @@ impl core::fmt::Debug for ImageViewCreateFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageViewCreateFlags {}
 
 #[doc = spec!("VkImageViewCreateFlagBits")]
 ///
@@ -1692,6 +1785,9 @@ impl core::fmt::Debug for PipelineCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineCreateFlags {}
+
 #[doc = spec!("VkPipelineCreateFlagBits")]
 ///
 /// The single bits of [`PipelineCreateFlags`]; the same type.
@@ -1727,6 +1823,9 @@ impl core::fmt::Debug for ColorComponentFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ColorComponentFlags {}
+
 #[doc = spec!("VkColorComponentFlagBits")]
 ///
 /// The single bits of [`ColorComponentFlags`]; the same type.
@@ -1752,6 +1851,9 @@ impl core::fmt::Debug for FenceCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FenceCreateFlags {}
+
 #[doc = spec!("VkFenceCreateFlagBits")]
 ///
 /// The single bits of [`FenceCreateFlags`]; the same type.
@@ -1771,6 +1873,9 @@ impl core::fmt::Debug for SemaphoreCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SemaphoreCreateFlags {}
 
 #[doc = spec!("VkFormatFeatureFlags")]
 ///
@@ -1997,6 +2102,9 @@ impl core::fmt::Debug for FormatFeatureFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FormatFeatureFlags {}
+
 #[doc = spec!("VkFormatFeatureFlagBits")]
 ///
 /// The single bits of [`FormatFeatureFlags`]; the same type.
@@ -2023,6 +2131,9 @@ impl core::fmt::Debug for QueryControlFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "PRECISE")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for QueryControlFlags {}
 
 #[doc = spec!("VkQueryControlFlagBits")]
 ///
@@ -2072,6 +2183,9 @@ impl core::fmt::Debug for QueryResultFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for QueryResultFlags {}
+
 #[doc = spec!("VkQueryResultFlagBits")]
 ///
 /// The single bits of [`QueryResultFlags`]; the same type.
@@ -2091,6 +2205,9 @@ impl core::fmt::Debug for ShaderModuleCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShaderModuleCreateFlags {}
 
 #[doc = spec!("VkEventCreateFlags")]
 ///
@@ -2115,6 +2232,9 @@ impl core::fmt::Debug for EventCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "DEVICE_ONLY")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for EventCreateFlags {}
 
 #[doc = spec!("VkEventCreateFlagBits")]
 ///
@@ -2159,6 +2279,9 @@ impl core::fmt::Debug for CommandPoolCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CommandPoolCreateFlags {}
+
 #[doc = spec!("VkCommandPoolCreateFlagBits")]
 ///
 /// The single bits of [`CommandPoolCreateFlags`]; the same type.
@@ -2186,6 +2309,9 @@ impl core::fmt::Debug for CommandPoolResetFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CommandPoolResetFlags {}
+
 #[doc = spec!("VkCommandPoolResetFlagBits")]
 ///
 /// The single bits of [`CommandPoolResetFlags`]; the same type.
@@ -2212,6 +2338,9 @@ impl core::fmt::Debug for CommandBufferResetFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "RELEASE_RESOURCES")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CommandBufferResetFlags {}
 
 #[doc = spec!("VkCommandBufferResetFlagBits")]
 ///
@@ -2251,6 +2380,9 @@ impl core::fmt::Debug for CommandBufferUsageFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CommandBufferUsageFlags {}
 
 #[doc = spec!("VkCommandBufferUsageFlagBits")]
 ///
@@ -2344,6 +2476,9 @@ impl core::fmt::Debug for QueryPipelineStatisticFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for QueryPipelineStatisticFlags {}
+
 #[doc = spec!("VkQueryPipelineStatisticFlagBits")]
 ///
 /// The single bits of [`QueryPipelineStatisticFlags`]; the same type.
@@ -2369,6 +2504,9 @@ impl core::fmt::Debug for MemoryMapFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for MemoryMapFlags {}
+
 #[doc = spec!("VkMemoryMapFlagBits")]
 ///
 /// The single bits of [`MemoryMapFlags`]; the same type.
@@ -2393,6 +2531,9 @@ impl core::fmt::Debug for MemoryUnmapFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "RESERVE_EXT")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for MemoryUnmapFlags {}
 
 #[doc = spec!("VkMemoryUnmapFlagBits")]
 ///
@@ -2473,6 +2614,9 @@ impl core::fmt::Debug for ImageAspectFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageAspectFlags {}
+
 #[doc = spec!("VkImageAspectFlagBits")]
 ///
 /// The single bits of [`ImageAspectFlags`]; the same type.
@@ -2499,6 +2643,9 @@ impl core::fmt::Debug for SparseMemoryBindFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "METADATA")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SparseMemoryBindFlags {}
 
 #[doc = spec!("VkSparseMemoryBindFlagBits")]
 ///
@@ -2543,6 +2690,9 @@ impl core::fmt::Debug for SparseImageFormatFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SparseImageFormatFlags {}
 
 #[doc = spec!("VkSparseImageFormatFlagBits")]
 ///
@@ -2626,6 +2776,9 @@ impl core::fmt::Debug for SubpassDescriptionFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SubpassDescriptionFlags {}
 
 #[doc = spec!("VkSubpassDescriptionFlagBits")]
 ///
@@ -2801,6 +2954,9 @@ impl core::fmt::Debug for PipelineStageFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineStageFlags {}
+
 #[doc = spec!("VkPipelineStageFlagBits")]
 ///
 /// The single bits of [`PipelineStageFlags`]; the same type.
@@ -2864,6 +3020,9 @@ impl core::fmt::Debug for SampleCountFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SampleCountFlags {}
+
 #[doc = spec!("VkSampleCountFlagBits")]
 ///
 /// The single bits of [`SampleCountFlags`]; the same type.
@@ -2905,6 +3064,9 @@ impl core::fmt::Debug for AttachmentDescriptionFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AttachmentDescriptionFlags {}
+
 #[doc = spec!("VkAttachmentDescriptionFlagBits")]
 ///
 /// The single bits of [`AttachmentDescriptionFlags`]; the same type.
@@ -2940,6 +3102,9 @@ impl core::fmt::Debug for StencilFaceFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for StencilFaceFlags {}
+
 #[doc = spec!("VkStencilFaceFlagBits")]
 ///
 /// The single bits of [`StencilFaceFlags`]; the same type.
@@ -2970,6 +3135,9 @@ impl core::fmt::Debug for CullModeFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "FRONT"), (0x2, "BACK")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CullModeFlags {}
 
 #[doc = spec!("VkCullModeFlagBits")]
 ///
@@ -3024,6 +3192,9 @@ impl core::fmt::Debug for DescriptorPoolCreateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DescriptorPoolCreateFlags {}
+
 #[doc = spec!("VkDescriptorPoolCreateFlagBits")]
 ///
 /// The single bits of [`DescriptorPoolCreateFlags`]; the same type.
@@ -3043,6 +3214,9 @@ impl core::fmt::Debug for DescriptorPoolResetFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DescriptorPoolResetFlags {}
 
 #[doc = spec!("VkDependencyFlags")]
 ///
@@ -3098,6 +3272,9 @@ impl core::fmt::Debug for DependencyFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DependencyFlags {}
 
 #[doc = spec!("VkDependencyFlagBits")]
 ///
@@ -3188,6 +3365,9 @@ impl core::fmt::Debug for SubgroupFeatureFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SubgroupFeatureFlags {}
+
 #[doc = spec!("VkSubgroupFeatureFlagBits")]
 ///
 /// The single bits of [`SubgroupFeatureFlags`]; the same type.
@@ -3225,6 +3405,9 @@ impl core::fmt::Debug for IndirectCommandsLayoutUsageFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for IndirectCommandsLayoutUsageFlagsNV {}
+
 #[doc = spec!("VkIndirectCommandsLayoutUsageFlagBitsNV")]
 ///
 /// The single bits of [`IndirectCommandsLayoutUsageFlagsNV`]; the same type.
@@ -3249,6 +3432,9 @@ impl core::fmt::Debug for IndirectStateFlagsNV {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "FLAG_FRONTFACE")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for IndirectStateFlagsNV {}
 
 #[doc = spec!("VkIndirectStateFlagBitsNV")]
 ///
@@ -3288,6 +3474,9 @@ impl core::fmt::Debug for GeometryFlagsKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for GeometryFlagsKHR {}
 
 #[doc = spec!("VkGeometryFlagBitsKHR")]
 ///
@@ -3363,6 +3552,9 @@ impl core::fmt::Debug for GeometryInstanceFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for GeometryInstanceFlagsKHR {}
+
 #[doc = spec!("VkGeometryInstanceFlagBitsKHR")]
 ///
 /// The single bits of [`GeometryInstanceFlagsKHR`]; the same type.
@@ -3400,6 +3592,9 @@ impl core::fmt::Debug for ClusterAccelerationStructureGeometryFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ClusterAccelerationStructureGeometryFlagsNV {}
+
 #[doc = spec!("VkClusterAccelerationStructureGeometryFlagBitsNV")]
 ///
 /// The single bits of [`ClusterAccelerationStructureGeometryFlagsNV`]; the same type.
@@ -3429,6 +3624,9 @@ impl core::fmt::Debug for ClusterAccelerationStructureClusterFlagsNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ClusterAccelerationStructureClusterFlagsNV {}
 
 #[doc = spec!("VkClusterAccelerationStructureClusterFlagBitsNV")]
 ///
@@ -3477,6 +3675,9 @@ impl core::fmt::Debug for ClusterAccelerationStructureAddressResolutionFlagsNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ClusterAccelerationStructureAddressResolutionFlagsNV {}
 
 #[doc = spec!("VkClusterAccelerationStructureAddressResolutionFlagBitsNV")]
 ///
@@ -3572,6 +3773,9 @@ impl core::fmt::Debug for BuildAccelerationStructureFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BuildAccelerationStructureFlagsKHR {}
+
 #[doc = spec!("VkBuildAccelerationStructureFlagBitsKHR")]
 ///
 /// The single bits of [`BuildAccelerationStructureFlagsKHR`]; the same type.
@@ -3596,6 +3800,9 @@ impl core::fmt::Debug for PrivateDataSlotCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "BASE_OBJECT_HANDLE_NV")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PrivateDataSlotCreateFlags {}
 
 #[doc = spec!("VkPrivateDataSlotCreateFlagBits")]
 ///
@@ -3634,6 +3841,9 @@ impl core::fmt::Debug for AccelerationStructureCreateFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccelerationStructureCreateFlagsKHR {}
+
 #[doc = spec!("VkAccelerationStructureCreateFlagBitsKHR")]
 ///
 /// The single bits of [`AccelerationStructureCreateFlagsKHR`]; the same type.
@@ -3653,6 +3863,9 @@ impl core::fmt::Debug for DescriptorUpdateTemplateCreateFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DescriptorUpdateTemplateCreateFlags {}
 
 #[doc = spec!("VkPipelineCreationFeedbackFlags")]
 ///
@@ -3698,6 +3911,9 @@ impl core::fmt::Debug for PipelineCreationFeedbackFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineCreationFeedbackFlags {}
+
 #[doc = spec!("VkPipelineCreationFeedbackFlagBits")]
 ///
 /// The single bits of [`PipelineCreationFeedbackFlags`]; the same type.
@@ -3732,6 +3948,9 @@ impl core::fmt::Debug for PerformanceCounterDescriptionFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerformanceCounterDescriptionFlagsKHR {}
+
 #[doc = spec!("VkPerformanceCounterDescriptionFlagBitsKHR")]
 ///
 /// The single bits of [`PerformanceCounterDescriptionFlagsKHR`]; the same type.
@@ -3751,6 +3970,9 @@ impl core::fmt::Debug for AcquireProfilingLockFlagsKHR {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AcquireProfilingLockFlagsKHR {}
 
 #[doc = spec!("VkAcquireProfilingLockFlagBitsKHR")]
 ///
@@ -3781,6 +4003,9 @@ impl core::fmt::Debug for SemaphoreWaitFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SemaphoreWaitFlags {}
+
 #[doc = spec!("VkSemaphoreWaitFlagBits")]
 ///
 /// The single bits of [`SemaphoreWaitFlags`]; the same type.
@@ -3801,6 +4026,9 @@ impl core::fmt::Debug for PipelineCompilerControlFlagsAMD {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineCompilerControlFlagsAMD {}
+
 #[doc = spec!("VkPipelineCompilerControlFlagBitsAMD")]
 ///
 /// The single bits of [`PipelineCompilerControlFlagsAMD`]; the same type.
@@ -3820,6 +4048,9 @@ impl core::fmt::Debug for ShaderCorePropertiesFlagsAMD {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShaderCorePropertiesFlagsAMD {}
 
 #[doc = spec!("VkShaderCorePropertiesFlagBitsAMD")]
 ///
@@ -3860,6 +4091,9 @@ impl core::fmt::Debug for DeviceDiagnosticsConfigFlagsNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceDiagnosticsConfigFlagsNV {}
 
 #[doc = spec!("VkDeviceDiagnosticsConfigFlagBitsNV")]
 ///
@@ -4134,6 +4368,9 @@ impl core::fmt::Debug for AccessFlags2 {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccessFlags2 {}
 
 #[doc = spec!("VkAccessFlagBits2")]
 ///
@@ -4432,6 +4669,9 @@ impl core::fmt::Debug for PipelineStageFlags2 {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineStageFlags2 {}
+
 #[doc = spec!("VkPipelineStageFlagBits2")]
 ///
 /// The single bits of [`PipelineStageFlags2`]; the same type.
@@ -4452,6 +4692,9 @@ impl core::fmt::Debug for AccelerationStructureMotionInfoFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccelerationStructureMotionInfoFlagsNV {}
+
 #[doc = spec!("VkAccelerationStructureMotionInstanceFlagsNV")]
 ///
 /// Provided by `VK_NV_ray_tracing_motion_blur`.
@@ -4466,6 +4709,9 @@ impl core::fmt::Debug for AccelerationStructureMotionInstanceFlagsNV {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccelerationStructureMotionInstanceFlagsNV {}
 
 #[doc = spec!("VkFormatFeatureFlags2")]
 ///
@@ -4799,6 +5045,9 @@ impl core::fmt::Debug for FormatFeatureFlags2 {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FormatFeatureFlags2 {}
+
 #[doc = spec!("VkFormatFeatureFlagBits2")]
 ///
 /// The single bits of [`FormatFeatureFlags2`]; the same type.
@@ -4818,6 +5067,9 @@ impl core::fmt::Debug for FormatFeatureFlags4KHR {
         crate::fmt::flags(f, self.0, &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FormatFeatureFlags4KHR {}
 
 #[doc = spec!("VkFormatFeatureFlagBits4KHR")]
 ///
@@ -4893,6 +5145,9 @@ impl core::fmt::Debug for RenderingFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for RenderingFlags {}
+
 #[doc = spec!("VkRenderingFlagBits")]
 ///
 /// The single bits of [`RenderingFlags`]; the same type.
@@ -4921,6 +5176,9 @@ impl core::fmt::Debug for MemoryDecompressionMethodFlagsEXT {
         crate::fmt::flags(f, self.0, &[(0x1, "GDEFLATE_1_0")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for MemoryDecompressionMethodFlagsEXT {}
 
 #[doc = spec!("VkMemoryDecompressionMethodFlagBitsEXT")]
 ///
@@ -4968,6 +5226,9 @@ impl core::fmt::Debug for DeviceFaultFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceFaultFlagsKHR {}
+
 #[doc = spec!("VkDeviceFaultFlagBitsKHR")]
 ///
 /// The single bits of [`DeviceFaultFlagsKHR`]; the same type.
@@ -5005,6 +5266,9 @@ impl core::fmt::Debug for BuildMicromapFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BuildMicromapFlagsEXT {}
+
 #[doc = spec!("VkBuildMicromapFlagBitsEXT")]
 ///
 /// The single bits of [`BuildMicromapFlagsEXT`]; the same type.
@@ -5033,6 +5297,9 @@ impl core::fmt::Debug for MicromapCreateFlagsEXT {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for MicromapCreateFlagsEXT {}
 
 #[doc = spec!("VkMicromapCreateFlagBitsEXT")]
 ///
@@ -5065,6 +5332,9 @@ impl core::fmt::Debug for IndirectCommandsLayoutUsageFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for IndirectCommandsLayoutUsageFlagsEXT {}
+
 #[doc = spec!("VkIndirectCommandsLayoutUsageFlagBitsEXT")]
 ///
 /// The single bits of [`IndirectCommandsLayoutUsageFlagsEXT`]; the same type.
@@ -5096,6 +5366,9 @@ impl core::fmt::Debug for IndirectCommandsInputModeFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for IndirectCommandsInputModeFlagsEXT {}
+
 #[doc = spec!("VkIndirectCommandsInputModeFlagBitsEXT")]
 ///
 /// The single bits of [`IndirectCommandsInputModeFlagsEXT`]; the same type.
@@ -5115,6 +5388,9 @@ impl core::fmt::Debug for DirectDriverLoadingFlagsLUNARG {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DirectDriverLoadingFlagsLUNARG {}
 
 #[doc = spec!("VkPipelineCreateFlags2")]
 ///
@@ -5312,6 +5588,9 @@ impl core::fmt::Debug for PipelineCreateFlags2 {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineCreateFlags2 {}
+
 #[doc = spec!("VkPipelineCreateFlagBits2")]
 ///
 /// The single bits of [`PipelineCreateFlags2`]; the same type.
@@ -5462,6 +5741,9 @@ impl core::fmt::Debug for BufferUsageFlags2 {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BufferUsageFlags2 {}
+
 #[doc = spec!("VkBufferUsageFlagBits2")]
 ///
 /// The single bits of [`BufferUsageFlags2`]; the same type.
@@ -5540,6 +5822,9 @@ impl core::fmt::Debug for ImageUsageFlags2KHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageUsageFlags2KHR {}
 
 #[doc = spec!("VkImageUsageFlagBits2KHR")]
 ///
@@ -5629,6 +5914,9 @@ impl core::fmt::Debug for ImageCreateFlags2KHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageCreateFlags2KHR {}
+
 #[doc = spec!("VkImageCreateFlagBits2KHR")]
 ///
 /// The single bits of [`ImageCreateFlags2KHR`]; the same type.
@@ -5661,6 +5949,9 @@ impl core::fmt::Debug for AddressCopyFlagsKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AddressCopyFlagsKHR {}
 
 #[doc = spec!("VkAddressCopyFlagBitsKHR")]
 ///
@@ -5701,6 +5992,9 @@ impl core::fmt::Debug for TensorCreateFlagsARM {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for TensorCreateFlagsARM {}
 
 #[doc = spec!("VkTensorCreateFlagBitsARM")]
 ///
@@ -5753,6 +6047,9 @@ impl core::fmt::Debug for TensorUsageFlagsARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for TensorUsageFlagsARM {}
+
 #[doc = spec!("VkTensorUsageFlagBitsARM")]
 ///
 /// The single bits of [`TensorUsageFlagsARM`]; the same type.
@@ -5777,6 +6074,9 @@ impl core::fmt::Debug for TensorViewCreateFlagsARM {
         crate::fmt::flags(f, self.0, &[(0x1, "DESCRIPTOR_BUFFER_CAPTURE_REPLAY")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for TensorViewCreateFlagsARM {}
 
 #[doc = spec!("VkTensorViewCreateFlagBitsARM")]
 ///
@@ -5809,6 +6109,9 @@ impl core::fmt::Debug for DataGraphPipelineSessionCreateFlagsARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphPipelineSessionCreateFlagsARM {}
+
 #[doc = spec!("VkDataGraphPipelineSessionCreateFlagBitsARM")]
 ///
 /// The single bits of [`DataGraphPipelineSessionCreateFlagsARM`]; the same type.
@@ -5828,6 +6131,9 @@ impl core::fmt::Debug for DataGraphPipelineDispatchFlagsARM {
         crate::fmt::flags(f, self.0, &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphPipelineDispatchFlagsARM {}
 
 #[doc = spec!("VkDataGraphPipelineDispatchFlagBitsARM")]
 ///
@@ -5889,6 +6195,9 @@ impl core::fmt::Debug for SpirvResourceTypeFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SpirvResourceTypeFlagsEXT {}
+
 #[doc = spec!("VkSpirvResourceTypeFlagBitsEXT")]
 ///
 /// The single bits of [`SpirvResourceTypeFlagsEXT`]; the same type.
@@ -5938,6 +6247,9 @@ impl core::fmt::Debug for GpaSqShaderStageFlagsAMD {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for GpaSqShaderStageFlagsAMD {}
+
 #[doc = spec!("VkGpaSqShaderStageFlagBitsAMD")]
 ///
 /// The single bits of [`GpaSqShaderStageFlagsAMD`]; the same type.
@@ -5958,6 +6270,9 @@ impl core::fmt::Debug for GpaPerfBlockPropertiesFlagsAMD {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for GpaPerfBlockPropertiesFlagsAMD {}
+
 #[doc = spec!("VkPhysicalDeviceGpaPropertiesFlagsAMD")]
 ///
 /// Provided by `VK_AMD_gpa_interface`.
@@ -5972,6 +6287,9 @@ impl core::fmt::Debug for PhysicalDeviceGpaPropertiesFlagsAMD {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PhysicalDeviceGpaPropertiesFlagsAMD {}
 
 #[doc = spec!("VkAddressCommandFlagsKHR")]
 ///
@@ -6014,6 +6332,9 @@ impl core::fmt::Debug for AddressCommandFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AddressCommandFlagsKHR {}
+
 #[doc = spec!("VkAddressCommandFlagBitsKHR")]
 ///
 /// The single bits of [`AddressCommandFlagsKHR`]; the same type.
@@ -6054,6 +6375,9 @@ impl core::fmt::Debug for CompositeAlphaFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CompositeAlphaFlagsKHR {}
+
 #[doc = spec!("VkCompositeAlphaFlagBitsKHR")]
 ///
 /// The single bits of [`CompositeAlphaFlagsKHR`]; the same type.
@@ -6093,6 +6417,9 @@ impl core::fmt::Debug for DisplayPlaneAlphaFlagsKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DisplayPlaneAlphaFlagsKHR {}
 
 #[doc = spec!("VkDisplayPlaneAlphaFlagBitsKHR")]
 ///
@@ -6148,6 +6475,9 @@ impl core::fmt::Debug for SurfaceTransformFlagsKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SurfaceTransformFlagsKHR {}
 
 #[doc = spec!("VkSurfaceTransformFlagBitsKHR")]
 ///
@@ -6213,6 +6543,9 @@ impl core::fmt::Debug for SwapchainCreateFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SwapchainCreateFlagsKHR {}
+
 #[doc = spec!("VkSwapchainCreateFlagBitsKHR")]
 ///
 /// The single bits of [`SwapchainCreateFlagsKHR`]; the same type.
@@ -6233,6 +6566,9 @@ impl core::fmt::Debug for DisplayModeCreateFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DisplayModeCreateFlagsKHR {}
+
 #[doc = spec!("VkDisplaySurfaceCreateFlagsKHR")]
 ///
 /// Provided by `VK_KHR_display`.
@@ -6247,6 +6583,9 @@ impl core::fmt::Debug for DisplaySurfaceCreateFlagsKHR {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DisplaySurfaceCreateFlagsKHR {}
 
 #[doc = spec!("VkWin32SurfaceCreateFlagsKHR")]
 ///
@@ -6263,6 +6602,9 @@ impl core::fmt::Debug for Win32SurfaceCreateFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for Win32SurfaceCreateFlagsKHR {}
+
 #[doc = spec!("VkHeadlessSurfaceCreateFlagsEXT")]
 ///
 /// Provided by `VK_EXT_headless_surface`.
@@ -6277,6 +6619,9 @@ impl core::fmt::Debug for HeadlessSurfaceCreateFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for HeadlessSurfaceCreateFlagsEXT {}
 
 #[doc = spec!("VkPeerMemoryFeatureFlags")]
 ///
@@ -6337,6 +6682,9 @@ impl core::fmt::Debug for PeerMemoryFeatureFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PeerMemoryFeatureFlags {}
+
 #[doc = spec!("VkPeerMemoryFeatureFlagBits")]
 ///
 /// The single bits of [`PeerMemoryFeatureFlags`]; the same type.
@@ -6391,6 +6739,9 @@ impl core::fmt::Debug for MemoryAllocateFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for MemoryAllocateFlags {}
+
 #[doc = spec!("VkMemoryAllocateFlagBits")]
 ///
 /// The single bits of [`MemoryAllocateFlags`]; the same type.
@@ -6439,6 +6790,9 @@ impl core::fmt::Debug for DeviceGroupPresentModeFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceGroupPresentModeFlagsKHR {}
+
 #[doc = spec!("VkDeviceGroupPresentModeFlagBitsKHR")]
 ///
 /// The single bits of [`DeviceGroupPresentModeFlagsKHR`]; the same type.
@@ -6482,6 +6836,9 @@ impl core::fmt::Debug for DebugReportFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DebugReportFlagsEXT {}
+
 #[doc = spec!("VkDebugReportFlagBitsEXT")]
 ///
 /// The single bits of [`DebugReportFlagsEXT`]; the same type.
@@ -6501,6 +6858,9 @@ impl core::fmt::Debug for CommandPoolTrimFlags {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CommandPoolTrimFlags {}
 
 #[doc = spec!("VkExternalMemoryHandleTypeFlagsNV")]
 ///
@@ -6536,6 +6896,9 @@ impl core::fmt::Debug for ExternalMemoryHandleTypeFlagsNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ExternalMemoryHandleTypeFlagsNV {}
 
 #[doc = spec!("VkExternalMemoryHandleTypeFlagBitsNV")]
 ///
@@ -6574,6 +6937,9 @@ impl core::fmt::Debug for ClusterAccelerationStructureIndexFormatFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ClusterAccelerationStructureIndexFormatFlagsNV {}
+
 #[doc = spec!("VkClusterAccelerationStructureIndexFormatFlagBitsNV")]
 ///
 /// The single bits of [`ClusterAccelerationStructureIndexFormatFlagsNV`]; the same type.
@@ -6611,6 +6977,9 @@ impl core::fmt::Debug for ExternalMemoryFeatureFlagsNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ExternalMemoryFeatureFlagsNV {}
 
 #[doc = spec!("VkExternalMemoryFeatureFlagBitsNV")]
 ///
@@ -6701,6 +7070,9 @@ impl core::fmt::Debug for ExternalMemoryHandleTypeFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ExternalMemoryHandleTypeFlags {}
+
 #[doc = spec!("VkExternalMemoryHandleTypeFlagBits")]
 ///
 /// The single bits of [`ExternalMemoryHandleTypeFlags`]; the same type.
@@ -6749,6 +7121,9 @@ impl core::fmt::Debug for ExternalMemoryFeatureFlags {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ExternalMemoryFeatureFlags {}
 
 #[doc = spec!("VkExternalMemoryFeatureFlagBits")]
 ///
@@ -6817,6 +7192,9 @@ impl core::fmt::Debug for ExternalSemaphoreHandleTypeFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ExternalSemaphoreHandleTypeFlags {}
+
 #[doc = spec!("VkExternalSemaphoreHandleTypeFlagBits")]
 ///
 /// The single bits of [`ExternalSemaphoreHandleTypeFlags`]; the same type.
@@ -6856,6 +7234,9 @@ impl core::fmt::Debug for ExternalSemaphoreFeatureFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ExternalSemaphoreFeatureFlags {}
+
 #[doc = spec!("VkExternalSemaphoreFeatureFlagBits")]
 ///
 /// The single bits of [`ExternalSemaphoreFeatureFlags`]; the same type.
@@ -6884,6 +7265,9 @@ impl core::fmt::Debug for SemaphoreImportFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "TEMPORARY")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SemaphoreImportFlags {}
 
 #[doc = spec!("VkSemaphoreImportFlagBits")]
 ///
@@ -6941,6 +7325,9 @@ impl core::fmt::Debug for ExternalFenceHandleTypeFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ExternalFenceHandleTypeFlags {}
+
 #[doc = spec!("VkExternalFenceHandleTypeFlagBits")]
 ///
 /// The single bits of [`ExternalFenceHandleTypeFlags`]; the same type.
@@ -6980,6 +7367,9 @@ impl core::fmt::Debug for ExternalFenceFeatureFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ExternalFenceFeatureFlags {}
+
 #[doc = spec!("VkExternalFenceFeatureFlagBits")]
 ///
 /// The single bits of [`ExternalFenceFeatureFlags`]; the same type.
@@ -7009,6 +7399,9 @@ impl core::fmt::Debug for FenceImportFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FenceImportFlags {}
+
 #[doc = spec!("VkFenceImportFlagBits")]
 ///
 /// The single bits of [`FenceImportFlags`]; the same type.
@@ -7034,6 +7427,9 @@ impl core::fmt::Debug for SurfaceCounterFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SurfaceCounterFlagsEXT {}
+
 #[doc = spec!("VkSurfaceCounterFlagBitsEXT")]
 ///
 /// The single bits of [`SurfaceCounterFlagsEXT`]; the same type.
@@ -7054,6 +7450,9 @@ impl core::fmt::Debug for PipelineViewportSwizzleStateCreateFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineViewportSwizzleStateCreateFlagsNV {}
+
 #[doc = spec!("VkPipelineDiscardRectangleStateCreateFlagsEXT")]
 ///
 /// Provided by `VK_EXT_discard_rectangles`.
@@ -7068,6 +7467,9 @@ impl core::fmt::Debug for PipelineDiscardRectangleStateCreateFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineDiscardRectangleStateCreateFlagsEXT {}
 
 #[doc = spec!("VkPipelineCoverageToColorStateCreateFlagsNV")]
 ///
@@ -7084,6 +7486,9 @@ impl core::fmt::Debug for PipelineCoverageToColorStateCreateFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineCoverageToColorStateCreateFlagsNV {}
+
 #[doc = spec!("VkPipelineCoverageModulationStateCreateFlagsNV")]
 ///
 /// Provided by `VK_NV_framebuffer_mixed_samples`.
@@ -7098,6 +7503,9 @@ impl core::fmt::Debug for PipelineCoverageModulationStateCreateFlagsNV {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineCoverageModulationStateCreateFlagsNV {}
 
 #[doc = spec!("VkPipelineCoverageReductionStateCreateFlagsNV")]
 ///
@@ -7114,6 +7522,9 @@ impl core::fmt::Debug for PipelineCoverageReductionStateCreateFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineCoverageReductionStateCreateFlagsNV {}
+
 #[doc = spec!("VkValidationCacheCreateFlagsEXT")]
 ///
 /// Provided by `VK_EXT_validation_cache`.
@@ -7128,6 +7539,9 @@ impl core::fmt::Debug for ValidationCacheCreateFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ValidationCacheCreateFlagsEXT {}
 
 #[doc = spec!("VkDebugUtilsMessageSeverityFlagsEXT")]
 ///
@@ -7163,6 +7577,9 @@ impl core::fmt::Debug for DebugUtilsMessageSeverityFlagsEXT {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DebugUtilsMessageSeverityFlagsEXT {}
 
 #[doc = spec!("VkDebugUtilsMessageSeverityFlagBitsEXT")]
 ///
@@ -7204,6 +7621,9 @@ impl core::fmt::Debug for DebugUtilsMessageTypeFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DebugUtilsMessageTypeFlagsEXT {}
+
 #[doc = spec!("VkDebugUtilsMessageTypeFlagBitsEXT")]
 ///
 /// The single bits of [`DebugUtilsMessageTypeFlagsEXT`]; the same type.
@@ -7224,6 +7644,9 @@ impl core::fmt::Debug for DebugUtilsMessengerCreateFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DebugUtilsMessengerCreateFlagsEXT {}
+
 #[doc = spec!("VkDebugUtilsMessengerCallbackDataFlagsEXT")]
 ///
 /// Provided by `VK_EXT_debug_utils`.
@@ -7238,6 +7661,9 @@ impl core::fmt::Debug for DebugUtilsMessengerCallbackDataFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DebugUtilsMessengerCallbackDataFlagsEXT {}
 
 #[doc = spec!("VkDeviceMemoryReportFlagsEXT")]
 ///
@@ -7254,6 +7680,9 @@ impl core::fmt::Debug for DeviceMemoryReportFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceMemoryReportFlagsEXT {}
+
 #[doc = spec!("VkPipelineRasterizationConservativeStateCreateFlagsEXT")]
 ///
 /// Provided by `VK_EXT_conservative_rasterization`.
@@ -7268,6 +7697,9 @@ impl core::fmt::Debug for PipelineRasterizationConservativeStateCreateFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineRasterizationConservativeStateCreateFlagsEXT {}
 
 #[doc = spec!("VkDescriptorBindingFlags")]
 ///
@@ -7320,6 +7752,9 @@ impl core::fmt::Debug for DescriptorBindingFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DescriptorBindingFlags {}
+
 #[doc = spec!("VkDescriptorBindingFlagBits")]
 ///
 /// The single bits of [`DescriptorBindingFlags`]; the same type.
@@ -7344,6 +7779,9 @@ impl core::fmt::Debug for ConditionalRenderingFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "INVERTED")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ConditionalRenderingFlagsEXT {}
 
 #[doc = spec!("VkConditionalRenderingFlagBitsEXT")]
 ///
@@ -7410,6 +7848,9 @@ impl core::fmt::Debug for ResolveModeFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ResolveModeFlags {}
+
 #[doc = spec!("VkResolveModeFlagBits")]
 ///
 /// The single bits of [`ResolveModeFlags`]; the same type.
@@ -7430,6 +7871,9 @@ impl core::fmt::Debug for PipelineRasterizationStateStreamCreateFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineRasterizationStateStreamCreateFlagsEXT {}
+
 #[doc = spec!("VkPipelineRasterizationDepthClipStateCreateFlagsEXT")]
 ///
 /// Provided by `VK_EXT_depth_clip_enable`.
@@ -7444,6 +7888,9 @@ impl core::fmt::Debug for PipelineRasterizationDepthClipStateCreateFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineRasterizationDepthClipStateCreateFlagsEXT {}
 
 #[doc = spec!("VkToolPurposeFlags")]
 ///
@@ -7509,6 +7956,9 @@ impl core::fmt::Debug for ToolPurposeFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ToolPurposeFlags {}
+
 #[doc = spec!("VkToolPurposeFlagBits")]
 ///
 /// The single bits of [`ToolPurposeFlags`]; the same type.
@@ -7538,6 +7988,9 @@ impl core::fmt::Debug for SubmitFlags {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SubmitFlags {}
+
 #[doc = spec!("VkSubmitFlagBits")]
 ///
 /// The single bits of [`SubmitFlags`]; the same type.
@@ -7566,6 +8019,9 @@ impl core::fmt::Debug for HostImageCopyFlags {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "MEMCPY")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for HostImageCopyFlags {}
 
 #[doc = spec!("VkHostImageCopyFlagBits")]
 ///
@@ -7610,6 +8066,9 @@ impl core::fmt::Debug for PartitionedAccelerationStructureInstanceFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PartitionedAccelerationStructureInstanceFlagsNV {}
+
 #[doc = spec!("VkPartitionedAccelerationStructureInstanceFlagBitsNV")]
 ///
 /// The single bits of [`PartitionedAccelerationStructureInstanceFlagsNV`]; the same type.
@@ -7651,6 +8110,9 @@ impl core::fmt::Debug for GraphicsPipelineLibraryFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for GraphicsPipelineLibraryFlagsEXT {}
+
 #[doc = spec!("VkGraphicsPipelineLibraryFlagBitsEXT")]
 ///
 /// The single bits of [`GraphicsPipelineLibraryFlagsEXT`]; the same type.
@@ -7689,6 +8151,9 @@ impl core::fmt::Debug for ImageCompressionFlagsEXT {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageCompressionFlagsEXT {}
 
 #[doc = spec!("VkImageCompressionFlagBitsEXT")]
 ///
@@ -7792,6 +8257,9 @@ impl core::fmt::Debug for ImageCompressionFixedRateFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageCompressionFixedRateFlagsEXT {}
+
 #[doc = spec!("VkImageCompressionFixedRateFlagBitsEXT")]
 ///
 /// The single bits of [`ImageCompressionFixedRateFlagsEXT`]; the same type.
@@ -7829,6 +8297,9 @@ impl core::fmt::Debug for RenderingAttachmentFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for RenderingAttachmentFlagsKHR {}
+
 #[doc = spec!("VkRenderingAttachmentFlagBitsKHR")]
 ///
 /// The single bits of [`RenderingAttachmentFlagsKHR`]; the same type.
@@ -7863,6 +8334,9 @@ impl core::fmt::Debug for ResolveImageFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ResolveImageFlagsKHR {}
+
 #[doc = spec!("VkResolveImageFlagBitsKHR")]
 ///
 /// The single bits of [`ResolveImageFlagsKHR`]; the same type.
@@ -7887,6 +8361,9 @@ impl core::fmt::Debug for DeviceAddressBindingFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "INTERNAL_OBJECT")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceAddressBindingFlagsEXT {}
 
 #[doc = spec!("VkDeviceAddressBindingFlagBitsEXT")]
 ///
@@ -7929,6 +8406,9 @@ impl core::fmt::Debug for OpticalFlowGridSizeFlagsNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for OpticalFlowGridSizeFlagsNV {}
 
 #[doc = spec!("VkOpticalFlowGridSizeFlagBitsNV")]
 ///
@@ -7975,6 +8455,9 @@ impl core::fmt::Debug for OpticalFlowUsageFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for OpticalFlowUsageFlagsNV {}
+
 #[doc = spec!("VkOpticalFlowUsageFlagBitsNV")]
 ///
 /// The single bits of [`OpticalFlowUsageFlagsNV`]; the same type.
@@ -8018,6 +8501,9 @@ impl core::fmt::Debug for OpticalFlowSessionCreateFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for OpticalFlowSessionCreateFlagsNV {}
+
 #[doc = spec!("VkOpticalFlowSessionCreateFlagBitsNV")]
 ///
 /// The single bits of [`OpticalFlowSessionCreateFlagsNV`]; the same type.
@@ -8043,6 +8529,9 @@ impl core::fmt::Debug for OpticalFlowExecuteFlagsNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for OpticalFlowExecuteFlagsNV {}
+
 #[doc = spec!("VkOpticalFlowExecuteFlagBitsNV")]
 ///
 /// The single bits of [`OpticalFlowExecuteFlagsNV`]; the same type.
@@ -8067,6 +8556,9 @@ impl core::fmt::Debug for FrameBoundaryFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "FRAME_END")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FrameBoundaryFlagsEXT {}
 
 #[doc = spec!("VkFrameBoundaryFlagBitsEXT")]
 ///
@@ -8117,6 +8609,9 @@ impl core::fmt::Debug for PresentScalingFlagsKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PresentScalingFlagsKHR {}
+
 #[doc = spec!("VkPresentScalingFlagBitsKHR")]
 ///
 /// The single bits of [`PresentScalingFlagsKHR`]; the same type.
@@ -8161,6 +8656,9 @@ impl core::fmt::Debug for PresentGravityFlagsKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PresentGravityFlagsKHR {}
 
 #[doc = spec!("VkPresentGravityFlagBitsKHR")]
 ///
@@ -8229,6 +8727,9 @@ impl core::fmt::Debug for ShaderCreateFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShaderCreateFlagsEXT {}
+
 #[doc = spec!("VkShaderCreateFlagBitsEXT")]
 ///
 /// The single bits of [`ShaderCreateFlagsEXT`]; the same type.
@@ -8260,6 +8761,9 @@ impl core::fmt::Debug for TileShadingRenderPassFlagsQCOM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for TileShadingRenderPassFlagsQCOM {}
+
 #[doc = spec!("VkTileShadingRenderPassFlagBitsQCOM")]
 ///
 /// The single bits of [`TileShadingRenderPassFlagsQCOM`]; the same type.
@@ -8290,6 +8794,9 @@ impl core::fmt::Debug for PhysicalDeviceSchedulingControlsFlagsARM {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PhysicalDeviceSchedulingControlsFlagsARM {}
 
 #[doc = spec!("VkPhysicalDeviceSchedulingControlsFlagBitsARM")]
 ///
@@ -8331,6 +8838,9 @@ impl core::fmt::Debug for PresentStageFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PresentStageFlagsEXT {}
+
 #[doc = spec!("VkPresentStageFlagBitsEXT")]
 ///
 /// The single bits of [`PresentStageFlagsEXT`]; the same type.
@@ -8364,6 +8874,9 @@ impl core::fmt::Debug for PastPresentationTimingFlagsEXT {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PastPresentationTimingFlagsEXT {}
 
 #[doc = spec!("VkPastPresentationTimingFlagBitsEXT")]
 ///
@@ -8399,6 +8912,9 @@ impl core::fmt::Debug for PresentTimingInfoFlagsEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PresentTimingInfoFlagsEXT {}
+
 #[doc = spec!("VkPresentTimingInfoFlagBitsEXT")]
 ///
 /// The single bits of [`PresentTimingInfoFlagsEXT`]; the same type.
@@ -8419,6 +8935,9 @@ impl core::fmt::Debug for PerformanceCounterDescriptionFlagsARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerformanceCounterDescriptionFlagsARM {}
+
 #[doc = spec!("VkShaderInstrumentationValuesFlagsARM")]
 ///
 /// Provided by `VK_ARM_shader_instrumentation`.
@@ -8433,6 +8952,9 @@ impl core::fmt::Debug for ShaderInstrumentationValuesFlagsARM {
         crate::fmt::flags(f, u64::from(self.0), &[])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShaderInstrumentationValuesFlagsARM {}
 
 #[doc = spec!("VkDataGraphTOSAQualityFlagsARM")]
 ///
@@ -8468,6 +8990,9 @@ impl core::fmt::Debug for DataGraphTOSAQualityFlagsARM {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphTOSAQualityFlagsARM {}
 
 #[doc = spec!("VkDataGraphTOSAQualityFlagBitsARM")]
 ///
@@ -8511,6 +9036,9 @@ impl core::fmt::Debug for DataGraphOpticalFlowGridSizeFlagsARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphOpticalFlowGridSizeFlagsARM {}
+
 #[doc = spec!("VkDataGraphOpticalFlowGridSizeFlagBitsARM")]
 ///
 /// The single bits of [`DataGraphOpticalFlowGridSizeFlagsARM`]; the same type.
@@ -8553,6 +9081,9 @@ impl core::fmt::Debug for DataGraphOpticalFlowImageUsageFlagsARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphOpticalFlowImageUsageFlagsARM {}
+
 #[doc = spec!("VkDataGraphOpticalFlowImageUsageFlagBitsARM")]
 ///
 /// The single bits of [`DataGraphOpticalFlowImageUsageFlagsARM`]; the same type.
@@ -8589,6 +9120,9 @@ impl core::fmt::Debug for DataGraphOpticalFlowCreateFlagsARM {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphOpticalFlowCreateFlagsARM {}
 
 #[doc = spec!("VkDataGraphOpticalFlowCreateFlagBitsARM")]
 ///
@@ -8633,6 +9167,9 @@ impl core::fmt::Debug for DataGraphOpticalFlowExecuteFlagsARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphOpticalFlowExecuteFlagsARM {}
+
 #[doc = spec!("VkDataGraphOpticalFlowExecuteFlagBitsARM")]
 ///
 /// The single bits of [`DataGraphOpticalFlowExecuteFlagsARM`]; the same type.
@@ -8658,6 +9195,9 @@ impl core::fmt::Debug for AccessFlags3KHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccessFlags3KHR {}
+
 #[doc = spec!("VkAccessFlagBits3KHR")]
 ///
 /// The single bits of [`AccessFlags3KHR`]; the same type.
@@ -8682,6 +9222,9 @@ impl core::fmt::Debug for CooperativeMatrixFlagsEXT {
         crate::fmt::flags(f, u64::from(self.0), &[(0x1, "SATURATING_ACCUMULATION")])
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CooperativeMatrixFlagsEXT {}
 
 #[doc = spec!("VkCooperativeMatrixFlagBitsEXT")]
 ///

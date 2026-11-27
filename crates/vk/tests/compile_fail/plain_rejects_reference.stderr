@@ -1,0 +1,16 @@
+error[E0277]: the trait bound `&u8: Plain` is not satisfied
+  --> tests/compile_fail/plain_rejects_reference.rs:11:84
+   |
+11 |         device.cmd_update_buffer(vk::CommandBuffer::null(), vk::Buffer::null(), 0, &[&BYTE]);
+   |                ----------------- required by a bound introduced by this call       ^^^^^^^^ the trait `Plain` is not implemented for `&u8`
+   |
+note: required by a bound in `tessera_vk::generated::commands::<impl tessera_vk::Device>::cmd_update_buffer`
+  --> src/generated/commands.rs
+   |
+   |     pub unsafe fn cmd_update_buffer<T: crate::Plain>(
+   |                                        ^^^^^^^^^^^^ required by this bound in `tessera_vk::generated::commands::<impl Device>::cmd_update_buffer`
+help: consider removing the leading `&`-reference
+      |
+11 -         device.cmd_update_buffer(vk::CommandBuffer::null(), vk::Buffer::null(), 0, &[&BYTE]);
+11 +         device.cmd_update_buffer(vk::CommandBuffer::null(), vk::Buffer::null(), 0, [&BYTE]);
+   |

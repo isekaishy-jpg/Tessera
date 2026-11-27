@@ -109,6 +109,13 @@ impl core::fmt::Debug for Offset2D {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for Offset2D {}
+
+const _: () = assert!(
+    core::mem::size_of::<Offset2D>() == core::mem::size_of::<i32>() + core::mem::size_of::<i32>()
+);
+
 #[doc = spec!("VkOffset3D")]
 ///
 /// Provided by Vulkan 1.0.
@@ -162,6 +169,14 @@ impl core::fmt::Debug for Offset3D {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for Offset3D {}
+
+const _: () = assert!(
+    core::mem::size_of::<Offset3D>()
+        == core::mem::size_of::<i32>() + core::mem::size_of::<i32>() + core::mem::size_of::<i32>()
+);
+
 #[doc = spec!("VkExtent2D")]
 ///
 /// Provided by Vulkan 1.0.
@@ -205,6 +220,13 @@ impl core::fmt::Debug for Extent2D {
         debug_fields!(f, "Extent2D", width, height)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for Extent2D {}
+
+const _: () = assert!(
+    core::mem::size_of::<Extent2D>() == core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkExtent3D")]
 ///
@@ -263,6 +285,14 @@ impl core::fmt::Debug for Extent3D {
         debug_fields!(f, "Extent3D", width, height, depth)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for Extent3D {}
+
+const _: () = assert!(
+    core::mem::size_of::<Extent3D>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkViewport")]
 ///
@@ -352,6 +382,19 @@ impl core::fmt::Debug for Viewport {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for Viewport {}
+
+const _: () = assert!(
+    core::mem::size_of::<Viewport>()
+        == core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+);
+
 #[doc = spec!("VkRect2D")]
 ///
 /// Provided by Vulkan 1.0.
@@ -395,6 +438,14 @@ impl core::fmt::Debug for Rect2D {
         debug_fields!(f, "Rect2D", offset, extent)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for Rect2D {}
+
+const _: () = assert!(
+    core::mem::size_of::<Rect2D>()
+        == core::mem::size_of::<Offset2D>() + core::mem::size_of::<Extent2D>()
+);
 
 #[doc = spec!("VkClearRect")]
 ///
@@ -453,6 +504,16 @@ impl core::fmt::Debug for ClearRect {
         debug_fields!(f, "ClearRect", rect, base_array_layer, layer_count)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ClearRect {}
+
+const _: () = assert!(
+    core::mem::size_of::<ClearRect>()
+        == core::mem::size_of::<Rect2D>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkComponentMapping")]
 ///
@@ -515,6 +576,17 @@ impl core::fmt::Debug for ComponentMapping {
         debug_fields!(f, "ComponentMapping", r, g, b, a)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ComponentMapping {}
+
+const _: () = assert!(
+    core::mem::size_of::<ComponentMapping>()
+        == core::mem::size_of::<ComponentSwizzle>()
+            + core::mem::size_of::<ComponentSwizzle>()
+            + core::mem::size_of::<ComponentSwizzle>()
+            + core::mem::size_of::<ComponentSwizzle>()
+);
 
 #[doc = spec!("VkPhysicalDeviceProperties")]
 ///
@@ -619,6 +691,14 @@ impl core::fmt::Debug for ExtensionProperties {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ExtensionProperties {}
+
+const _: () = assert!(
+    core::mem::size_of::<ExtensionProperties>()
+        == core::mem::size_of::<[c_char; MAX_EXTENSION_NAME_SIZE]>() + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkLayerProperties")]
 ///
 /// Provided by Vulkan 1.0.
@@ -673,6 +753,17 @@ impl core::fmt::Debug for LayerProperties {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for LayerProperties {}
+
+const _: () = assert!(
+    core::mem::size_of::<LayerProperties>()
+        == core::mem::size_of::<[c_char; MAX_EXTENSION_NAME_SIZE]>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<[c_char; MAX_DESCRIPTION_SIZE]>()
+);
 
 #[doc = spec!("VkApplicationInfo")]
 ///
@@ -1284,6 +1375,17 @@ impl core::fmt::Debug for QueueFamilyProperties {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for QueueFamilyProperties {}
+
+const _: () = assert!(
+    core::mem::size_of::<QueueFamilyProperties>()
+        == core::mem::size_of::<QueueFlags>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<Extent3D>()
+);
+
 #[doc = spec!("VkPhysicalDeviceMemoryProperties")]
 ///
 /// Provided by Vulkan 1.0.
@@ -1495,6 +1597,16 @@ impl core::fmt::Debug for SparseImageFormatProperties {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SparseImageFormatProperties {}
+
+const _: () = assert!(
+    core::mem::size_of::<SparseImageFormatProperties>()
+        == core::mem::size_of::<ImageAspectFlags>()
+            + core::mem::size_of::<Extent3D>()
+            + core::mem::size_of::<SparseImageFormatFlags>()
+);
+
 #[doc = spec!("VkSparseImageMemoryRequirements")]
 ///
 /// Provided by Vulkan 1.0.
@@ -1550,6 +1662,18 @@ impl core::fmt::Debug for SparseImageMemoryRequirements {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SparseImageMemoryRequirements {}
+
+const _: () = assert!(
+    core::mem::size_of::<SparseImageMemoryRequirements>()
+        == core::mem::size_of::<SparseImageFormatProperties>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+);
+
 #[doc = spec!("VkMemoryType")]
 ///
 /// Provided by Vulkan 1.0.
@@ -1585,6 +1709,14 @@ impl core::fmt::Debug for MemoryType {
         debug_fields!(f, "MemoryType", property_flags, heap_index)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for MemoryType {}
+
+const _: () = assert!(
+    core::mem::size_of::<MemoryType>()
+        == core::mem::size_of::<MemoryPropertyFlags>() + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkMemoryHeap")]
 ///
@@ -1746,6 +1878,16 @@ impl core::fmt::Debug for FormatProperties {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for FormatProperties {}
+
+const _: () = assert!(
+    core::mem::size_of::<FormatProperties>()
+        == core::mem::size_of::<FormatFeatureFlags>()
+            + core::mem::size_of::<FormatFeatureFlags>()
+            + core::mem::size_of::<FormatFeatureFlags>()
+);
+
 #[doc = spec!("VkImageFormatProperties")]
 ///
 /// Provided by Vulkan 1.0.
@@ -1804,6 +1946,18 @@ impl core::fmt::Debug for ImageFormatProperties {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ImageFormatProperties {}
+
+const _: () = assert!(
+    core::mem::size_of::<ImageFormatProperties>()
+        == core::mem::size_of::<Extent3D>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<SampleCountFlags>()
+            + core::mem::size_of::<DeviceSize>()
+);
 
 #[doc = spec!("VkDescriptorBufferInfo")]
 ///
@@ -1868,6 +2022,16 @@ impl core::fmt::Debug for DescriptorBufferInfo {
         debug_fields!(f, "DescriptorBufferInfo", buffer, offset, range)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DescriptorBufferInfo {}
+
+const _: () = assert!(
+    core::mem::size_of::<DescriptorBufferInfo>()
+        == core::mem::size_of::<Buffer>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+);
 
 #[doc = spec!("VkDescriptorImageInfo")]
 ///
@@ -2619,6 +2783,16 @@ impl core::fmt::Debug for ImageSubresource {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ImageSubresource {}
+
+const _: () = assert!(
+    core::mem::size_of::<ImageSubresource>()
+        == core::mem::size_of::<ImageAspectFlags>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkImageSubresourceLayers")]
 ///
 /// Provided by Vulkan 1.0.
@@ -2693,6 +2867,17 @@ impl core::fmt::Debug for ImageSubresourceLayers {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ImageSubresourceLayers {}
+
+const _: () = assert!(
+    core::mem::size_of::<ImageSubresourceLayers>()
+        == core::mem::size_of::<ImageAspectFlags>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkImageSubresourceRange")]
 ///
@@ -2779,6 +2964,18 @@ impl core::fmt::Debug for ImageSubresourceRange {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ImageSubresourceRange {}
+
+const _: () = assert!(
+    core::mem::size_of::<ImageSubresourceRange>()
+        == core::mem::size_of::<ImageAspectFlags>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkMemoryBarrier")]
 ///
@@ -3612,6 +3809,18 @@ impl core::fmt::Debug for SubresourceLayout {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SubresourceLayout {}
+
+const _: () = assert!(
+    core::mem::size_of::<SubresourceLayout>()
+        == core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+);
+
 #[doc = spec!("VkImageViewCreateInfo")]
 ///
 /// Provided by Vulkan 1.0.
@@ -3799,6 +4008,16 @@ impl core::fmt::Debug for BufferCopy {
         debug_fields!(f, "BufferCopy", src_offset, dst_offset, size)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for BufferCopy {}
+
+const _: () = assert!(
+    core::mem::size_of::<BufferCopy>()
+        == core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+);
 
 #[doc = spec!("VkSparseMemoryBind")]
 ///
@@ -4405,6 +4624,18 @@ impl core::fmt::Debug for ImageCopy {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ImageCopy {}
+
+const _: () = assert!(
+    core::mem::size_of::<ImageCopy>()
+        == core::mem::size_of::<ImageSubresourceLayers>()
+            + core::mem::size_of::<Offset3D>()
+            + core::mem::size_of::<ImageSubresourceLayers>()
+            + core::mem::size_of::<Offset3D>()
+            + core::mem::size_of::<Extent3D>()
+);
+
 #[doc = spec!("VkImageBlit")]
 ///
 /// Provided by Vulkan 1.0.
@@ -4483,6 +4714,17 @@ impl core::fmt::Debug for ImageBlit {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ImageBlit {}
+
+const _: () = assert!(
+    core::mem::size_of::<ImageBlit>()
+        == core::mem::size_of::<ImageSubresourceLayers>()
+            + core::mem::size_of::<[Offset3D; 2]>()
+            + core::mem::size_of::<ImageSubresourceLayers>()
+            + core::mem::size_of::<[Offset3D; 2]>()
+);
 
 #[doc = spec!("VkBufferImageCopy")]
 ///
@@ -4589,6 +4831,19 @@ impl core::fmt::Debug for BufferImageCopy {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for BufferImageCopy {}
+
+const _: () = assert!(
+    core::mem::size_of::<BufferImageCopy>()
+        == core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<ImageSubresourceLayers>()
+            + core::mem::size_of::<Offset3D>()
+            + core::mem::size_of::<Extent3D>()
+);
+
 #[doc = spec!("VkStridedDeviceAddressRangeKHR")]
 ///
 /// Provided by `VK_KHR_device_address_commands`, `VK_KHR_copy_memory_indirect`.
@@ -4646,6 +4901,16 @@ impl core::fmt::Debug for StridedDeviceAddressRangeKHR {
         debug_fields!(f, "StridedDeviceAddressRangeKHR", address, size, stride)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for StridedDeviceAddressRangeKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<StridedDeviceAddressRangeKHR>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+);
 
 #[doc = spec!("VkCopyMemoryIndirectCommandKHR")]
 ///
@@ -4710,6 +4975,16 @@ impl core::fmt::Debug for CopyMemoryIndirectCommandKHR {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for CopyMemoryIndirectCommandKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<CopyMemoryIndirectCommandKHR>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceSize>()
+);
 
 #[doc = spec!("VkCopyMemoryIndirectInfoKHR")]
 ///
@@ -4901,6 +5176,19 @@ impl core::fmt::Debug for CopyMemoryToImageIndirectCommandKHR {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for CopyMemoryToImageIndirectCommandKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<CopyMemoryToImageIndirectCommandKHR>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<ImageSubresourceLayers>()
+            + core::mem::size_of::<Offset3D>()
+            + core::mem::size_of::<Extent3D>()
+);
 
 #[doc = spec!("VkCopyMemoryToImageIndirectInfoKHR")]
 ///
@@ -5099,6 +5387,18 @@ impl core::fmt::Debug for ImageResolve {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ImageResolve {}
+
+const _: () = assert!(
+    core::mem::size_of::<ImageResolve>()
+        == core::mem::size_of::<ImageSubresourceLayers>()
+            + core::mem::size_of::<Offset3D>()
+            + core::mem::size_of::<ImageSubresourceLayers>()
+            + core::mem::size_of::<Offset3D>()
+            + core::mem::size_of::<Extent3D>()
+);
 
 #[doc = spec!("VkShaderModuleCreateInfo")]
 ///
@@ -5442,6 +5742,14 @@ impl core::fmt::Debug for DescriptorPoolSize {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DescriptorPoolSize {}
+
+const _: () = assert!(
+    core::mem::size_of::<DescriptorPoolSize>()
+        == core::mem::size_of::<DescriptorType>() + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkDescriptorPoolCreateInfo")]
 ///
 /// Provided by Vulkan 1.0.
@@ -5691,6 +5999,16 @@ impl core::fmt::Debug for SpecializationMapEntry {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SpecializationMapEntry {}
+
+const _: () = assert!(
+    core::mem::size_of::<SpecializationMapEntry>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<usize>()
+);
+
 #[doc = spec!("VkSpecializationInfo")]
 ///
 /// Provided by Vulkan 1.0.
@@ -5732,7 +6050,7 @@ impl<'a> SpecializationInfo<'a> {
     /// Sets `p_data` and `data_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn data<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn data<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_data = value.as_ptr().cast();
         self.data_size = len;
@@ -6236,6 +6554,16 @@ impl core::fmt::Debug for VertexInputBindingDescription {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for VertexInputBindingDescription {}
+
+const _: () = assert!(
+    core::mem::size_of::<VertexInputBindingDescription>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<VertexInputRate>()
+);
+
 #[doc = spec!("VkVertexInputAttributeDescription")]
 ///
 /// Provided by Vulkan 1.0.
@@ -6318,6 +6646,17 @@ impl core::fmt::Debug for VertexInputAttributeDescription {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for VertexInputAttributeDescription {}
+
+const _: () = assert!(
+    core::mem::size_of::<VertexInputAttributeDescription>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<Format>()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkPipelineVertexInputStateCreateInfo")]
 ///
@@ -7164,6 +7503,21 @@ impl core::fmt::Debug for PipelineColorBlendAttachmentState {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PipelineColorBlendAttachmentState {}
+
+const _: () = assert!(
+    core::mem::size_of::<PipelineColorBlendAttachmentState>()
+        == core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<BlendFactor>()
+            + core::mem::size_of::<BlendFactor>()
+            + core::mem::size_of::<BlendOp>()
+            + core::mem::size_of::<BlendFactor>()
+            + core::mem::size_of::<BlendFactor>()
+            + core::mem::size_of::<BlendOp>()
+            + core::mem::size_of::<ColorComponentFlags>()
+);
+
 #[doc = spec!("VkPipelineColorBlendStateCreateInfo")]
 ///
 /// Provided by Vulkan 1.0.
@@ -7479,6 +7833,20 @@ impl core::fmt::Debug for StencilOpState {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for StencilOpState {}
+
+const _: () = assert!(
+    core::mem::size_of::<StencilOpState>()
+        == core::mem::size_of::<StencilOp>()
+            + core::mem::size_of::<StencilOp>()
+            + core::mem::size_of::<StencilOp>()
+            + core::mem::size_of::<CompareOp>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkPipelineDepthStencilStateCreateInfo")]
 ///
@@ -7950,7 +8318,7 @@ impl<'a> PipelineCacheCreateInfo<'a> {
     /// Sets `p_initial_data` and `initial_data_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn initial_data<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn initial_data<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_initial_data = value.as_ptr().cast();
         self.initial_data_size = len;
@@ -8083,6 +8451,18 @@ impl core::fmt::Debug for PipelineCacheHeaderVersionOne {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PipelineCacheHeaderVersionOne {}
+
+const _: () = assert!(
+    core::mem::size_of::<PipelineCacheHeaderVersionOne>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<PipelineCacheHeaderVersion>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<[u8; UUID_SIZE]>()
+);
+
 #[doc = spec!("VkPipelineCacheHeaderVersionDataGraphQCOM")]
 ///
 /// Provided by `VK_QCOM_data_graph_model`.
@@ -8172,6 +8552,18 @@ impl core::fmt::Debug for PipelineCacheHeaderVersionDataGraphQCOM {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PipelineCacheHeaderVersionDataGraphQCOM {}
+
+const _: () = assert!(
+    core::mem::size_of::<PipelineCacheHeaderVersionDataGraphQCOM>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<PipelineCacheHeaderVersion>()
+            + core::mem::size_of::<DataGraphModelCacheTypeQCOM>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<[u32; DATA_GRAPH_MODEL_TOOLCHAIN_VERSION_LENGTH_QCOM]>()
+);
+
 #[doc = spec!("VkPushConstantRange")]
 ///
 /// Provided by Vulkan 1.0.
@@ -8235,6 +8627,16 @@ impl core::fmt::Debug for PushConstantRange {
         debug_fields!(f, "PushConstantRange", stage_flags, offset, size)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PushConstantRange {}
+
+const _: () = assert!(
+    core::mem::size_of::<PushConstantRange>()
+        == core::mem::size_of::<ShaderStageFlags>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkPipelineBinaryCreateInfoKHR")]
 ///
@@ -8413,7 +8815,7 @@ impl<'a> PipelineBinaryDataKHR<'a> {
     /// Sets `p_data` and `data_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn data<T: Copy>(mut self, value: &'a mut [T]) -> Self {
+    pub fn data<T: crate::Plain>(mut self, value: &'a mut [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_data = value.as_mut_ptr().cast();
         self.data_size = len;
@@ -9707,6 +10109,14 @@ impl core::fmt::Debug for ClearDepthStencilValue {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ClearDepthStencilValue {}
+
+const _: () = assert!(
+    core::mem::size_of::<ClearDepthStencilValue>()
+        == core::mem::size_of::<f32>() + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkClearAttachment")]
 ///
 /// Provided by Vulkan 1.0.
@@ -9911,6 +10321,22 @@ impl core::fmt::Debug for AttachmentDescription {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for AttachmentDescription {}
+
+const _: () = assert!(
+    core::mem::size_of::<AttachmentDescription>()
+        == core::mem::size_of::<AttachmentDescriptionFlags>()
+            + core::mem::size_of::<Format>()
+            + core::mem::size_of::<SampleCountFlagBits>()
+            + core::mem::size_of::<AttachmentLoadOp>()
+            + core::mem::size_of::<AttachmentStoreOp>()
+            + core::mem::size_of::<AttachmentLoadOp>()
+            + core::mem::size_of::<AttachmentStoreOp>()
+            + core::mem::size_of::<ImageLayout>()
+            + core::mem::size_of::<ImageLayout>()
+);
+
 #[doc = spec!("VkAttachmentReference")]
 ///
 /// Provided by Vulkan 1.0.
@@ -9958,6 +10384,14 @@ impl core::fmt::Debug for AttachmentReference {
         debug_fields!(f, "AttachmentReference", attachment, layout)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for AttachmentReference {}
+
+const _: () = assert!(
+    core::mem::size_of::<AttachmentReference>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<ImageLayout>()
+);
 
 #[doc = spec!("VkSubpassDescription")]
 ///
@@ -10213,6 +10647,20 @@ impl core::fmt::Debug for SubpassDependency {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SubpassDependency {}
+
+const _: () = assert!(
+    core::mem::size_of::<SubpassDependency>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<PipelineStageFlags>()
+            + core::mem::size_of::<PipelineStageFlags>()
+            + core::mem::size_of::<AccessFlags>()
+            + core::mem::size_of::<AccessFlags>()
+            + core::mem::size_of::<DependencyFlags>()
+);
 
 #[doc = spec!("VkRenderPassCreateInfo")]
 ///
@@ -11212,6 +11660,68 @@ impl core::fmt::Debug for PhysicalDeviceFeatures {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PhysicalDeviceFeatures {}
+
+const _: () = assert!(
+    core::mem::size_of::<PhysicalDeviceFeatures>()
+        == core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+);
+
 #[doc = spec!("VkPhysicalDeviceSparseProperties")]
 ///
 /// Provided by Vulkan 1.0.
@@ -11275,6 +11785,18 @@ impl core::fmt::Debug for PhysicalDeviceSparseProperties {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PhysicalDeviceSparseProperties {}
+
+const _: () = assert!(
+    core::mem::size_of::<PhysicalDeviceSparseProperties>()
+        == core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+);
 
 #[doc = spec!("VkPhysicalDeviceLimits")]
 ///
@@ -12319,6 +12841,17 @@ impl core::fmt::Debug for DrawIndirectCommand {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DrawIndirectCommand {}
+
+const _: () = assert!(
+    core::mem::size_of::<DrawIndirectCommand>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkDrawIndexedIndirectCommand")]
 ///
 /// Provided by Vulkan 1.0.
@@ -12405,6 +12938,18 @@ impl core::fmt::Debug for DrawIndexedIndirectCommand {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DrawIndexedIndirectCommand {}
+
+const _: () = assert!(
+    core::mem::size_of::<DrawIndexedIndirectCommand>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<i32>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkDispatchIndirectCommand")]
 ///
 /// Provided by Vulkan 1.0.
@@ -12458,6 +13003,14 @@ impl core::fmt::Debug for DispatchIndirectCommand {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DispatchIndirectCommand {}
+
+const _: () = assert!(
+    core::mem::size_of::<DispatchIndirectCommand>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkMultiDrawInfoEXT")]
 ///
 /// Provided by `VK_EXT_multi_draw`.
@@ -12505,6 +13058,14 @@ impl core::fmt::Debug for MultiDrawInfoEXT {
         debug_fields!(f, "MultiDrawInfoEXT", first_vertex, vertex_count)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for MultiDrawInfoEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<MultiDrawInfoEXT>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkMultiDrawIndexedInfoEXT")]
 ///
@@ -12569,6 +13130,14 @@ impl core::fmt::Debug for MultiDrawIndexedInfoEXT {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for MultiDrawIndexedInfoEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<MultiDrawIndexedInfoEXT>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>() + core::mem::size_of::<i32>()
+);
 
 #[doc = spec!("VkSubmitInfo")]
 ///
@@ -12866,6 +13435,14 @@ impl core::fmt::Debug for DisplayModeParametersKHR {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DisplayModeParametersKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<DisplayModeParametersKHR>()
+        == core::mem::size_of::<Extent2D>() + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkDisplayModePropertiesKHR")]
 ///
 /// Provided by `VK_KHR_display`.
@@ -13044,6 +13621,22 @@ impl core::fmt::Debug for DisplayPlaneCapabilitiesKHR {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DisplayPlaneCapabilitiesKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<DisplayPlaneCapabilitiesKHR>()
+        == core::mem::size_of::<DisplayPlaneAlphaFlagsKHR>()
+            + core::mem::size_of::<Offset2D>()
+            + core::mem::size_of::<Offset2D>()
+            + core::mem::size_of::<Extent2D>()
+            + core::mem::size_of::<Extent2D>()
+            + core::mem::size_of::<Offset2D>()
+            + core::mem::size_of::<Offset2D>()
+            + core::mem::size_of::<Extent2D>()
+            + core::mem::size_of::<Extent2D>()
+);
 
 #[doc = spec!("VkDisplaySurfaceCreateInfoKHR")]
 ///
@@ -13465,6 +14058,23 @@ impl core::fmt::Debug for SurfaceCapabilitiesKHR {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SurfaceCapabilitiesKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<SurfaceCapabilitiesKHR>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<Extent2D>()
+            + core::mem::size_of::<Extent2D>()
+            + core::mem::size_of::<Extent2D>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<SurfaceTransformFlagsKHR>()
+            + core::mem::size_of::<SurfaceTransformFlagBitsKHR>()
+            + core::mem::size_of::<CompositeAlphaFlagsKHR>()
+            + core::mem::size_of::<ImageUsageFlags>()
+);
+
 #[doc = spec!("VkWin32SurfaceCreateInfoKHR")]
 ///
 /// Provided by `VK_KHR_win32_surface`.
@@ -13583,6 +14193,14 @@ impl core::fmt::Debug for SurfaceFormatKHR {
         debug_fields!(f, "SurfaceFormatKHR", format, color_space)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SurfaceFormatKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<SurfaceFormatKHR>()
+        == core::mem::size_of::<Format>() + core::mem::size_of::<ColorSpaceKHR>()
+);
 
 #[doc = spec!("VkSwapchainCreateInfoKHR")]
 ///
@@ -14406,7 +15024,7 @@ impl<'a> LayerSettingEXT<'a> {
     /// Sets `p_values` and `value_count` from the slice length in elements.
     #[inline]
     #[track_caller]
-    pub fn values<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn values<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = value.len();
         self.p_values = value.as_ptr().cast();
         self.value_count = crate::len::count_u32(len, "valueCount");
@@ -14663,7 +15281,7 @@ impl<'a> DebugMarkerObjectTagInfoEXT<'a> {
     /// Sets `p_tag` and `tag_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn tag<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn tag<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_tag = value.as_ptr().cast();
         self.tag_size = len;
@@ -16410,6 +17028,14 @@ impl core::fmt::Debug for StridedDeviceAddressNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for StridedDeviceAddressNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<StridedDeviceAddressNV>()
+        == core::mem::size_of::<DeviceAddress>() + core::mem::size_of::<DeviceSize>()
+);
+
 #[doc = spec!("VkRayTracingPipelineClusterAccelerationStructureCreateInfoNV")]
 ///
 /// Provided by `VK_NV_cluster_acceleration_structure`.
@@ -16560,6 +17186,14 @@ impl core::fmt::Debug for ClusterAccelerationStructureGeometryIndexAndGeometryFl
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ClusterAccelerationStructureGeometryIndexAndGeometryFlagsNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<ClusterAccelerationStructureGeometryIndexAndGeometryFlagsNV>()
+        == core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkClusterAccelerationStructureMoveObjectsInfoNV")]
 ///
 /// Provided by `VK_NV_cluster_acceleration_structure`.
@@ -16601,6 +17235,14 @@ impl core::fmt::Debug for ClusterAccelerationStructureMoveObjectsInfoNV {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ClusterAccelerationStructureMoveObjectsInfoNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<ClusterAccelerationStructureMoveObjectsInfoNV>()
+        == core::mem::size_of::<DeviceAddress>()
+);
 
 #[doc = spec!("VkClusterAccelerationStructureBuildClustersBottomLevelInfoNV")]
 ///
@@ -16666,6 +17308,16 @@ impl core::fmt::Debug for ClusterAccelerationStructureBuildClustersBottomLevelIn
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ClusterAccelerationStructureBuildClustersBottomLevelInfoNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<ClusterAccelerationStructureBuildClustersBottomLevelInfoNV>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<DeviceAddress>()
+);
+
 #[doc = spec!("VkClusterAccelerationStructureGetTemplateIndicesInfoNV")]
 ///
 /// Provided by `VK_NV_cluster_acceleration_structure`.
@@ -16707,6 +17359,14 @@ impl core::fmt::Debug for ClusterAccelerationStructureGetTemplateIndicesInfoNV {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ClusterAccelerationStructureGetTemplateIndicesInfoNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<ClusterAccelerationStructureGetTemplateIndicesInfoNV>()
+        == core::mem::size_of::<DeviceAddress>()
+);
 
 #[doc = spec!("VkClusterAccelerationStructureBuildTriangleClusterInfoNV")]
 ///
@@ -16969,6 +17629,26 @@ impl core::fmt::Debug for ClusterAccelerationStructureBuildTriangleClusterInfoNV
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ClusterAccelerationStructureBuildTriangleClusterInfoNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<ClusterAccelerationStructureBuildTriangleClusterInfoNV>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<ClusterAccelerationStructureClusterFlagsNV>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<ClusterAccelerationStructureGeometryIndexAndGeometryFlagsNV>()
+            + core::mem::size_of::<u16>()
+            + core::mem::size_of::<u16>()
+            + core::mem::size_of::<u16>()
+            + core::mem::size_of::<u16>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+);
 
 #[doc = spec!("VkClusterAccelerationStructureBuildTriangleClusterTemplateInfoNV")]
 ///
@@ -17243,6 +17923,27 @@ impl core::fmt::Debug for ClusterAccelerationStructureBuildTriangleClusterTempla
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ClusterAccelerationStructureBuildTriangleClusterTemplateInfoNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<ClusterAccelerationStructureBuildTriangleClusterTemplateInfoNV>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<ClusterAccelerationStructureClusterFlagsNV>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<ClusterAccelerationStructureGeometryIndexAndGeometryFlagsNV>()
+            + core::mem::size_of::<u16>()
+            + core::mem::size_of::<u16>()
+            + core::mem::size_of::<u16>()
+            + core::mem::size_of::<u16>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+);
+
 #[doc = spec!("VkClusterAccelerationStructureInstantiateClusterInfoNV")]
 ///
 /// Provided by `VK_NV_cluster_acceleration_structure`.
@@ -17347,6 +18048,17 @@ impl core::fmt::Debug for ClusterAccelerationStructureInstantiateClusterInfoNV {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ClusterAccelerationStructureInstantiateClusterInfoNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<ClusterAccelerationStructureInstantiateClusterInfoNV>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<StridedDeviceAddressNV>()
+);
 
 #[doc = spec!("VkClusterAccelerationStructureClustersBottomLevelInputNV")]
 ///
@@ -18167,6 +18879,13 @@ impl core::fmt::Debug for BindShaderGroupIndirectCommandNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for BindShaderGroupIndirectCommandNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<BindShaderGroupIndirectCommandNV>() == core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkBindIndexBufferIndirectCommandNV")]
 ///
 /// Provided by `VK_NV_device_generated_commands`.
@@ -18230,6 +18949,16 @@ impl core::fmt::Debug for BindIndexBufferIndirectCommandNV {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for BindIndexBufferIndirectCommandNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<BindIndexBufferIndirectCommandNV>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<IndexType>()
+);
 
 #[doc = spec!("VkBindVertexBufferIndirectCommandNV")]
 ///
@@ -18295,6 +19024,16 @@ impl core::fmt::Debug for BindVertexBufferIndirectCommandNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for BindVertexBufferIndirectCommandNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<BindVertexBufferIndirectCommandNV>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkSetStateFlagsIndirectCommandNV")]
 ///
 /// Provided by `VK_NV_device_generated_commands`.
@@ -18329,6 +19068,12 @@ impl core::fmt::Debug for SetStateFlagsIndirectCommandNV {
         debug_fields!(f, "SetStateFlagsIndirectCommandNV", data)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SetStateFlagsIndirectCommandNV {}
+
+const _: () =
+    assert!(core::mem::size_of::<SetStateFlagsIndirectCommandNV>() == core::mem::size_of::<u32>());
 
 #[doc = spec!("VkIndirectCommandsStreamNV")]
 ///
@@ -18373,6 +19118,14 @@ impl core::fmt::Debug for IndirectCommandsStreamNV {
         debug_fields!(f, "IndirectCommandsStreamNV", buffer, offset)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for IndirectCommandsStreamNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<IndirectCommandsStreamNV>()
+        == core::mem::size_of::<Buffer>() + core::mem::size_of::<DeviceSize>()
+);
 
 #[doc = spec!("VkIndirectCommandsLayoutTokenNV")]
 ///
@@ -19073,6 +19826,13 @@ impl core::fmt::Debug for BindPipelineIndirectCommandNV {
         debug_fields!(f, "BindPipelineIndirectCommandNV", pipeline_address)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for BindPipelineIndirectCommandNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<BindPipelineIndirectCommandNV>() == core::mem::size_of::<DeviceAddress>()
+);
 
 #[doc = spec!("VkPhysicalDeviceFeatures2")]
 ///
@@ -19847,6 +20607,17 @@ impl core::fmt::Debug for ConformanceVersion {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ConformanceVersion {}
+
+const _: () = assert!(
+    core::mem::size_of::<ConformanceVersion>()
+        == core::mem::size_of::<u8>()
+            + core::mem::size_of::<u8>()
+            + core::mem::size_of::<u8>()
+            + core::mem::size_of::<u8>()
+);
+
 #[doc = spec!("VkPhysicalDeviceDriverProperties")]
 ///
 /// Provided by Vulkan 1.2.
@@ -20127,6 +20898,16 @@ impl core::fmt::Debug for RectLayerKHR {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for RectLayerKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<RectLayerKHR>()
+        == core::mem::size_of::<Offset2D>()
+            + core::mem::size_of::<Extent2D>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkPhysicalDeviceVariablePointersFeatures")]
 ///
 /// Provided by Vulkan 1.1.
@@ -20247,6 +21028,16 @@ impl core::fmt::Debug for ExternalMemoryProperties {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ExternalMemoryProperties {}
+
+const _: () = assert!(
+    core::mem::size_of::<ExternalMemoryProperties>()
+        == core::mem::size_of::<ExternalMemoryFeatureFlags>()
+            + core::mem::size_of::<ExternalMemoryHandleTypeFlags>()
+            + core::mem::size_of::<ExternalMemoryHandleTypeFlags>()
+);
 
 #[doc = spec!("VkPhysicalDeviceExternalImageFormatInfo")]
 ///
@@ -24851,6 +25642,19 @@ impl core::fmt::Debug for DescriptorUpdateTemplateEntry {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DescriptorUpdateTemplateEntry {}
+
+const _: () = assert!(
+    core::mem::size_of::<DescriptorUpdateTemplateEntry>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<DescriptorType>()
+            + core::mem::size_of::<usize>()
+            + core::mem::size_of::<usize>()
+);
+
 #[doc = spec!("VkDescriptorUpdateTemplateCreateInfo")]
 ///
 /// Provided by Vulkan 1.1.
@@ -25036,6 +25840,13 @@ impl core::fmt::Debug for XYColorEXT {
         debug_fields!(f, "XYColorEXT", x, y)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for XYColorEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<XYColorEXT>() == core::mem::size_of::<f32>() + core::mem::size_of::<f32>()
+);
 
 #[doc = spec!("VkPhysicalDevicePresentIdFeaturesKHR")]
 ///
@@ -26597,7 +27408,7 @@ impl<'a> HdrVividDynamicMetadataHUAWEI<'a> {
     /// Sets `p_dynamic_metadata` and `dynamic_metadata_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn dynamic_metadata<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn dynamic_metadata<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_dynamic_metadata = value.as_ptr().cast();
         self.dynamic_metadata_size = len;
@@ -26803,6 +27614,12 @@ impl core::fmt::Debug for RefreshCycleDurationGOOGLE {
         debug_fields!(f, "RefreshCycleDurationGOOGLE", refresh_duration)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for RefreshCycleDurationGOOGLE {}
+
+const _: () =
+    assert!(core::mem::size_of::<RefreshCycleDurationGOOGLE>() == core::mem::size_of::<u64>());
 
 #[doc = spec!("VkPastPresentationTimingGOOGLE")]
 ///
@@ -27046,6 +27863,14 @@ impl core::fmt::Debug for ViewportWScalingNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ViewportWScalingNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<ViewportWScalingNV>()
+        == core::mem::size_of::<f32>() + core::mem::size_of::<f32>()
+);
+
 #[doc = spec!("VkPipelineViewportWScalingStateCreateInfoNV")]
 ///
 /// Provided by `VK_NV_clip_space_w_scaling`.
@@ -27200,6 +28025,17 @@ impl core::fmt::Debug for ViewportSwizzleNV {
         debug_fields!(f, "ViewportSwizzleNV", x, y, z, w)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ViewportSwizzleNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<ViewportSwizzleNV>()
+        == core::mem::size_of::<ViewportCoordinateSwizzleNV>()
+            + core::mem::size_of::<ViewportCoordinateSwizzleNV>()
+            + core::mem::size_of::<ViewportCoordinateSwizzleNV>()
+            + core::mem::size_of::<ViewportCoordinateSwizzleNV>()
+);
 
 #[doc = spec!("VkPipelineViewportSwizzleStateCreateInfoNV")]
 ///
@@ -27569,6 +28405,16 @@ impl core::fmt::Debug for InputAttachmentAspectReference {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for InputAttachmentAspectReference {}
+
+const _: () = assert!(
+    core::mem::size_of::<InputAttachmentAspectReference>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<ImageAspectFlags>()
+);
 
 #[doc = spec!("VkRenderPassInputAttachmentAspectCreateInfo")]
 ///
@@ -30599,6 +31445,14 @@ impl core::fmt::Debug for SampleLocationEXT {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SampleLocationEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<SampleLocationEXT>()
+        == core::mem::size_of::<f32>() + core::mem::size_of::<f32>()
+);
+
 #[doc = spec!("VkSampleLocationsInfoEXT")]
 ///
 /// Provided by `VK_EXT_sample_locations`.
@@ -31680,7 +32534,7 @@ impl<'a> WriteDescriptorSetInlineUniformBlock<'a> {
     /// Sets `p_data` and `data_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn data<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn data<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_data = value.as_ptr().cast();
         self.data_size = crate::len::count_u32(len, "dataSize");
@@ -32025,7 +32879,7 @@ impl<'a> ValidationCacheCreateInfoEXT<'a> {
     /// Sets `p_initial_data` and `initial_data_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn initial_data<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn initial_data<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_initial_data = value.as_ptr().cast();
         self.initial_data_size = len;
@@ -34567,7 +35421,7 @@ impl<'a> DebugUtilsObjectTagInfoEXT<'a> {
     /// Sets `p_tag` and `tag_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn tag<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn tag<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_tag = value.as_ptr().cast();
         self.tag_size = len;
@@ -37844,6 +38698,14 @@ impl core::fmt::Debug for VertexInputBindingDivisorDescription {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for VertexInputBindingDivisorDescription {}
+
+const _: () = assert!(
+    core::mem::size_of::<VertexInputBindingDivisorDescription>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkPipelineVertexInputDivisorStateCreateInfo")]
 ///
 /// Provided by Vulkan 1.4.
@@ -41056,6 +41918,14 @@ impl core::fmt::Debug for CoarseSampleLocationNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for CoarseSampleLocationNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<CoarseSampleLocationNV>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkCoarseSampleOrderCustomNV")]
 ///
 /// Provided by `VK_NV_shading_rate_image`.
@@ -41450,6 +42320,14 @@ impl core::fmt::Debug for DrawMeshTasksIndirectCommandNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DrawMeshTasksIndirectCommandNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<DrawMeshTasksIndirectCommandNV>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkPhysicalDeviceMeshShaderFeaturesEXT")]
 ///
 /// Provided by `VK_EXT_mesh_shader`.
@@ -41793,6 +42671,14 @@ impl core::fmt::Debug for DrawMeshTasksIndirectCommandEXT {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DrawMeshTasksIndirectCommandEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<DrawMeshTasksIndirectCommandEXT>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkRayTracingShaderGroupCreateInfoNV")]
 ///
@@ -43908,6 +44794,16 @@ impl core::fmt::Debug for StridedDeviceAddressRegionKHR {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for StridedDeviceAddressRegionKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<StridedDeviceAddressRegionKHR>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+);
+
 #[doc = spec!("VkTraceRaysIndirectCommandKHR")]
 ///
 /// Provided by `VK_KHR_ray_tracing_pipeline`.
@@ -43965,6 +44861,14 @@ impl core::fmt::Debug for TraceRaysIndirectCommandKHR {
         debug_fields!(f, "TraceRaysIndirectCommandKHR", width, height, depth)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for TraceRaysIndirectCommandKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<TraceRaysIndirectCommandKHR>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkTraceRaysIndirectCommand2KHR")]
 ///
@@ -44334,6 +45238,16 @@ impl core::fmt::Debug for DrmFormatModifierPropertiesEXT {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DrmFormatModifierPropertiesEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<DrmFormatModifierPropertiesEXT>()
+        == core::mem::size_of::<u64>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<FormatFeatureFlags>()
+);
 
 #[doc = spec!("VkPhysicalDeviceImageDrmFormatModifierInfoEXT")]
 ///
@@ -53780,6 +54694,20 @@ impl core::fmt::Debug for GpaPerfBlockPropertiesAMD {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for GpaPerfBlockPropertiesAMD {}
+
+const _: () = assert!(
+    core::mem::size_of::<GpaPerfBlockPropertiesAMD>()
+        == core::mem::size_of::<GpaPerfBlockAMD>()
+            + core::mem::size_of::<GpaPerfBlockPropertiesFlagsAMD>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkPhysicalDeviceGpaFeaturesAMD")]
 ///
 /// Provided by `VK_AMD_gpa_interface`.
@@ -54073,6 +55001,16 @@ impl core::fmt::Debug for GpaPerfCounterAMD {
         debug_fields!(f, "GpaPerfCounterAMD", block_type, block_instance, event_id)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for GpaPerfCounterAMD {}
+
+const _: () = assert!(
+    core::mem::size_of::<GpaPerfCounterAMD>()
+        == core::mem::size_of::<GpaPerfBlockAMD>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkGpaSampleBeginInfoAMD")]
 ///
@@ -55898,6 +56836,17 @@ impl core::fmt::Debug for AccelerationStructureBuildRangeInfoKHR {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for AccelerationStructureBuildRangeInfoKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<AccelerationStructureBuildRangeInfoKHR>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkAccelerationStructureCreateInfoKHR")]
 ///
 /// Provided by `VK_KHR_acceleration_structure`.
@@ -56121,6 +57070,19 @@ impl core::fmt::Debug for AabbPositionsKHR {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for AabbPositionsKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<AabbPositionsKHR>()
+        == core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+);
+
 #[doc = spec!("VkTransformMatrixKHR")]
 ///
 /// Provided by `VK_KHR_acceleration_structure`.
@@ -56155,6 +57117,12 @@ impl core::fmt::Debug for TransformMatrixKHR {
         debug_fields!(f, "TransformMatrixKHR", matrix)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for TransformMatrixKHR {}
+
+const _: () =
+    assert!(core::mem::size_of::<TransformMatrixKHR>() == core::mem::size_of::<[[f32; 4]; 3]>());
 
 #[doc = spec!("VkAccelerationStructureInstanceKHR")]
 ///
@@ -56295,6 +57263,17 @@ impl core::fmt::Debug for AccelerationStructureInstanceKHR {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for AccelerationStructureInstanceKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<AccelerationStructureInstanceKHR>()
+        == core::mem::size_of::<TransformMatrixKHR>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u64>()
+);
 
 #[doc = spec!("VkAccelerationStructureDeviceAddressInfoKHR")]
 ///
@@ -57604,6 +58583,19 @@ impl core::fmt::Debug for ColorBlendEquationEXT {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ColorBlendEquationEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<ColorBlendEquationEXT>()
+        == core::mem::size_of::<BlendFactor>()
+            + core::mem::size_of::<BlendFactor>()
+            + core::mem::size_of::<BlendOp>()
+            + core::mem::size_of::<BlendFactor>()
+            + core::mem::size_of::<BlendFactor>()
+            + core::mem::size_of::<BlendOp>()
+);
+
 #[doc = spec!("VkColorBlendAdvancedEXT")]
 ///
 /// Provided by `VK_EXT_extended_dynamic_state3`, `VK_EXT_shader_object`.
@@ -57689,6 +58681,18 @@ impl core::fmt::Debug for ColorBlendAdvancedEXT {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ColorBlendAdvancedEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<ColorBlendAdvancedEXT>()
+        == core::mem::size_of::<BlendOp>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<Bool32>()
+            + core::mem::size_of::<BlendOverlapEXT>()
+            + core::mem::size_of::<Bool32>()
+);
 
 #[doc = spec!("VkRenderPassTransformBeginInfoQCOM")]
 ///
@@ -58097,6 +59101,16 @@ impl core::fmt::Debug for BuildPartitionedAccelerationStructureIndirectCommandNV
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for BuildPartitionedAccelerationStructureIndirectCommandNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<BuildPartitionedAccelerationStructureIndirectCommandNV>()
+        == core::mem::size_of::<PartitionedAccelerationStructureOpTypeNV>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<StridedDeviceAddressNV>()
+);
+
 #[doc = spec!("VkPartitionedAccelerationStructureFlagsNV")]
 ///
 /// Provided by `VK_NV_partitioned_acceleration_structure`.
@@ -58298,6 +59312,22 @@ impl core::fmt::Debug for PartitionedAccelerationStructureWriteInstanceDataNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PartitionedAccelerationStructureWriteInstanceDataNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<PartitionedAccelerationStructureWriteInstanceDataNV>()
+        == core::mem::size_of::<TransformMatrixKHR>()
+            + core::mem::size_of::<[f32; 6]>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<PartitionedAccelerationStructureInstanceFlagsNV>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<DeviceAddress>()
+);
+
 #[doc = spec!("VkPartitionedAccelerationStructureUpdateInstanceDataNV")]
 ///
 /// Provided by `VK_NV_partitioned_acceleration_structure`.
@@ -58362,6 +59392,16 @@ impl core::fmt::Debug for PartitionedAccelerationStructureUpdateInstanceDataNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PartitionedAccelerationStructureUpdateInstanceDataNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<PartitionedAccelerationStructureUpdateInstanceDataNV>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<DeviceAddress>()
+);
+
 #[doc = spec!("VkPartitionedAccelerationStructureWritePartitionTranslationDataNV")]
 ///
 /// Provided by `VK_NV_partitioned_acceleration_structure`.
@@ -58414,6 +59454,14 @@ impl core::fmt::Debug for PartitionedAccelerationStructureWritePartitionTranslat
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PartitionedAccelerationStructureWritePartitionTranslationDataNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<PartitionedAccelerationStructureWritePartitionTranslationDataNV>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<[f32; 3]>()
+);
 
 #[doc = spec!("VkWriteDescriptorSetPartitionedAccelerationStructureNV")]
 ///
@@ -63947,6 +64995,16 @@ impl core::fmt::Debug for DrawIndirectCountIndirectCommandEXT {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DrawIndirectCountIndirectCommandEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<DrawIndirectCountIndirectCommandEXT>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkIndirectCommandsVertexBufferTokenEXT")]
 ///
 /// Provided by `VK_EXT_device_generated_commands`.
@@ -63988,6 +65046,13 @@ impl core::fmt::Debug for IndirectCommandsVertexBufferTokenEXT {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for IndirectCommandsVertexBufferTokenEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<IndirectCommandsVertexBufferTokenEXT>() == core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkBindVertexBufferIndirectCommandEXT")]
 ///
@@ -64053,6 +65118,16 @@ impl core::fmt::Debug for BindVertexBufferIndirectCommandEXT {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for BindVertexBufferIndirectCommandEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<BindVertexBufferIndirectCommandEXT>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkIndirectCommandsIndexBufferTokenEXT")]
 ///
 /// Provided by `VK_EXT_device_generated_commands`.
@@ -64087,6 +65162,14 @@ impl core::fmt::Debug for IndirectCommandsIndexBufferTokenEXT {
         debug_fields!(f, "IndirectCommandsIndexBufferTokenEXT", mode)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for IndirectCommandsIndexBufferTokenEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<IndirectCommandsIndexBufferTokenEXT>()
+        == core::mem::size_of::<IndirectCommandsInputModeFlagBitsEXT>()
+);
 
 #[doc = spec!("VkBindIndexBufferIndirectCommandEXT")]
 ///
@@ -64152,6 +65235,16 @@ impl core::fmt::Debug for BindIndexBufferIndirectCommandEXT {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for BindIndexBufferIndirectCommandEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<BindIndexBufferIndirectCommandEXT>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<IndexType>()
+);
+
 #[doc = spec!("VkIndirectCommandsPushConstantTokenEXT")]
 ///
 /// Provided by `VK_EXT_device_generated_commands`.
@@ -64186,6 +65279,14 @@ impl core::fmt::Debug for IndirectCommandsPushConstantTokenEXT {
         debug_fields!(f, "IndirectCommandsPushConstantTokenEXT", update_range)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for IndirectCommandsPushConstantTokenEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<IndirectCommandsPushConstantTokenEXT>()
+        == core::mem::size_of::<PushConstantRange>()
+);
 
 #[doc = spec!("VkIndirectCommandsExecutionSetTokenEXT")]
 ///
@@ -64239,6 +65340,15 @@ impl core::fmt::Debug for IndirectCommandsExecutionSetTokenEXT {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for IndirectCommandsExecutionSetTokenEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<IndirectCommandsExecutionSetTokenEXT>()
+        == core::mem::size_of::<IndirectExecutionSetInfoTypeEXT>()
+            + core::mem::size_of::<ShaderStageFlags>()
+);
 
 #[doc = spec!("VkPipelineViewportDepthClipControlCreateInfoEXT")]
 ///
@@ -68277,7 +69387,7 @@ impl<'a> CuModuleCreateInfoNVX<'a> {
     /// Sets `p_data` and `data_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn data<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn data<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_data = value.as_ptr().cast();
         self.data_size = len;
@@ -70810,6 +71920,29 @@ impl core::fmt::Debug for SRTDataNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for SRTDataNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<SRTDataNV>()
+        == core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+            + core::mem::size_of::<f32>()
+);
+
 #[doc = spec!("VkAccelerationStructureSRTMotionInstanceNV")]
 ///
 /// Provided by `VK_NV_ray_tracing_motion_blur`.
@@ -70961,6 +72094,18 @@ impl core::fmt::Debug for AccelerationStructureSRTMotionInstanceNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for AccelerationStructureSRTMotionInstanceNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<AccelerationStructureSRTMotionInstanceNV>()
+        == core::mem::size_of::<SRTDataNV>()
+            + core::mem::size_of::<SRTDataNV>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u64>()
+);
+
 #[doc = spec!("VkAccelerationStructureMatrixMotionInstanceNV")]
 ///
 /// Provided by `VK_NV_ray_tracing_motion_blur`.
@@ -71111,6 +72256,18 @@ impl core::fmt::Debug for AccelerationStructureMatrixMotionInstanceNV {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for AccelerationStructureMatrixMotionInstanceNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<AccelerationStructureMatrixMotionInstanceNV>()
+        == core::mem::size_of::<TransformMatrixKHR>()
+            + core::mem::size_of::<TransformMatrixKHR>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u64>()
+);
 
 #[doc = spec!("VkAccelerationStructureMotionInstanceNV")]
 ///
@@ -74724,6 +75881,13 @@ impl core::fmt::Debug for RenderPassCreationFeedbackInfoEXT {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for RenderPassCreationFeedbackInfoEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<RenderPassCreationFeedbackInfoEXT>() == core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkRenderPassCreationFeedbackCreateInfoEXT")]
 ///
 /// Provided by `VK_EXT_subpass_merge_feedback`.
@@ -74840,6 +76004,16 @@ impl core::fmt::Debug for RenderPassSubpassFeedbackInfoEXT {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for RenderPassSubpassFeedbackInfoEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<RenderPassSubpassFeedbackInfoEXT>()
+        == core::mem::size_of::<SubpassMergeStatusEXT>()
+            + core::mem::size_of::<[c_char; MAX_DESCRIPTION_SIZE]>()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkRenderPassSubpassFeedbackCreateInfoEXT")]
 ///
@@ -75841,6 +77015,16 @@ impl core::fmt::Debug for MicromapUsageKHR {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for MicromapUsageKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<MicromapUsageKHR>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<OpacityMicromapFormatKHR>()
+);
+
 #[doc = spec!("VkMicromapUsageEXT")]
 ///
 /// Provided by `VK_EXT_opacity_micromap`.
@@ -75900,6 +77084,14 @@ impl core::fmt::Debug for MicromapUsageEXT {
         debug_fields!(f, "MicromapUsageEXT", count, subdivision_level, format)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for MicromapUsageEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<MicromapUsageEXT>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkMicromapTriangleKHR")]
 ///
@@ -75966,6 +77158,14 @@ impl core::fmt::Debug for MicromapTriangleKHR {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for MicromapTriangleKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<MicromapTriangleKHR>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u16>() + core::mem::size_of::<u16>()
+);
 
 #[doc = spec!("VkPhysicalDeviceOpacityMicromapFeaturesKHR")]
 ///
@@ -79075,6 +80275,16 @@ impl core::fmt::Debug for DeviceFaultVendorInfoKHR {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DeviceFaultVendorInfoKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<DeviceFaultVendorInfoKHR>()
+        == core::mem::size_of::<[c_char; MAX_DESCRIPTION_SIZE]>()
+            + core::mem::size_of::<u64>()
+            + core::mem::size_of::<u64>()
+);
+
 #[doc = spec!("VkDeviceFaultInfoKHR")]
 ///
 /// Provided by `VK_KHR_device_fault`.
@@ -79519,6 +80729,24 @@ impl core::fmt::Debug for DeviceFaultVendorBinaryHeaderVersionOneKHR {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DeviceFaultVendorBinaryHeaderVersionOneKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<DeviceFaultVendorBinaryHeaderVersionOneKHR>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<DeviceFaultVendorBinaryHeaderVersionKHR>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<[u8; UUID_SIZE]>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkPhysicalDeviceFaultFeaturesKHR")]
 ///
@@ -80011,6 +81239,18 @@ impl core::fmt::Debug for DecompressMemoryRegionNV {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DecompressMemoryRegionNV {}
+
+const _: () = assert!(
+    core::mem::size_of::<DecompressMemoryRegionNV>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<MemoryDecompressionMethodFlagsEXT>()
+);
+
 #[doc = spec!("VkDecompressMemoryRegionEXT")]
 ///
 /// Provided by `VK_EXT_memory_decompression`.
@@ -80089,6 +81329,17 @@ impl core::fmt::Debug for DecompressMemoryRegionEXT {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DecompressMemoryRegionEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<DecompressMemoryRegionEXT>()
+        == core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceAddress>()
+            + core::mem::size_of::<DeviceSize>()
+            + core::mem::size_of::<DeviceSize>()
+);
 
 #[doc = spec!("VkDecompressMemoryInfoEXT")]
 ///
@@ -80406,7 +81657,7 @@ impl<'a> FrameBoundaryEXT<'a> {
     /// Sets `p_tag` and `tag_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn tag<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn tag<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_tag = value.as_ptr().cast();
         self.tag_size = len;
@@ -82944,7 +84195,7 @@ impl<'a> ShaderCreateInfoEXT<'a> {
     /// Sets `p_code` and `code_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn code<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn code<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_code = value.as_ptr().cast();
         self.code_size = len;
@@ -84447,7 +85698,7 @@ impl<'a> PushConstantsInfo<'a> {
     /// Sets `p_values` and `size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn values<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn values<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_values = value.as_ptr().cast();
         self.size = crate::len::count_u32(len, "size");
@@ -88860,6 +90111,14 @@ impl core::fmt::Debug for DepthClampRangeEXT {
         debug_fields!(f, "DepthClampRangeEXT", min_depth_clamp, max_depth_clamp)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DepthClampRangeEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<DepthClampRangeEXT>()
+        == core::mem::size_of::<f32>() + core::mem::size_of::<f32>()
+);
 
 #[doc = spec!("VkPhysicalDeviceCooperativeMatrix2FeaturesNV")]
 ///
@@ -94694,7 +95953,7 @@ impl<'a> DataGraphPipelinePropertyQueryResultARM<'a> {
     /// Sets `p_data` and `data_size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn data<T: Copy>(mut self, value: &'a mut [T]) -> Self {
+    pub fn data<T: crate::Plain>(mut self, value: &'a mut [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.p_data = value.as_mut_ptr().cast();
         self.data_size = len;
@@ -94932,6 +96191,15 @@ impl core::fmt::Debug for PhysicalDeviceDataGraphProcessingEngineARM {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PhysicalDeviceDataGraphProcessingEngineARM {}
+
+const _: () = assert!(
+    core::mem::size_of::<PhysicalDeviceDataGraphProcessingEngineARM>()
+        == core::mem::size_of::<PhysicalDeviceDataGraphProcessingEngineTypeARM>()
+            + core::mem::size_of::<Bool32>()
+);
+
 #[doc = spec!("VkPhysicalDeviceDataGraphOperationSupportARM")]
 ///
 /// Provided by `VK_ARM_data_graph`.
@@ -94999,6 +96267,18 @@ impl core::fmt::Debug for PhysicalDeviceDataGraphOperationSupportARM {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for PhysicalDeviceDataGraphOperationSupportARM {}
+
+const _: () = assert!(
+    core::mem::size_of::<PhysicalDeviceDataGraphOperationSupportARM>()
+        == core::mem::size_of::<PhysicalDeviceDataGraphOperationTypeARM>()
+            + core::mem::size_of::<
+                [c_char; MAX_PHYSICAL_DEVICE_DATA_GRAPH_OPERATION_SET_NAME_SIZE_ARM],
+            >()
+            + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkQueueFamilyDataGraphPropertiesARM")]
 ///
@@ -96584,7 +97864,7 @@ impl<'a> HostAddressRangeEXT<'a> {
     /// Sets `address` and `size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn address<T: Copy>(mut self, value: &'a mut [T]) -> Self {
+    pub fn address<T: crate::Plain>(mut self, value: &'a mut [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.address = value.as_mut_ptr().cast();
         self.size = len;
@@ -96626,7 +97906,7 @@ impl<'a> HostAddressRangeConstEXT<'a> {
     /// Sets `address` and `size` from the slice length in bytes.
     #[inline]
     #[track_caller]
-    pub fn address<T: Copy>(mut self, value: &'a [T]) -> Self {
+    pub fn address<T: crate::Plain>(mut self, value: &'a [T]) -> Self {
         let len = core::mem::size_of_val(value);
         self.address = value.as_ptr().cast();
         self.size = len;
@@ -97607,6 +98887,14 @@ impl core::fmt::Debug for DescriptorMappingSourceHeapDataEXT {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DescriptorMappingSourceHeapDataEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<DescriptorMappingSourceHeapDataEXT>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkDescriptorMappingSourceShaderRecordIndexEXT")]
 ///
 /// Provided by `VK_EXT_descriptor_heap`.
@@ -97802,6 +99090,14 @@ impl core::fmt::Debug for DescriptorMappingSourceIndirectAddressEXT {
         )
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DescriptorMappingSourceIndirectAddressEXT {}
+
+const _: () = assert!(
+    core::mem::size_of::<DescriptorMappingSourceIndirectAddressEXT>()
+        == core::mem::size_of::<u32>() + core::mem::size_of::<u32>()
+);
 
 #[doc = spec!("VkDescriptorSetAndBindingMappingEXT")]
 ///
@@ -99086,6 +100382,17 @@ impl core::fmt::Debug for ShaderInstrumentationMetricDataHeaderARM {
     }
 }
 
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for ShaderInstrumentationMetricDataHeaderARM {}
+
+const _: () = assert!(
+    core::mem::size_of::<ShaderInstrumentationMetricDataHeaderARM>()
+        == core::mem::size_of::<u32>()
+            + core::mem::size_of::<u32>()
+            + core::mem::size_of::<ShaderStageFlags>()
+            + core::mem::size_of::<u32>()
+);
+
 #[doc = spec!("VkDeviceAddressRangeKHR")]
 ///
 /// Provided by `VK_KHR_device_address_commands`.
@@ -99129,6 +100436,14 @@ impl core::fmt::Debug for DeviceAddressRangeKHR {
         debug_fields!(f, "DeviceAddressRangeKHR", address, size)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DeviceAddressRangeKHR {}
+
+const _: () = assert!(
+    core::mem::size_of::<DeviceAddressRangeKHR>()
+        == core::mem::size_of::<DeviceAddress>() + core::mem::size_of::<DeviceSize>()
+);
 
 #[doc = spec!("VkDeviceMemoryCopyKHR")]
 ///
@@ -100885,6 +102200,15 @@ impl core::fmt::Debug for DataGraphTOSANameQualityARM {
         debug_fields!(f, "DataGraphTOSANameQualityARM", name, quality_flags)
     }
 }
+
+// SAFETY: every field is `Plain`, and the assertion below proves there is no padding.
+unsafe impl crate::Plain for DataGraphTOSANameQualityARM {}
+
+const _: () = assert!(
+    core::mem::size_of::<DataGraphTOSANameQualityARM>()
+        == core::mem::size_of::<[c_char; MAX_DATA_GRAPH_TOSA_NAME_SIZE_ARM]>()
+            + core::mem::size_of::<DataGraphTOSAQualityFlagsARM>()
+);
 
 #[doc = spec!("VkQueueFamilyDataGraphTOSAPropertiesARM")]
 ///

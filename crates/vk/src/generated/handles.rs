@@ -49,6 +49,9 @@ impl core::fmt::Debug for Instance {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Instance {}
+
 #[doc = spec!("VkPhysicalDevice")]
 ///
 /// Provided by Vulkan 1.0.
@@ -96,6 +99,9 @@ impl core::fmt::Debug for PhysicalDevice {
         write!(f, "PhysicalDevice({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for PhysicalDevice {}
 
 #[doc = spec!("VkDevice")]
 ///
@@ -145,6 +151,9 @@ impl core::fmt::Debug for Device {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Device {}
+
 #[doc = spec!("VkQueue")]
 ///
 /// Provided by Vulkan 1.0.
@@ -192,6 +201,9 @@ impl core::fmt::Debug for Queue {
         write!(f, "Queue({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Queue {}
 
 #[doc = spec!("VkCommandBuffer")]
 ///
@@ -241,6 +253,9 @@ impl core::fmt::Debug for CommandBuffer {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for CommandBuffer {}
+
 #[doc = spec!("VkDeviceMemory")]
 ///
 /// Provided by Vulkan 1.0.
@@ -288,6 +303,9 @@ impl core::fmt::Debug for DeviceMemory {
         write!(f, "DeviceMemory({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DeviceMemory {}
 
 #[doc = spec!("VkCommandPool")]
 ///
@@ -337,6 +355,9 @@ impl core::fmt::Debug for CommandPool {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for CommandPool {}
+
 #[doc = spec!("VkBuffer")]
 ///
 /// Provided by Vulkan 1.0.
@@ -384,6 +405,9 @@ impl core::fmt::Debug for Buffer {
         write!(f, "Buffer({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Buffer {}
 
 #[doc = spec!("VkBufferView")]
 ///
@@ -433,6 +457,9 @@ impl core::fmt::Debug for BufferView {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for BufferView {}
+
 #[doc = spec!("VkImage")]
 ///
 /// Provided by Vulkan 1.0.
@@ -480,6 +507,9 @@ impl core::fmt::Debug for Image {
         write!(f, "Image({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Image {}
 
 #[doc = spec!("VkImageView")]
 ///
@@ -529,6 +559,9 @@ impl core::fmt::Debug for ImageView {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for ImageView {}
+
 #[doc = spec!("VkShaderModule")]
 ///
 /// Provided by Vulkan 1.0.
@@ -576,6 +609,9 @@ impl core::fmt::Debug for ShaderModule {
         write!(f, "ShaderModule({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for ShaderModule {}
 
 #[doc = spec!("VkPipeline")]
 ///
@@ -625,6 +661,9 @@ impl core::fmt::Debug for Pipeline {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Pipeline {}
+
 #[doc = spec!("VkPipelineLayout")]
 ///
 /// Provided by Vulkan 1.0.
@@ -672,6 +711,9 @@ impl core::fmt::Debug for PipelineLayout {
         write!(f, "PipelineLayout({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for PipelineLayout {}
 
 #[doc = spec!("VkSampler")]
 ///
@@ -721,6 +763,9 @@ impl core::fmt::Debug for Sampler {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Sampler {}
+
 #[doc = spec!("VkDescriptorSet")]
 ///
 /// Provided by Vulkan 1.0.
@@ -768,6 +813,9 @@ impl core::fmt::Debug for DescriptorSet {
         write!(f, "DescriptorSet({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DescriptorSet {}
 
 #[doc = spec!("VkDescriptorSetLayout")]
 ///
@@ -817,6 +865,9 @@ impl core::fmt::Debug for DescriptorSetLayout {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DescriptorSetLayout {}
+
 #[doc = spec!("VkDescriptorPool")]
 ///
 /// Provided by Vulkan 1.0.
@@ -864,6 +915,9 @@ impl core::fmt::Debug for DescriptorPool {
         write!(f, "DescriptorPool({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DescriptorPool {}
 
 #[doc = spec!("VkFence")]
 ///
@@ -913,6 +967,9 @@ impl core::fmt::Debug for Fence {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Fence {}
+
 #[doc = spec!("VkSemaphore")]
 ///
 /// Provided by Vulkan 1.0.
@@ -960,6 +1017,9 @@ impl core::fmt::Debug for Semaphore {
         write!(f, "Semaphore({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Semaphore {}
 
 #[doc = spec!("VkEvent")]
 ///
@@ -1009,6 +1069,9 @@ impl core::fmt::Debug for Event {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Event {}
+
 #[doc = spec!("VkQueryPool")]
 ///
 /// Provided by Vulkan 1.0.
@@ -1056,6 +1119,9 @@ impl core::fmt::Debug for QueryPool {
         write!(f, "QueryPool({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for QueryPool {}
 
 #[doc = spec!("VkFramebuffer")]
 ///
@@ -1107,6 +1173,9 @@ impl core::fmt::Debug for Framebuffer {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for Framebuffer {}
+
 #[doc = spec!("VkRenderPass")]
 ///
 /// Provided by Vulkan 1.0.
@@ -1157,6 +1226,9 @@ impl core::fmt::Debug for RenderPass {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for RenderPass {}
+
 #[doc = spec!("VkPipelineCache")]
 ///
 /// Provided by Vulkan 1.0.
@@ -1204,6 +1276,9 @@ impl core::fmt::Debug for PipelineCache {
         write!(f, "PipelineCache({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for PipelineCache {}
 
 #[doc = spec!("VkPipelineBinaryKHR")]
 ///
@@ -1253,6 +1328,9 @@ impl core::fmt::Debug for PipelineBinaryKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for PipelineBinaryKHR {}
+
 #[doc = spec!("VkIndirectCommandsLayoutNV")]
 ///
 /// Provided by `VK_NV_device_generated_commands`.
@@ -1300,6 +1378,9 @@ impl core::fmt::Debug for IndirectCommandsLayoutNV {
         write!(f, "IndirectCommandsLayoutNV({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for IndirectCommandsLayoutNV {}
 
 #[doc = spec!("VkIndirectCommandsLayoutEXT")]
 ///
@@ -1349,6 +1430,9 @@ impl core::fmt::Debug for IndirectCommandsLayoutEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for IndirectCommandsLayoutEXT {}
+
 #[doc = spec!("VkIndirectExecutionSetEXT")]
 ///
 /// Provided by `VK_EXT_device_generated_commands`.
@@ -1396,6 +1480,9 @@ impl core::fmt::Debug for IndirectExecutionSetEXT {
         write!(f, "IndirectExecutionSetEXT({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for IndirectExecutionSetEXT {}
 
 #[doc = spec!("VkDescriptorUpdateTemplate")]
 ///
@@ -1445,6 +1532,9 @@ impl core::fmt::Debug for DescriptorUpdateTemplate {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DescriptorUpdateTemplate {}
+
 #[doc = spec!("VkSamplerYcbcrConversion")]
 ///
 /// Provided by Vulkan 1.1.
@@ -1492,6 +1582,9 @@ impl core::fmt::Debug for SamplerYcbcrConversion {
         write!(f, "SamplerYcbcrConversion({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for SamplerYcbcrConversion {}
 
 #[doc = spec!("VkValidationCacheEXT")]
 ///
@@ -1541,6 +1634,9 @@ impl core::fmt::Debug for ValidationCacheEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for ValidationCacheEXT {}
+
 #[doc = spec!("VkAccelerationStructureKHR")]
 ///
 /// Provided by `VK_KHR_acceleration_structure`.
@@ -1588,6 +1684,9 @@ impl core::fmt::Debug for AccelerationStructureKHR {
         write!(f, "AccelerationStructureKHR({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for AccelerationStructureKHR {}
 
 #[doc = spec!("VkAccelerationStructureNV")]
 ///
@@ -1637,6 +1736,9 @@ impl core::fmt::Debug for AccelerationStructureNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for AccelerationStructureNV {}
+
 #[doc = spec!("VkPerformanceConfigurationINTEL")]
 ///
 /// Provided by `VK_INTEL_performance_query`.
@@ -1684,6 +1786,9 @@ impl core::fmt::Debug for PerformanceConfigurationINTEL {
         write!(f, "PerformanceConfigurationINTEL({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for PerformanceConfigurationINTEL {}
 
 #[doc = spec!("VkDeferredOperationKHR")]
 ///
@@ -1733,6 +1838,9 @@ impl core::fmt::Debug for DeferredOperationKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DeferredOperationKHR {}
+
 #[doc = spec!("VkPrivateDataSlot")]
 ///
 /// Provided by Vulkan 1.3.
@@ -1780,6 +1888,9 @@ impl core::fmt::Debug for PrivateDataSlot {
         write!(f, "PrivateDataSlot({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for PrivateDataSlot {}
 
 #[doc = spec!("VkCuModuleNVX")]
 ///
@@ -1829,6 +1940,9 @@ impl core::fmt::Debug for CuModuleNVX {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for CuModuleNVX {}
+
 #[doc = spec!("VkCuFunctionNVX")]
 ///
 /// Provided by `VK_NVX_binary_import`.
@@ -1876,6 +1990,9 @@ impl core::fmt::Debug for CuFunctionNVX {
         write!(f, "CuFunctionNVX({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for CuFunctionNVX {}
 
 #[doc = spec!("VkOpticalFlowSessionNV")]
 ///
@@ -1925,6 +2042,9 @@ impl core::fmt::Debug for OpticalFlowSessionNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for OpticalFlowSessionNV {}
+
 #[doc = spec!("VkMicromapEXT")]
 ///
 /// Provided by `VK_EXT_opacity_micromap`.
@@ -1972,6 +2092,9 @@ impl core::fmt::Debug for MicromapEXT {
         write!(f, "MicromapEXT({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for MicromapEXT {}
 
 #[doc = spec!("VkShaderEXT")]
 ///
@@ -2021,6 +2144,9 @@ impl core::fmt::Debug for ShaderEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for ShaderEXT {}
+
 #[doc = spec!("VkTensorARM")]
 ///
 /// Provided by `VK_EXT_descriptor_heap`, `VK_ARM_tensors`.
@@ -2068,6 +2194,9 @@ impl core::fmt::Debug for TensorARM {
         write!(f, "TensorARM({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for TensorARM {}
 
 #[doc = spec!("VkTensorViewARM")]
 ///
@@ -2117,6 +2246,9 @@ impl core::fmt::Debug for TensorViewARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for TensorViewARM {}
+
 #[doc = spec!("VkDataGraphPipelineSessionARM")]
 ///
 /// Provided by `VK_ARM_data_graph`.
@@ -2164,6 +2296,9 @@ impl core::fmt::Debug for DataGraphPipelineSessionARM {
         write!(f, "DataGraphPipelineSessionARM({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DataGraphPipelineSessionARM {}
 
 #[doc = spec!("VkShaderInstrumentationARM")]
 ///
@@ -2213,6 +2348,9 @@ impl core::fmt::Debug for ShaderInstrumentationARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for ShaderInstrumentationARM {}
+
 #[doc = spec!("VkGpaSessionAMD")]
 ///
 /// Provided by `VK_AMD_gpa_interface`.
@@ -2260,6 +2398,9 @@ impl core::fmt::Debug for GpaSessionAMD {
         write!(f, "GpaSessionAMD({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for GpaSessionAMD {}
 
 #[doc = spec!("VkDisplayKHR")]
 ///
@@ -2309,6 +2450,9 @@ impl core::fmt::Debug for DisplayKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DisplayKHR {}
+
 #[doc = spec!("VkDisplayModeKHR")]
 ///
 /// Provided by `VK_KHR_display`.
@@ -2356,6 +2500,9 @@ impl core::fmt::Debug for DisplayModeKHR {
         write!(f, "DisplayModeKHR({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DisplayModeKHR {}
 
 #[doc = spec!("VkSurfaceKHR")]
 ///
@@ -2405,6 +2552,9 @@ impl core::fmt::Debug for SurfaceKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for SurfaceKHR {}
+
 #[doc = spec!("VkSwapchainKHR")]
 ///
 /// Provided by `VK_KHR_swapchain`.
@@ -2452,6 +2602,9 @@ impl core::fmt::Debug for SwapchainKHR {
         write!(f, "SwapchainKHR({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for SwapchainKHR {}
 
 #[doc = spec!("VkDebugReportCallbackEXT")]
 ///
@@ -2501,6 +2654,9 @@ impl core::fmt::Debug for DebugReportCallbackEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DebugReportCallbackEXT {}
+
 #[doc = spec!("VkDebugUtilsMessengerEXT")]
 ///
 /// Provided by `VK_EXT_debug_utils`.
@@ -2549,6 +2705,9 @@ impl core::fmt::Debug for DebugUtilsMessengerEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for DebugUtilsMessengerEXT {}
+
 #[doc = spec!("VkExternalComputeQueueNV")]
 ///
 /// Provided by `VK_NV_external_compute_queue`.
@@ -2596,6 +2755,9 @@ impl core::fmt::Debug for ExternalComputeQueueNV {
         write!(f, "ExternalComputeQueueNV({:#x})", self.0)
     }
 }
+
+// SAFETY: a transparent integer newtype; any raw value is a handle value (null included).
+unsafe impl crate::Plain for ExternalComputeQueueNV {}
 
 #[doc = spec!("VkDescriptorUpdateTemplateKHR")]
 ///

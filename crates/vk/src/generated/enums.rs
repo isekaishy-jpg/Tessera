@@ -61,6 +61,9 @@ impl core::fmt::Debug for AttachmentLoadOp {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AttachmentLoadOp {}
+
 #[doc = spec!("VkAttachmentStoreOp")]
 ///
 /// Provided by Vulkan 1.0.
@@ -116,6 +119,9 @@ impl core::fmt::Debug for AttachmentStoreOp {
         crate::fmt::enum_value(f, "AttachmentStoreOp", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AttachmentStoreOp {}
 
 #[doc = spec!("VkBlendFactor")]
 ///
@@ -208,6 +214,9 @@ impl core::fmt::Debug for BlendFactor {
         crate::fmt::enum_value(f, "BlendFactor", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BlendFactor {}
 
 #[doc = spec!("VkBlendOp")]
 ///
@@ -397,6 +406,9 @@ impl core::fmt::Debug for BlendOp {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BlendOp {}
+
 #[doc = spec!("VkBorderColor")]
 ///
 /// Provided by Vulkan 1.0.
@@ -456,6 +468,9 @@ impl core::fmt::Debug for BorderColor {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BorderColor {}
+
 #[doc = spec!("VkPipelineCacheHeaderVersion")]
 ///
 /// Provided by Vulkan 1.0.
@@ -501,6 +516,9 @@ impl core::fmt::Debug for PipelineCacheHeaderVersion {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineCacheHeaderVersion {}
 
 #[doc = spec!("VkComponentSwizzle")]
 ///
@@ -558,6 +576,9 @@ impl core::fmt::Debug for ComponentSwizzle {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ComponentSwizzle {}
+
 #[doc = spec!("VkCommandBufferLevel")]
 ///
 /// Provided by Vulkan 1.0.
@@ -598,6 +619,9 @@ impl core::fmt::Debug for CommandBufferLevel {
         crate::fmt::enum_value(f, "CommandBufferLevel", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CommandBufferLevel {}
 
 #[doc = spec!("VkCompareOp")]
 ///
@@ -657,6 +681,9 @@ impl core::fmt::Debug for CompareOp {
         crate::fmt::enum_value(f, "CompareOp", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CompareOp {}
 
 #[doc = spec!("VkDescriptorType")]
 ///
@@ -757,6 +784,9 @@ impl core::fmt::Debug for DescriptorType {
         crate::fmt::enum_value(f, "DescriptorType", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DescriptorType {}
 
 #[doc = spec!("VkDynamicState")]
 ///
@@ -1084,6 +1114,9 @@ impl core::fmt::Debug for DynamicState {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DynamicState {}
+
 #[doc = spec!("VkPolygonMode")]
 ///
 /// Provided by Vulkan 1.0.
@@ -1130,6 +1163,9 @@ impl core::fmt::Debug for PolygonMode {
         crate::fmt::enum_value(f, "PolygonMode", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PolygonMode {}
 
 #[doc = spec!("VkFormat")]
 ///
@@ -2306,6 +2342,9 @@ impl core::fmt::Debug for Format {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for Format {}
+
 #[doc = spec!("VkFrontFace")]
 ///
 /// Provided by Vulkan 1.0.
@@ -2346,6 +2385,9 @@ impl core::fmt::Debug for FrontFace {
         crate::fmt::enum_value(f, "FrontFace", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FrontFace {}
 
 #[doc = spec!("VkImageLayout")]
 ///
@@ -2518,6 +2560,9 @@ impl core::fmt::Debug for ImageLayout {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageLayout {}
+
 #[doc = spec!("VkImageTiling")]
 ///
 /// Provided by Vulkan 1.0.
@@ -2562,6 +2607,9 @@ impl core::fmt::Debug for ImageTiling {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageTiling {}
+
 #[doc = spec!("VkImageType")]
 ///
 /// Provided by Vulkan 1.0.
@@ -2605,6 +2653,9 @@ impl core::fmt::Debug for ImageType {
         crate::fmt::enum_value(f, "ImageType", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageType {}
 
 #[doc = spec!("VkImageViewType")]
 ///
@@ -2661,6 +2712,9 @@ impl core::fmt::Debug for ImageViewType {
         crate::fmt::enum_value(f, "ImageViewType", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageViewType {}
 
 #[doc = spec!("VkIndirectCommandsTokenTypeEXT")]
 ///
@@ -2753,6 +2807,9 @@ impl core::fmt::Debug for IndirectCommandsTokenTypeEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for IndirectCommandsTokenTypeEXT {}
+
 #[doc = spec!("VkSharingMode")]
 ///
 /// Provided by Vulkan 1.0.
@@ -2793,6 +2850,9 @@ impl core::fmt::Debug for SharingMode {
         crate::fmt::enum_value(f, "SharingMode", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SharingMode {}
 
 #[doc = spec!("VkIndexType")]
 ///
@@ -2852,6 +2912,9 @@ impl core::fmt::Debug for IndexType {
         crate::fmt::enum_value(f, "IndexType", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for IndexType {}
 
 #[doc = spec!("VkLogicOp")]
 ///
@@ -2936,6 +2999,9 @@ impl core::fmt::Debug for LogicOp {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for LogicOp {}
+
 #[doc = spec!("VkPhysicalDeviceType")]
 ///
 /// Provided by Vulkan 1.0.
@@ -2985,6 +3051,9 @@ impl core::fmt::Debug for PhysicalDeviceType {
         crate::fmt::enum_value(f, "PhysicalDeviceType", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PhysicalDeviceType {}
 
 #[doc = spec!("VkPipelineBindPoint")]
 ///
@@ -3039,6 +3108,9 @@ impl core::fmt::Debug for PipelineBindPoint {
         crate::fmt::enum_value(f, "PipelineBindPoint", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineBindPoint {}
 
 #[doc = spec!("VkPrimitiveTopology")]
 ///
@@ -3107,6 +3179,9 @@ impl core::fmt::Debug for PrimitiveTopology {
         crate::fmt::enum_value(f, "PrimitiveTopology", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PrimitiveTopology {}
 
 #[doc = spec!("VkQueryType")]
 ///
@@ -3194,6 +3269,9 @@ impl core::fmt::Debug for QueryType {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for QueryType {}
+
 #[doc = spec!("VkSubpassContents")]
 ///
 /// Provided by Vulkan 1.0.
@@ -3244,6 +3322,9 @@ impl core::fmt::Debug for SubpassContents {
         crate::fmt::enum_value(f, "SubpassContents", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SubpassContents {}
 
 #[doc = spec!("VkResult")]
 ///
@@ -3522,6 +3603,9 @@ impl core::fmt::Debug for Result {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for Result {}
+
 #[doc = spec!("VkStencilOp")]
 ///
 /// Provided by Vulkan 1.0.
@@ -3580,6 +3664,9 @@ impl core::fmt::Debug for StencilOp {
         crate::fmt::enum_value(f, "StencilOp", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for StencilOp {}
 
 #[doc = spec!("VkStructureType")]
 ///
@@ -8042,6 +8129,9 @@ impl core::fmt::Debug for StructureType {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for StructureType {}
+
 #[doc = spec!("VkSystemAllocationScope")]
 ///
 /// Provided by Vulkan 1.0.
@@ -8092,6 +8182,9 @@ impl core::fmt::Debug for SystemAllocationScope {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SystemAllocationScope {}
+
 #[doc = spec!("VkInternalAllocationType")]
 ///
 /// Provided by Vulkan 1.0.
@@ -8129,6 +8222,9 @@ impl core::fmt::Debug for InternalAllocationType {
         crate::fmt::enum_value(f, "InternalAllocationType", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for InternalAllocationType {}
 
 #[doc = spec!("VkSamplerAddressMode")]
 ///
@@ -8188,6 +8284,9 @@ impl core::fmt::Debug for SamplerAddressMode {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SamplerAddressMode {}
+
 #[doc = spec!("VkFilter")]
 ///
 /// Provided by Vulkan 1.0.
@@ -8236,6 +8335,9 @@ impl core::fmt::Debug for Filter {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for Filter {}
+
 #[doc = spec!("VkSamplerMipmapMode")]
 ///
 /// Provided by Vulkan 1.0.
@@ -8281,6 +8383,9 @@ impl core::fmt::Debug for SamplerMipmapMode {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SamplerMipmapMode {}
+
 #[doc = spec!("VkVertexInputRate")]
 ///
 /// Provided by Vulkan 1.0.
@@ -8321,6 +8426,9 @@ impl core::fmt::Debug for VertexInputRate {
         crate::fmt::enum_value(f, "VertexInputRate", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for VertexInputRate {}
 
 #[doc = spec!("VkClusterAccelerationStructureTypeNV")]
 ///
@@ -8370,6 +8478,9 @@ impl core::fmt::Debug for ClusterAccelerationStructureTypeNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ClusterAccelerationStructureTypeNV {}
 
 #[doc = spec!("VkClusterAccelerationStructureOpTypeNV")]
 ///
@@ -8429,6 +8540,9 @@ impl core::fmt::Debug for ClusterAccelerationStructureOpTypeNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ClusterAccelerationStructureOpTypeNV {}
+
 #[doc = spec!("VkClusterAccelerationStructureOpModeNV")]
 ///
 /// Provided by `VK_NV_cluster_acceleration_structure`.
@@ -8477,6 +8591,9 @@ impl core::fmt::Debug for ClusterAccelerationStructureOpModeNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ClusterAccelerationStructureOpModeNV {}
 
 #[doc = spec!("VkObjectType")]
 ///
@@ -8690,6 +8807,9 @@ impl core::fmt::Debug for ObjectType {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ObjectType {}
+
 #[doc = spec!("VkRayTracingInvocationReorderModeEXT")]
 ///
 /// Provided by `VK_EXT_ray_tracing_invocation_reorder`.
@@ -8744,6 +8864,9 @@ impl core::fmt::Debug for RayTracingInvocationReorderModeEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for RayTracingInvocationReorderModeEXT {}
+
 #[doc = spec!("VkImageTilingControlEXT")]
 ///
 /// Provided by `VK_EXT_image_tiling_control`.
@@ -8787,6 +8910,9 @@ impl core::fmt::Debug for ImageTilingControlEXT {
         crate::fmt::enum_value(f, "ImageTilingControlEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ImageTilingControlEXT {}
 
 #[doc = spec!("VkIndirectCommandsTokenTypeNV")]
 ///
@@ -8864,6 +8990,9 @@ impl core::fmt::Debug for IndirectCommandsTokenTypeNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for IndirectCommandsTokenTypeNV {}
+
 #[doc = spec!("VkDescriptorUpdateTemplateType")]
 ///
 /// Provided by Vulkan 1.1.
@@ -8921,6 +9050,9 @@ impl core::fmt::Debug for DescriptorUpdateTemplateType {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DescriptorUpdateTemplateType {}
 
 #[doc = spec!("VkViewportCoordinateSwizzleNV")]
 ///
@@ -8986,6 +9118,9 @@ impl core::fmt::Debug for ViewportCoordinateSwizzleNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ViewportCoordinateSwizzleNV {}
+
 #[doc = spec!("VkDiscardRectangleModeEXT")]
 ///
 /// Provided by `VK_EXT_discard_rectangles`.
@@ -9026,6 +9161,9 @@ impl core::fmt::Debug for DiscardRectangleModeEXT {
         crate::fmt::enum_value(f, "DiscardRectangleModeEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DiscardRectangleModeEXT {}
 
 #[doc = spec!("VkPointClippingBehavior")]
 ///
@@ -9075,6 +9213,9 @@ impl core::fmt::Debug for PointClippingBehavior {
         crate::fmt::enum_value(f, "PointClippingBehavior", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PointClippingBehavior {}
 
 #[doc = spec!("VkCoverageModulationModeNV")]
 ///
@@ -9128,6 +9269,9 @@ impl core::fmt::Debug for CoverageModulationModeNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CoverageModulationModeNV {}
+
 #[doc = spec!("VkCoverageReductionModeNV")]
 ///
 /// Provided by `VK_NV_coverage_reduction_mode`.
@@ -9168,6 +9312,9 @@ impl core::fmt::Debug for CoverageReductionModeNV {
         crate::fmt::enum_value(f, "CoverageReductionModeNV", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CoverageReductionModeNV {}
 
 #[doc = spec!("VkValidationCacheHeaderVersionEXT")]
 ///
@@ -9212,6 +9359,9 @@ impl core::fmt::Debug for ValidationCacheHeaderVersionEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ValidationCacheHeaderVersionEXT {}
+
 #[doc = spec!("VkShaderInfoTypeAMD")]
 ///
 /// Provided by `VK_AMD_shader_info`.
@@ -9255,6 +9405,9 @@ impl core::fmt::Debug for ShaderInfoTypeAMD {
         crate::fmt::enum_value(f, "ShaderInfoTypeAMD", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShaderInfoTypeAMD {}
 
 #[doc = spec!("VkQueueGlobalPriority")]
 ///
@@ -9335,6 +9488,9 @@ impl core::fmt::Debug for QueueGlobalPriority {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for QueueGlobalPriority {}
+
 #[doc = spec!("VkTimeDomainKHR")]
 ///
 /// Provided by `VK_KHR_calibrated_timestamps`.
@@ -9404,6 +9560,9 @@ impl core::fmt::Debug for TimeDomainKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for TimeDomainKHR {}
+
 #[doc = spec!("VkConservativeRasterizationModeEXT")]
 ///
 /// Provided by `VK_EXT_conservative_rasterization`.
@@ -9452,6 +9611,9 @@ impl core::fmt::Debug for ConservativeRasterizationModeEXT {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ConservativeRasterizationModeEXT {}
 
 #[doc = spec!("VkSemaphoreType")]
 ///
@@ -9502,6 +9664,9 @@ impl core::fmt::Debug for SemaphoreType {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SemaphoreType {}
+
 #[doc = spec!("VkBuildAccelerationStructureModeKHR")]
 ///
 /// Provided by `VK_KHR_acceleration_structure`.
@@ -9547,6 +9712,9 @@ impl core::fmt::Debug for BuildAccelerationStructureModeKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BuildAccelerationStructureModeKHR {}
 
 #[doc = spec!("VkCopyAccelerationStructureModeKHR")]
 ///
@@ -9608,6 +9776,9 @@ impl core::fmt::Debug for CopyAccelerationStructureModeKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CopyAccelerationStructureModeKHR {}
+
 #[doc = spec!("VkAccelerationStructureTypeKHR")]
 ///
 /// Provided by `VK_KHR_acceleration_structure`.
@@ -9667,6 +9838,9 @@ impl core::fmt::Debug for AccelerationStructureTypeKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccelerationStructureTypeKHR {}
 
 #[doc = spec!("VkGeometryTypeKHR")]
 ///
@@ -9729,6 +9903,9 @@ impl core::fmt::Debug for GeometryTypeKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for GeometryTypeKHR {}
+
 #[doc = spec!("VkRayTracingShaderGroupTypeKHR")]
 ///
 /// Provided by `VK_KHR_ray_tracing_pipeline`.
@@ -9790,6 +9967,9 @@ impl core::fmt::Debug for RayTracingShaderGroupTypeKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for RayTracingShaderGroupTypeKHR {}
+
 #[doc = spec!("VkAccelerationStructureMemoryRequirementsTypeNV")]
 ///
 /// Provided by `VK_NV_ray_tracing`.
@@ -9838,6 +10018,9 @@ impl core::fmt::Debug for AccelerationStructureMemoryRequirementsTypeNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccelerationStructureMemoryRequirementsTypeNV {}
 
 #[doc = spec!("VkAccelerationStructureBuildTypeKHR")]
 ///
@@ -9888,6 +10071,9 @@ impl core::fmt::Debug for AccelerationStructureBuildTypeKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccelerationStructureBuildTypeKHR {}
+
 #[doc = spec!("VkAccelerationStructureCompatibilityKHR")]
 ///
 /// Provided by `VK_KHR_acceleration_structure`.
@@ -9933,6 +10119,9 @@ impl core::fmt::Debug for AccelerationStructureCompatibilityKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccelerationStructureCompatibilityKHR {}
 
 #[doc = spec!("VkRayTracingLssIndexingModeNV")]
 ///
@@ -9980,6 +10169,9 @@ impl core::fmt::Debug for RayTracingLssIndexingModeNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for RayTracingLssIndexingModeNV {}
+
 #[doc = spec!("VkRayTracingLssPrimitiveEndCapsModeNV")]
 ///
 /// Provided by `VK_NV_ray_tracing_linear_swept_spheres`.
@@ -10025,6 +10217,9 @@ impl core::fmt::Debug for RayTracingLssPrimitiveEndCapsModeNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for RayTracingLssPrimitiveEndCapsModeNV {}
 
 #[doc = spec!("VkShaderGroupShaderKHR")]
 ///
@@ -10072,6 +10267,9 @@ impl core::fmt::Debug for ShaderGroupShaderKHR {
         crate::fmt::enum_value(f, "ShaderGroupShaderKHR", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShaderGroupShaderKHR {}
 
 #[doc = spec!("VkMemoryOverallocationBehaviorAMD")]
 ///
@@ -10121,6 +10319,9 @@ impl core::fmt::Debug for MemoryOverallocationBehaviorAMD {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for MemoryOverallocationBehaviorAMD {}
 
 #[doc = spec!("VkPerformanceCounterScopeKHR")]
 ///
@@ -10182,6 +10383,9 @@ impl core::fmt::Debug for PerformanceCounterScopeKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerformanceCounterScopeKHR {}
 
 #[doc = spec!("VkPerformanceCounterUnitKHR")]
 ///
@@ -10256,6 +10460,9 @@ impl core::fmt::Debug for PerformanceCounterUnitKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerformanceCounterUnitKHR {}
+
 #[doc = spec!("VkPerformanceCounterStorageKHR")]
 ///
 /// Provided by `VK_KHR_performance_query`.
@@ -10314,6 +10521,9 @@ impl core::fmt::Debug for PerformanceCounterStorageKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerformanceCounterStorageKHR {}
+
 #[doc = spec!("VkPerformanceConfigurationTypeINTEL")]
 ///
 /// Provided by `VK_INTEL_performance_query`.
@@ -10357,6 +10567,9 @@ impl core::fmt::Debug for PerformanceConfigurationTypeINTEL {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerformanceConfigurationTypeINTEL {}
+
 #[doc = spec!("VkQueryPoolSamplingModeINTEL")]
 ///
 /// Provided by `VK_INTEL_performance_query`.
@@ -10399,6 +10612,9 @@ impl core::fmt::Debug for QueryPoolSamplingModeINTEL {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for QueryPoolSamplingModeINTEL {}
 
 #[doc = spec!("VkPerformanceOverrideTypeINTEL")]
 ///
@@ -10446,6 +10662,9 @@ impl core::fmt::Debug for PerformanceOverrideTypeINTEL {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerformanceOverrideTypeINTEL {}
+
 #[doc = spec!("VkPerformanceParameterTypeINTEL")]
 ///
 /// Provided by `VK_INTEL_performance_query`.
@@ -10491,6 +10710,9 @@ impl core::fmt::Debug for PerformanceParameterTypeINTEL {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerformanceParameterTypeINTEL {}
 
 #[doc = spec!("VkPerformanceValueTypeINTEL")]
 ///
@@ -10546,6 +10768,9 @@ impl core::fmt::Debug for PerformanceValueTypeINTEL {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerformanceValueTypeINTEL {}
 
 #[doc = spec!("VkLineRasterizationMode")]
 ///
@@ -10626,6 +10851,9 @@ impl core::fmt::Debug for LineRasterizationMode {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for LineRasterizationMode {}
+
 #[doc = spec!("VkFragmentShadingRateNV")]
 ///
 /// Provided by `VK_NV_fragment_shading_rate_enums`.
@@ -10697,6 +10925,9 @@ impl core::fmt::Debug for FragmentShadingRateNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FragmentShadingRateNV {}
+
 #[doc = spec!("VkFragmentShadingRateTypeNV")]
 ///
 /// Provided by `VK_NV_fragment_shading_rate_enums`.
@@ -10742,6 +10973,9 @@ impl core::fmt::Debug for FragmentShadingRateTypeNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FragmentShadingRateTypeNV {}
 
 #[doc = spec!("VkSubpassMergeStatusEXT")]
 ///
@@ -10820,6 +11054,9 @@ impl core::fmt::Debug for SubpassMergeStatusEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SubpassMergeStatusEXT {}
+
 #[doc = spec!("VkProvokingVertexModeEXT")]
 ///
 /// Provided by `VK_EXT_provoking_vertex`.
@@ -10860,6 +11097,9 @@ impl core::fmt::Debug for ProvokingVertexModeEXT {
         crate::fmt::enum_value(f, "ProvokingVertexModeEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ProvokingVertexModeEXT {}
 
 #[doc = spec!("VkPipelineRobustnessBufferBehavior")]
 ///
@@ -10929,6 +11169,9 @@ impl core::fmt::Debug for PipelineRobustnessBufferBehavior {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineRobustnessBufferBehavior {}
+
 #[doc = spec!("VkPipelineRobustnessImageBehavior")]
 ///
 /// Provided by Vulkan 1.4.
@@ -10997,6 +11240,9 @@ impl core::fmt::Debug for PipelineRobustnessImageBehavior {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineRobustnessImageBehavior {}
+
 #[doc = spec!("VkDeviceAddressBindingTypeEXT")]
 ///
 /// Provided by `VK_EXT_device_address_binding_report`.
@@ -11043,6 +11289,9 @@ impl core::fmt::Debug for DeviceAddressBindingTypeEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceAddressBindingTypeEXT {}
+
 #[doc = spec!("VkMicromapTypeEXT")]
 ///
 /// Provided by `VK_EXT_opacity_micromap`.
@@ -11081,6 +11330,9 @@ impl core::fmt::Debug for MicromapTypeEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for MicromapTypeEXT {}
+
 #[doc = spec!("VkBuildMicromapModeEXT")]
 ///
 /// Provided by `VK_EXT_opacity_micromap`.
@@ -11118,6 +11370,9 @@ impl core::fmt::Debug for BuildMicromapModeEXT {
         crate::fmt::enum_value(f, "BuildMicromapModeEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BuildMicromapModeEXT {}
 
 #[doc = spec!("VkCopyMicromapModeEXT")]
 ///
@@ -11165,6 +11420,9 @@ impl core::fmt::Debug for CopyMicromapModeEXT {
         crate::fmt::enum_value(f, "CopyMicromapModeEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CopyMicromapModeEXT {}
 
 #[doc = spec!("VkOpacityMicromapFormatKHR")]
 ///
@@ -11219,6 +11477,9 @@ impl core::fmt::Debug for OpacityMicromapFormatKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for OpacityMicromapFormatKHR {}
 
 #[doc = spec!("VkOpacityMicromapSpecialIndexKHR")]
 ///
@@ -11291,6 +11552,9 @@ impl core::fmt::Debug for OpacityMicromapSpecialIndexKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for OpacityMicromapSpecialIndexKHR {}
+
 #[doc = spec!("VkAccelerationStructureSerializedBlockTypeKHR")]
 ///
 /// Provided by `VK_KHR_opacity_micromap`.
@@ -11333,6 +11597,9 @@ impl core::fmt::Debug for AccelerationStructureSerializedBlockTypeKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccelerationStructureSerializedBlockTypeKHR {}
 
 #[doc = spec!("VkIndirectExecutionSetInfoTypeEXT")]
 ///
@@ -11380,6 +11647,9 @@ impl core::fmt::Debug for IndirectExecutionSetInfoTypeEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for IndirectExecutionSetInfoTypeEXT {}
+
 #[doc = spec!("VkDeviceFaultVendorBinaryHeaderVersionKHR")]
 ///
 /// Provided by `VK_KHR_device_fault`.
@@ -11426,6 +11696,9 @@ impl core::fmt::Debug for DeviceFaultVendorBinaryHeaderVersionKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceFaultVendorBinaryHeaderVersionKHR {}
 
 #[doc = spec!("VkDepthBiasRepresentationEXT")]
 ///
@@ -11476,6 +11749,9 @@ impl core::fmt::Debug for DepthBiasRepresentationEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DepthBiasRepresentationEXT {}
+
 #[doc = spec!("VkDirectDriverLoadingModeLUNARG")]
 ///
 /// Provided by `VK_LUNARG_direct_driver_loading`.
@@ -11521,6 +11797,9 @@ impl core::fmt::Debug for DirectDriverLoadingModeLUNARG {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DirectDriverLoadingModeLUNARG {}
 
 #[doc = spec!("VkPartitionedAccelerationStructureOpTypeNV")]
 ///
@@ -11571,6 +11850,9 @@ impl core::fmt::Debug for PartitionedAccelerationStructureOpTypeNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PartitionedAccelerationStructureOpTypeNV {}
+
 #[doc = spec!("VkAntiLagModeAMD")]
 ///
 /// Provided by `VK_AMD_anti_lag`.
@@ -11615,6 +11897,9 @@ impl core::fmt::Debug for AntiLagModeAMD {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AntiLagModeAMD {}
+
 #[doc = spec!("VkAntiLagStageAMD")]
 ///
 /// Provided by `VK_AMD_anti_lag`.
@@ -11656,6 +11941,9 @@ impl core::fmt::Debug for AntiLagStageAMD {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AntiLagStageAMD {}
+
 #[doc = spec!("VkShaderCodeTypeEXT")]
 ///
 /// Provided by `VK_EXT_shader_object`.
@@ -11696,6 +11984,9 @@ impl core::fmt::Debug for ShaderCodeTypeEXT {
         crate::fmt::enum_value(f, "ShaderCodeTypeEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShaderCodeTypeEXT {}
 
 #[doc = spec!("VkScopeKHR")]
 ///
@@ -11759,6 +12050,9 @@ impl core::fmt::Debug for ScopeKHR {
         crate::fmt::enum_value(f, "ScopeKHR", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ScopeKHR {}
 
 #[doc = spec!("VkComponentTypeKHR")]
 ///
@@ -11910,6 +12204,9 @@ impl core::fmt::Debug for ComponentTypeKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ComponentTypeKHR {}
+
 #[doc = spec!("VkCubicFilterWeightsQCOM")]
 ///
 /// Provided by `VK_QCOM_filter_cubic_weights`.
@@ -11957,6 +12254,9 @@ impl core::fmt::Debug for CubicFilterWeightsQCOM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CubicFilterWeightsQCOM {}
+
 #[doc = spec!("VkBlockMatchWindowCompareModeQCOM")]
 ///
 /// Provided by `VK_QCOM_image_processing2`.
@@ -12003,6 +12303,9 @@ impl core::fmt::Debug for BlockMatchWindowCompareModeQCOM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BlockMatchWindowCompareModeQCOM {}
+
 #[doc = spec!("VkLayeredDriverUnderlyingApiMSFT")]
 ///
 /// Provided by `VK_MSFT_layered_driver`.
@@ -12048,6 +12351,9 @@ impl core::fmt::Debug for LayeredDriverUnderlyingApiMSFT {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for LayeredDriverUnderlyingApiMSFT {}
 
 #[doc = spec!("VkPhysicalDeviceLayeredApiKHR")]
 ///
@@ -12104,6 +12410,9 @@ impl core::fmt::Debug for PhysicalDeviceLayeredApiKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PhysicalDeviceLayeredApiKHR {}
+
 #[doc = spec!("VkDepthClampModeEXT")]
 ///
 /// Provided by `VK_EXT_depth_clamp_control`.
@@ -12144,6 +12453,9 @@ impl core::fmt::Debug for DepthClampModeEXT {
         crate::fmt::enum_value(f, "DepthClampModeEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DepthClampModeEXT {}
 
 #[doc = spec!("VkCooperativeVectorMatrixLayoutNV")]
 ///
@@ -12196,6 +12508,9 @@ impl core::fmt::Debug for CooperativeVectorMatrixLayoutNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CooperativeVectorMatrixLayoutNV {}
 
 #[doc = spec!("VkTensorTilingARM")]
 ///
@@ -12253,6 +12568,9 @@ impl core::fmt::Debug for TensorTilingARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for TensorTilingARM {}
+
 #[doc = spec!("VkDataGraphPipelinePropertyARM")]
 ///
 /// Provided by `VK_ARM_data_graph`.
@@ -12305,6 +12623,9 @@ impl core::fmt::Debug for DataGraphPipelinePropertyARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphPipelinePropertyARM {}
+
 #[doc = spec!("VkDataGraphPipelineSessionBindPointARM")]
 ///
 /// Provided by `VK_ARM_data_graph`.
@@ -12354,6 +12675,9 @@ impl core::fmt::Debug for DataGraphPipelineSessionBindPointARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphPipelineSessionBindPointARM {}
+
 #[doc = spec!("VkDataGraphPipelineSessionBindPointTypeARM")]
 ///
 /// Provided by `VK_ARM_data_graph`.
@@ -12396,6 +12720,9 @@ impl core::fmt::Debug for DataGraphPipelineSessionBindPointTypeARM {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphPipelineSessionBindPointTypeARM {}
 
 #[doc = spec!("VkPhysicalDeviceDataGraphProcessingEngineTypeARM")]
 ///
@@ -12445,6 +12772,9 @@ impl core::fmt::Debug for PhysicalDeviceDataGraphProcessingEngineTypeARM {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PhysicalDeviceDataGraphProcessingEngineTypeARM {}
 
 #[doc = spec!("VkPhysicalDeviceDataGraphOperationTypeARM")]
 ///
@@ -12498,6 +12828,9 @@ impl core::fmt::Debug for PhysicalDeviceDataGraphOperationTypeARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PhysicalDeviceDataGraphOperationTypeARM {}
+
 #[doc = spec!("VkDataGraphModelCacheTypeQCOM")]
 ///
 /// Provided by `VK_QCOM_data_graph_model`.
@@ -12540,6 +12873,9 @@ impl core::fmt::Debug for DataGraphModelCacheTypeQCOM {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphModelCacheTypeQCOM {}
 
 #[doc = spec!("VkPerfHintTypeQCOM")]
 ///
@@ -12587,6 +12923,9 @@ impl core::fmt::Debug for PerfHintTypeQCOM {
         crate::fmt::enum_value(f, "PerfHintTypeQCOM", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PerfHintTypeQCOM {}
 
 #[doc = spec!("VkDescriptorMappingSourceEXT")]
 ///
@@ -12660,6 +12999,9 @@ impl core::fmt::Debug for DescriptorMappingSourceEXT {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DescriptorMappingSourceEXT {}
 
 #[doc = spec!("VkGpaPerfBlockAMD")]
 ///
@@ -12875,6 +13217,9 @@ impl core::fmt::Debug for GpaPerfBlockAMD {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for GpaPerfBlockAMD {}
+
 #[doc = spec!("VkGpaSampleTypeAMD")]
 ///
 /// Provided by `VK_AMD_gpa_interface`.
@@ -12918,6 +13263,9 @@ impl core::fmt::Debug for GpaSampleTypeAMD {
         crate::fmt::enum_value(f, "GpaSampleTypeAMD", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for GpaSampleTypeAMD {}
 
 #[doc = spec!("VkGpaDeviceClockModeAMD")]
 ///
@@ -12972,6 +13320,9 @@ impl core::fmt::Debug for GpaDeviceClockModeAMD {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for GpaDeviceClockModeAMD {}
+
 #[doc = spec!("VkDataGraphTOSALevelARM")]
 ///
 /// Provided by `VK_ARM_data_graph_instruction_set_tosa`.
@@ -13012,6 +13363,9 @@ impl core::fmt::Debug for DataGraphTOSALevelARM {
         crate::fmt::enum_value(f, "DataGraphTOSALevelARM", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphTOSALevelARM {}
 
 #[doc = spec!("VkDataGraphOpticalFlowPerformanceLevelARM")]
 ///
@@ -13064,6 +13418,9 @@ impl core::fmt::Debug for DataGraphOpticalFlowPerformanceLevelARM {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphOpticalFlowPerformanceLevelARM {}
 
 #[doc = spec!("VkDataGraphPipelineNodeConnectionTypeARM")]
 ///
@@ -13120,6 +13477,9 @@ impl core::fmt::Debug for DataGraphPipelineNodeConnectionTypeARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphPipelineNodeConnectionTypeARM {}
+
 #[doc = spec!("VkDataGraphPipelineNodeTypeARM")]
 ///
 /// Provided by `VK_ARM_data_graph_optical_flow`.
@@ -13162,6 +13522,9 @@ impl core::fmt::Debug for DataGraphPipelineNodeTypeARM {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DataGraphPipelineNodeTypeARM {}
 
 #[doc = spec!("VkNeuralAcceleratorStatisticsModeARM")]
 ///
@@ -13212,6 +13575,9 @@ impl core::fmt::Debug for NeuralAcceleratorStatisticsModeARM {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for NeuralAcceleratorStatisticsModeARM {}
+
 #[doc = spec!("VkThrottleHintTypeSEC")]
 ///
 /// Provided by `VK_SEC_throttle_hint`.
@@ -13255,6 +13621,9 @@ impl core::fmt::Debug for ThrottleHintTypeSEC {
         crate::fmt::enum_value(f, "ThrottleHintTypeSEC", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ThrottleHintTypeSEC {}
 
 #[doc = spec!("VkColorSpaceKHR")]
 ///
@@ -13347,6 +13716,9 @@ impl core::fmt::Debug for ColorSpaceKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ColorSpaceKHR {}
+
 #[doc = spec!("VkPresentModeKHR")]
 ///
 /// Provided by `VK_KHR_surface`.
@@ -13407,6 +13779,9 @@ impl core::fmt::Debug for PresentModeKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PresentModeKHR {}
+
 #[doc = spec!("VkDisplaySurfaceStereoTypeNV")]
 ///
 /// Provided by `VK_NV_display_stereo`.
@@ -13458,6 +13833,9 @@ impl core::fmt::Debug for DisplaySurfaceStereoTypeNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DisplaySurfaceStereoTypeNV {}
 
 #[doc = spec!("VkDebugReportObjectTypeEXT")]
 ///
@@ -13629,6 +14007,9 @@ impl core::fmt::Debug for DebugReportObjectTypeEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DebugReportObjectTypeEXT {}
+
 #[doc = spec!("VkDeviceMemoryReportEventTypeEXT")]
 ///
 /// Provided by `VK_EXT_device_memory_report`.
@@ -13684,6 +14065,9 @@ impl core::fmt::Debug for DeviceMemoryReportEventTypeEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceMemoryReportEventTypeEXT {}
+
 #[doc = spec!("VkRasterizationOrderAMD")]
 ///
 /// Provided by `VK_AMD_rasterization_order`.
@@ -13725,6 +14109,9 @@ impl core::fmt::Debug for RasterizationOrderAMD {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for RasterizationOrderAMD {}
+
 #[doc = spec!("VkValidationCheckEXT")]
 ///
 /// Provided by `VK_EXT_validation_flags`.
@@ -13765,6 +14152,9 @@ impl core::fmt::Debug for ValidationCheckEXT {
         crate::fmt::enum_value(f, "ValidationCheckEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ValidationCheckEXT {}
 
 #[doc = spec!("VkValidationFeatureEnableEXT")]
 ///
@@ -13820,6 +14210,9 @@ impl core::fmt::Debug for ValidationFeatureEnableEXT {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ValidationFeatureEnableEXT {}
 
 #[doc = spec!("VkValidationFeatureDisableEXT")]
 ///
@@ -13885,6 +14278,9 @@ impl core::fmt::Debug for ValidationFeatureDisableEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ValidationFeatureDisableEXT {}
+
 #[doc = spec!("VkDisplayPowerStateEXT")]
 ///
 /// Provided by `VK_EXT_display_control`.
@@ -13929,6 +14325,9 @@ impl core::fmt::Debug for DisplayPowerStateEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DisplayPowerStateEXT {}
+
 #[doc = spec!("VkDeviceEventTypeEXT")]
 ///
 /// Provided by `VK_EXT_display_control`.
@@ -13967,6 +14366,9 @@ impl core::fmt::Debug for DeviceEventTypeEXT {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceEventTypeEXT {}
+
 #[doc = spec!("VkDisplayEventTypeEXT")]
 ///
 /// Provided by `VK_EXT_display_control`.
@@ -14004,6 +14406,9 @@ impl core::fmt::Debug for DisplayEventTypeEXT {
         crate::fmt::enum_value(f, "DisplayEventTypeEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DisplayEventTypeEXT {}
 
 #[doc = spec!("VkTessellationDomainOrigin")]
 ///
@@ -14058,6 +14463,9 @@ impl core::fmt::Debug for TessellationDomainOrigin {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for TessellationDomainOrigin {}
 
 #[doc = spec!("VkSamplerYcbcrModelConversion")]
 ///
@@ -14142,6 +14550,9 @@ impl core::fmt::Debug for SamplerYcbcrModelConversion {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SamplerYcbcrModelConversion {}
+
 #[doc = spec!("VkSamplerYcbcrRange")]
 ///
 /// Provided by Vulkan 1.1.
@@ -14195,6 +14606,9 @@ impl core::fmt::Debug for SamplerYcbcrRange {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SamplerYcbcrRange {}
+
 #[doc = spec!("VkChromaLocation")]
 ///
 /// Provided by Vulkan 1.1.
@@ -14243,6 +14657,9 @@ impl core::fmt::Debug for ChromaLocation {
         crate::fmt::enum_value(f, "ChromaLocation", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ChromaLocation {}
 
 #[doc = spec!("VkSamplerReductionMode")]
 ///
@@ -14303,6 +14720,9 @@ impl core::fmt::Debug for SamplerReductionMode {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for SamplerReductionMode {}
+
 #[doc = spec!("VkBlendOverlapEXT")]
 ///
 /// Provided by `VK_EXT_blend_operation_advanced`.
@@ -14346,6 +14766,9 @@ impl core::fmt::Debug for BlendOverlapEXT {
         crate::fmt::enum_value(f, "BlendOverlapEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for BlendOverlapEXT {}
 
 #[doc = spec!("VkFullScreenExclusiveEXT")]
 ///
@@ -14393,6 +14816,9 @@ impl core::fmt::Debug for FullScreenExclusiveEXT {
         crate::fmt::enum_value(f, "FullScreenExclusiveEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FullScreenExclusiveEXT {}
 
 #[doc = spec!("VkShaderFloatControlsIndependence")]
 ///
@@ -14455,6 +14881,9 @@ impl core::fmt::Debug for ShaderFloatControlsIndependence {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShaderFloatControlsIndependence {}
+
 #[doc = spec!("VkFragmentShadingRateCombinerOpKHR")]
 ///
 /// Provided by `VK_KHR_fragment_shading_rate`.
@@ -14510,6 +14939,9 @@ impl core::fmt::Debug for FragmentShadingRateCombinerOpKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for FragmentShadingRateCombinerOpKHR {}
+
 #[doc = spec!("VkOpticalFlowPerformanceLevelNV")]
 ///
 /// Provided by `VK_NV_optical_flow`.
@@ -14561,6 +14993,9 @@ impl core::fmt::Debug for OpticalFlowPerformanceLevelNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for OpticalFlowPerformanceLevelNV {}
 
 #[doc = spec!("VkOpticalFlowSessionBindingPointNV")]
 ///
@@ -14628,6 +15063,9 @@ impl core::fmt::Debug for OpticalFlowSessionBindingPointNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for OpticalFlowSessionBindingPointNV {}
 
 #[doc = spec!("VkDeviceFaultAddressTypeKHR")]
 ///
@@ -14720,6 +15158,9 @@ impl core::fmt::Debug for DeviceFaultAddressTypeKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DeviceFaultAddressTypeKHR {}
+
 #[doc = spec!("VkLayerSettingTypeEXT")]
 ///
 /// Provided by `VK_EXT_layer_settings`.
@@ -14778,6 +15219,9 @@ impl core::fmt::Debug for LayerSettingTypeEXT {
         crate::fmt::enum_value(f, "LayerSettingTypeEXT", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for LayerSettingTypeEXT {}
 
 #[doc = spec!("VkLatencyMarkerNV")]
 ///
@@ -14850,6 +15294,9 @@ impl core::fmt::Debug for LatencyMarkerNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for LatencyMarkerNV {}
+
 #[doc = spec!("VkOutOfBandQueueTypeNV")]
 ///
 /// Provided by `VK_NV_low_latency2`.
@@ -14890,6 +15337,9 @@ impl core::fmt::Debug for OutOfBandQueueTypeNV {
         crate::fmt::enum_value(f, "OutOfBandQueueTypeNV", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for OutOfBandQueueTypeNV {}
 
 #[doc = spec!("VkVendorId")]
 ///
@@ -14970,6 +15420,9 @@ impl core::fmt::Debug for VendorId {
         crate::fmt::enum_value(f, "VendorId", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for VendorId {}
 
 #[doc = spec!("VkDriverId")]
 ///
@@ -15209,6 +15662,9 @@ impl core::fmt::Debug for DriverId {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DriverId {}
+
 #[doc = spec!("VkShadingRatePaletteEntryNV")]
 ///
 /// Provided by `VK_NV_shading_rate_image`.
@@ -15285,6 +15741,9 @@ impl core::fmt::Debug for ShadingRatePaletteEntryNV {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for ShadingRatePaletteEntryNV {}
+
 #[doc = spec!("VkCoarseSampleOrderTypeNV")]
 ///
 /// Provided by `VK_NV_shading_rate_image`.
@@ -15331,6 +15790,9 @@ impl core::fmt::Debug for CoarseSampleOrderTypeNV {
         crate::fmt::enum_value(f, "CoarseSampleOrderTypeNV", self.name(), i64::from(self.0))
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for CoarseSampleOrderTypeNV {}
 
 #[doc = spec!("VkPipelineExecutableStatisticFormatKHR")]
 ///
@@ -15384,6 +15846,9 @@ impl core::fmt::Debug for PipelineExecutableStatisticFormatKHR {
     }
 }
 
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for PipelineExecutableStatisticFormatKHR {}
+
 #[doc = spec!("VkDefaultVertexAttributeValueKHR")]
 ///
 /// Provided by `VK_KHR_maintenance9`.
@@ -15429,6 +15894,9 @@ impl core::fmt::Debug for DefaultVertexAttributeValueKHR {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for DefaultVertexAttributeValueKHR {}
 
 #[doc = spec!("VkAccelerationStructureMotionInstanceTypeNV")]
 ///
@@ -15478,6 +15946,9 @@ impl core::fmt::Debug for AccelerationStructureMotionInstanceTypeNV {
         )
     }
 }
+
+// SAFETY: a transparent integer newtype; every bit pattern is a value (unknown values are kept).
+unsafe impl crate::Plain for AccelerationStructureMotionInstanceTypeNV {}
 
 #[doc = spec!("VkRayTracingInvocationReorderModeNV")]
 ///

@@ -1646,6 +1646,89 @@ impl crate::Instance {
         queue_family_properties
     }
 
+    #[doc = spec!("vkGetPhysicalDeviceQueueFamilyProperties2")]
+    ///
+    /// Provided by Vulkan 1.1.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_queue_family_properties2_into`] fills that many elements.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceQueueFamilyProperties2`
+    /// (see the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_queue_family_properties2_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> usize {
+        let f = crate::loaded(
+            self.table().get_physical_device_queue_family_properties2,
+            "vkGetPhysicalDeviceQueueFamilyProperties2",
+        );
+        let mut queue_family_property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                physical_device,
+                &mut queue_family_property_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::len::to_usize(queue_family_property_count)
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceQueueFamilyProperties2")]
+    ///
+    /// Provided by Vulkan 1.1.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written;
+    /// [`Self::get_physical_device_queue_family_properties2_len`] gives the full count.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceQueueFamilyProperties2`
+    /// (see the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_queue_family_properties2_into(
+        &self,
+        physical_device: PhysicalDevice,
+        queue_family_properties: &mut [QueueFamilyProperties2<'_>],
+    ) -> usize {
+        let f = crate::loaded(
+            self.table().get_physical_device_queue_family_properties2,
+            "vkGetPhysicalDeviceQueueFamilyProperties2",
+        );
+        assert!(
+            !queue_family_properties.is_empty(),
+            "pQueueFamilyProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut queue_family_property_count: u32 =
+            crate::len::count_u32(queue_family_properties.len(), "pQueueFamilyPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                physical_device,
+                &mut queue_family_property_count,
+                queue_family_properties.as_mut_ptr(),
+            )
+        };
+        crate::len::to_usize(queue_family_property_count).min(queue_family_properties.len())
+    }
+
     #[doc = spec!("vkGetPhysicalDeviceMemoryProperties2")]
     ///
     /// Provided by Vulkan 1.1.
@@ -1726,6 +1809,96 @@ impl crate::Instance {
         };
         properties.truncate(crate::len::to_usize(property_count));
         properties
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceSparseImageFormatProperties2")]
+    ///
+    /// Provided by Vulkan 1.1.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_sparse_image_format_properties2_into`] fills that many elements.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceSparseImageFormatProperties2` (see the spec link); every handle belongs
+    /// to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_sparse_image_format_properties2_len(
+        &self,
+        physical_device: PhysicalDevice,
+        format_info: &PhysicalDeviceSparseImageFormatInfo2<'_>,
+    ) -> usize {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_sparse_image_format_properties2,
+            "vkGetPhysicalDeviceSparseImageFormatProperties2",
+        );
+        let mut property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                physical_device,
+                format_info,
+                &mut property_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::len::to_usize(property_count)
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceSparseImageFormatProperties2")]
+    ///
+    /// Provided by Vulkan 1.1.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written;
+    /// [`Self::get_physical_device_sparse_image_format_properties2_len`] gives the full count.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceSparseImageFormatProperties2` (see the spec link); every handle belongs
+    /// to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_sparse_image_format_properties2_into(
+        &self,
+        physical_device: PhysicalDevice,
+        format_info: &PhysicalDeviceSparseImageFormatInfo2<'_>,
+        properties: &mut [SparseImageFormatProperties2<'_>],
+    ) -> usize {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_sparse_image_format_properties2,
+            "vkGetPhysicalDeviceSparseImageFormatProperties2",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut property_count: u32 = crate::len::count_u32(properties.len(), "pPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                physical_device,
+                format_info,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        crate::len::to_usize(property_count).min(properties.len())
     }
 
     #[doc = spec!("vkGetPhysicalDeviceExternalBufferProperties")]
@@ -2021,6 +2194,102 @@ impl crate::Instance {
         }
     }
 
+    #[doc = spec!("vkEnumeratePhysicalDeviceGroups")]
+    ///
+    /// Provided by Vulkan 1.1.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::enumerate_physical_device_groups_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_INITIALIZATION_FAILED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkEnumeratePhysicalDeviceGroups` (see the spec
+    /// link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn enumerate_physical_device_groups_len(&self) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table().enumerate_physical_device_groups,
+            "vkEnumeratePhysicalDeviceGroups",
+        );
+        let mut physical_device_group_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                &mut physical_device_group_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(physical_device_group_count))
+    }
+
+    #[doc = spec!("vkEnumeratePhysicalDeviceGroups")]
+    ///
+    /// Provided by Vulkan 1.1.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain); [`Self::enumerate_physical_device_groups_len`] gives the
+    /// full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_INITIALIZATION_FAILED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkEnumeratePhysicalDeviceGroups` (see the spec
+    /// link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn enumerate_physical_device_groups_into(
+        &self,
+        physical_device_group_properties: &mut [PhysicalDeviceGroupProperties<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table().enumerate_physical_device_groups,
+            "vkEnumeratePhysicalDeviceGroups",
+        );
+        assert!(
+            !physical_device_group_properties.is_empty(),
+            "pPhysicalDeviceGroupProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut physical_device_group_count: u32 = crate::len::count_u32(
+            physical_device_group_properties.len(),
+            "pPhysicalDeviceGroupCount",
+        );
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                &mut physical_device_group_count,
+                physical_device_group_properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(physical_device_group_count)
+                .min(physical_device_group_properties.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetPhysicalDevicePresentRectanglesKHR")]
     ///
     /// Provided by `VK_KHR_swapchain`, `VK_KHR_device_group`.
@@ -2209,6 +2478,107 @@ impl crate::Instance {
         }
     }
 
+    #[doc = spec!("vkGetPhysicalDeviceSurfaceFormats2KHR")]
+    ///
+    /// Provided by `VK_KHR_get_surface_capabilities2`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_surface_formats2_khr_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_SURFACE_LOST_KHR`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceSurfaceFormats2KHR` (see
+    /// the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_surface_formats2_khr_len(
+        &self,
+        physical_device: PhysicalDevice,
+        surface_info: &PhysicalDeviceSurfaceInfo2KHR<'_>,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table().get_physical_device_surface_formats2_khr,
+            "vkGetPhysicalDeviceSurfaceFormats2KHR",
+        );
+        let mut surface_format_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                surface_info,
+                &mut surface_format_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(surface_format_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceSurfaceFormats2KHR")]
+    ///
+    /// Provided by `VK_KHR_get_surface_capabilities2`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain); [`Self::get_physical_device_surface_formats2_khr_len`]
+    /// gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_SURFACE_LOST_KHR`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceSurfaceFormats2KHR` (see
+    /// the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_surface_formats2_khr_into(
+        &self,
+        physical_device: PhysicalDevice,
+        surface_info: &PhysicalDeviceSurfaceInfo2KHR<'_>,
+        surface_formats: &mut [SurfaceFormat2KHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table().get_physical_device_surface_formats2_khr,
+            "vkGetPhysicalDeviceSurfaceFormats2KHR",
+        );
+        assert!(
+            !surface_formats.is_empty(),
+            "pSurfaceFormats: empty slice; the _len wrapper gives the count"
+        );
+        let mut surface_format_count: u32 =
+            crate::len::count_u32(surface_formats.len(), "pSurfaceFormatCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                surface_info,
+                &mut surface_format_count,
+                surface_formats.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(surface_format_count).min(surface_formats.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetPhysicalDeviceDisplayProperties2KHR")]
     ///
     /// Provided by `VK_KHR_get_display_properties2`.
@@ -2263,6 +2633,94 @@ impl crate::Instance {
         }
     }
 
+    #[doc = spec!("vkGetPhysicalDeviceDisplayProperties2KHR")]
+    ///
+    /// Provided by `VK_KHR_get_display_properties2`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_display_properties2_khr_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceDisplayProperties2KHR` (see
+    /// the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_display_properties2_khr_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table().get_physical_device_display_properties2_khr,
+            "vkGetPhysicalDeviceDisplayProperties2KHR",
+        );
+        let mut property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe { f(physical_device, &mut property_count, core::ptr::null_mut()) };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(property_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceDisplayProperties2KHR")]
+    ///
+    /// Provided by `VK_KHR_get_display_properties2`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain); [`Self::get_physical_device_display_properties2_khr_len`]
+    /// gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceDisplayProperties2KHR` (see
+    /// the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_display_properties2_khr_into(
+        &self,
+        physical_device: PhysicalDevice,
+        properties: &mut [DisplayProperties2KHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table().get_physical_device_display_properties2_khr,
+            "vkGetPhysicalDeviceDisplayProperties2KHR",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut property_count: u32 = crate::len::count_u32(properties.len(), "pPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(property_count).min(properties.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetPhysicalDeviceDisplayPlaneProperties2KHR")]
     ///
     /// Provided by `VK_KHR_get_display_properties2`.
@@ -2315,6 +2773,96 @@ impl crate::Instance {
             properties.truncate(crate::len::to_usize(property_count));
             return Ok(properties);
         }
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceDisplayPlaneProperties2KHR")]
+    ///
+    /// Provided by `VK_KHR_get_display_properties2`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_display_plane_properties2_khr_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceDisplayPlaneProperties2KHR`
+    /// (see the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_display_plane_properties2_khr_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_display_plane_properties2_khr,
+            "vkGetPhysicalDeviceDisplayPlaneProperties2KHR",
+        );
+        let mut property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe { f(physical_device, &mut property_count, core::ptr::null_mut()) };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(property_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceDisplayPlaneProperties2KHR")]
+    ///
+    /// Provided by `VK_KHR_get_display_properties2`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_display_plane_properties2_khr_len`] gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceDisplayPlaneProperties2KHR`
+    /// (see the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_display_plane_properties2_khr_into(
+        &self,
+        physical_device: PhysicalDevice,
+        properties: &mut [DisplayPlaneProperties2KHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_display_plane_properties2_khr,
+            "vkGetPhysicalDeviceDisplayPlaneProperties2KHR",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut property_count: u32 = crate::len::count_u32(properties.len(), "pPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(property_count).min(properties.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetDisplayModeProperties2KHR")]
@@ -2377,6 +2925,104 @@ impl crate::Instance {
             properties.truncate(crate::len::to_usize(property_count));
             return Ok(properties);
         }
+    }
+
+    #[doc = spec!("vkGetDisplayModeProperties2KHR")]
+    ///
+    /// Provided by `VK_KHR_get_display_properties2`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_display_mode_properties2_khr_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetDisplayModeProperties2KHR` (see the spec
+    /// link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_display_mode_properties2_khr_len(
+        &self,
+        physical_device: PhysicalDevice,
+        display: DisplayKHR,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table().get_display_mode_properties2_khr,
+            "vkGetDisplayModeProperties2KHR",
+        );
+        let mut property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                display,
+                &mut property_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(property_count))
+    }
+
+    #[doc = spec!("vkGetDisplayModeProperties2KHR")]
+    ///
+    /// Provided by `VK_KHR_get_display_properties2`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain); [`Self::get_display_mode_properties2_khr_len`] gives the
+    /// full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetDisplayModeProperties2KHR` (see the spec
+    /// link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_display_mode_properties2_khr_into(
+        &self,
+        physical_device: PhysicalDevice,
+        display: DisplayKHR,
+        properties: &mut [DisplayModeProperties2KHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table().get_display_mode_properties2_khr,
+            "vkGetDisplayModeProperties2KHR",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut property_count: u32 = crate::len::count_u32(properties.len(), "pPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                display,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(property_count).min(properties.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetDisplayPlaneCapabilities2KHR")]
@@ -2639,6 +3285,99 @@ impl crate::Instance {
         }
     }
 
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixPropertiesNV")]
+    ///
+    /// Provided by `VK_NV_cooperative_matrix`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_cooperative_matrix_properties_nv_into`] fills that many
+    /// elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeMatrixPropertiesNV` (see the spec link); every handle belongs
+    /// to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_matrix_properties_nv_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_matrix_properties_nv,
+            "vkGetPhysicalDeviceCooperativeMatrixPropertiesNV",
+        );
+        let mut property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe { f(physical_device, &mut property_count, core::ptr::null_mut()) };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(property_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixPropertiesNV")]
+    ///
+    /// Provided by `VK_NV_cooperative_matrix`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_cooperative_matrix_properties_nv_len`] gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeMatrixPropertiesNV` (see the spec link); every handle belongs
+    /// to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_matrix_properties_nv_into(
+        &self,
+        physical_device: PhysicalDevice,
+        properties: &mut [CooperativeMatrixPropertiesNV<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_matrix_properties_nv,
+            "vkGetPhysicalDeviceCooperativeMatrixPropertiesNV",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut property_count: u32 = crate::len::count_u32(properties.len(), "pPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(property_count).min(properties.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetPhysicalDeviceSurfacePresentModes2EXT")]
     ///
     /// Provided by `VK_EXT_full_screen_exclusive`.
@@ -2774,6 +3513,125 @@ impl crate::Instance {
             counter_descriptions.truncate(crate::len::to_usize(counter_count));
             return Ok((counters, counter_descriptions));
         }
+    }
+
+    #[doc = spec!("vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR")]
+    ///
+    /// Provided by `VK_KHR_performance_query`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::enumerate_physical_device_queue_family_performance_query_counters_khr_into`] fills
+    /// that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_INITIALIZATION_FAILED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR` (see the spec link); every
+    /// handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn enumerate_physical_device_queue_family_performance_query_counters_khr_len(
+        &self,
+        physical_device: PhysicalDevice,
+        queue_family_index: u32,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .enumerate_physical_device_queue_family_performance_query_counters_khr,
+            "vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR",
+        );
+        let mut counter_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                queue_family_index,
+                &mut counter_count,
+                core::ptr::null_mut(),
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(counter_count))
+    }
+
+    #[doc = spec!("vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR")]
+    ///
+    /// Provided by `VK_KHR_performance_query`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::enumerate_physical_device_queue_family_performance_query_counters_khr_len`] gives
+    /// the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_INITIALIZATION_FAILED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR` (see the spec link); every
+    /// handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when slice lengths disagree with each other or with the
+    /// lengths they must match, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn enumerate_physical_device_queue_family_performance_query_counters_khr_into(
+        &self,
+        physical_device: PhysicalDevice,
+        queue_family_index: u32,
+        counters: &mut [PerformanceCounterKHR<'_>],
+        counter_descriptions: &mut [PerformanceCounterDescriptionKHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .enumerate_physical_device_queue_family_performance_query_counters_khr,
+            "vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR",
+        );
+        assert!(
+            !counters.is_empty(),
+            "pCounters: empty slice; the _len wrapper gives the count"
+        );
+        assert!(
+            !counter_descriptions.is_empty(),
+            "pCounterDescriptions: empty slice; the _len wrapper gives the count"
+        );
+        assert_eq!(
+            counter_descriptions.len(),
+            counters.len(),
+            "pCounterCount: arrays differ in length"
+        );
+        let mut counter_count: u32 = crate::len::count_u32(counters.len(), "pCounterCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                queue_family_index,
+                &mut counter_count,
+                counters.as_mut_ptr(),
+                counter_descriptions.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(counter_count).min(counters.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR")]
@@ -2916,6 +3774,107 @@ impl crate::Instance {
         }
     }
 
+    #[doc = spec!("vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV")]
+    ///
+    /// Provided by `VK_NV_coverage_reduction_mode`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_supported_framebuffer_mixed_samples_combinations_nv_into`] fills
+    /// that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV` (see the spec link);
+    /// every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_supported_framebuffer_mixed_samples_combinations_nv_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_supported_framebuffer_mixed_samples_combinations_nv,
+            "vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV",
+        );
+        let mut combination_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut combination_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(combination_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV")]
+    ///
+    /// Provided by `VK_NV_coverage_reduction_mode`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_supported_framebuffer_mixed_samples_combinations_nv_len`] gives
+    /// the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV` (see the spec link);
+    /// every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_supported_framebuffer_mixed_samples_combinations_nv_into(
+        &self,
+        physical_device: PhysicalDevice,
+        combinations: &mut [FramebufferMixedSamplesCombinationNV<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_supported_framebuffer_mixed_samples_combinations_nv,
+            "vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV",
+        );
+        assert!(
+            !combinations.is_empty(),
+            "pCombinations: empty slice; the _len wrapper gives the count"
+        );
+        let mut combination_count: u32 =
+            crate::len::count_u32(combinations.len(), "pCombinationCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut combination_count,
+                combinations.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(combination_count).min(combinations.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetPhysicalDeviceToolProperties")]
     ///
     /// Provided by Vulkan 1.3.
@@ -2967,6 +3926,94 @@ impl crate::Instance {
             tool_properties.truncate(crate::len::to_usize(tool_count));
             return Ok(tool_properties);
         }
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceToolProperties")]
+    ///
+    /// Provided by Vulkan 1.3.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_tool_properties_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceToolProperties` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_tool_properties_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table().get_physical_device_tool_properties,
+            "vkGetPhysicalDeviceToolProperties",
+        );
+        let mut tool_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe { f(physical_device, &mut tool_count, core::ptr::null_mut()) };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(tool_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceToolProperties")]
+    ///
+    /// Provided by Vulkan 1.3.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain); [`Self::get_physical_device_tool_properties_len`] gives
+    /// the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceToolProperties` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_tool_properties_into(
+        &self,
+        physical_device: PhysicalDevice,
+        tool_properties: &mut [PhysicalDeviceToolProperties<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table().get_physical_device_tool_properties,
+            "vkGetPhysicalDeviceToolProperties",
+        );
+        assert!(
+            !tool_properties.is_empty(),
+            "pToolProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut tool_count: u32 = crate::len::count_u32(tool_properties.len(), "pToolCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut tool_count,
+                tool_properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(tool_count).min(tool_properties.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetPhysicalDeviceFragmentShadingRatesKHR")]
@@ -3027,6 +4074,101 @@ impl crate::Instance {
             fragment_shading_rates.truncate(crate::len::to_usize(fragment_shading_rate_count));
             return Ok(fragment_shading_rates);
         }
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceFragmentShadingRatesKHR")]
+    ///
+    /// Provided by `VK_KHR_fragment_shading_rate`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_fragment_shading_rates_khr_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceFragmentShadingRatesKHR`
+    /// (see the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_fragment_shading_rates_khr_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table().get_physical_device_fragment_shading_rates_khr,
+            "vkGetPhysicalDeviceFragmentShadingRatesKHR",
+        );
+        let mut fragment_shading_rate_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut fragment_shading_rate_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(fragment_shading_rate_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceFragmentShadingRatesKHR")]
+    ///
+    /// Provided by `VK_KHR_fragment_shading_rate`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_fragment_shading_rates_khr_len`] gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceFragmentShadingRatesKHR`
+    /// (see the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_fragment_shading_rates_khr_into(
+        &self,
+        physical_device: PhysicalDevice,
+        fragment_shading_rates: &mut [PhysicalDeviceFragmentShadingRateKHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table().get_physical_device_fragment_shading_rates_khr,
+            "vkGetPhysicalDeviceFragmentShadingRatesKHR",
+        );
+        assert!(
+            !fragment_shading_rates.is_empty(),
+            "pFragmentShadingRates: empty slice; the _len wrapper gives the count"
+        );
+        let mut fragment_shading_rate_count: u32 =
+            crate::len::count_u32(fragment_shading_rates.len(), "pFragmentShadingRateCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut fragment_shading_rate_count,
+                fragment_shading_rates.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(fragment_shading_rate_count).min(fragment_shading_rates.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkAcquireDrmDisplayEXT")]
@@ -3159,6 +4301,109 @@ impl crate::Instance {
         }
     }
 
+    #[doc = spec!("vkGetPhysicalDeviceOpticalFlowImageFormatsNV")]
+    ///
+    /// Provided by `VK_NV_optical_flow`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_optical_flow_image_formats_nv_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_EXTENSION_NOT_PRESENT`,
+    /// `ERROR_INITIALIZATION_FAILED`, `ERROR_FORMAT_NOT_SUPPORTED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceOpticalFlowImageFormatsNV`
+    /// (see the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_optical_flow_image_formats_nv_len(
+        &self,
+        physical_device: PhysicalDevice,
+        optical_flow_image_format_info: &OpticalFlowImageFormatInfoNV<'_>,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_optical_flow_image_formats_nv,
+            "vkGetPhysicalDeviceOpticalFlowImageFormatsNV",
+        );
+        let mut format_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                optical_flow_image_format_info,
+                &mut format_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(format_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceOpticalFlowImageFormatsNV")]
+    ///
+    /// Provided by `VK_NV_optical_flow`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_optical_flow_image_formats_nv_len`] gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_EXTENSION_NOT_PRESENT`,
+    /// `ERROR_INITIALIZATION_FAILED`, `ERROR_FORMAT_NOT_SUPPORTED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPhysicalDeviceOpticalFlowImageFormatsNV`
+    /// (see the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_optical_flow_image_formats_nv_into(
+        &self,
+        physical_device: PhysicalDevice,
+        optical_flow_image_format_info: &OpticalFlowImageFormatInfoNV<'_>,
+        image_format_properties: &mut [OpticalFlowImageFormatPropertiesNV<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_optical_flow_image_formats_nv,
+            "vkGetPhysicalDeviceOpticalFlowImageFormatsNV",
+        );
+        assert!(
+            !image_format_properties.is_empty(),
+            "pImageFormatProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut format_count: u32 =
+            crate::len::count_u32(image_format_properties.len(), "pFormatCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                optical_flow_image_format_info,
+                &mut format_count,
+                image_format_properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(format_count).min(image_format_properties.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR")]
     ///
     /// Provided by `VK_KHR_cooperative_matrix`.
@@ -3212,6 +4457,99 @@ impl crate::Instance {
             properties.truncate(crate::len::to_usize(property_count));
             return Ok(properties);
         }
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR")]
+    ///
+    /// Provided by `VK_KHR_cooperative_matrix`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_cooperative_matrix_properties_khr_into`] fills that many
+    /// elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_matrix_properties_khr_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_matrix_properties_khr,
+            "vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR",
+        );
+        let mut property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe { f(physical_device, &mut property_count, core::ptr::null_mut()) };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(property_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR")]
+    ///
+    /// Provided by `VK_KHR_cooperative_matrix`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_cooperative_matrix_properties_khr_len`] gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_matrix_properties_khr_into(
+        &self,
+        physical_device: PhysicalDevice,
+        properties: &mut [CooperativeMatrixPropertiesKHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_matrix_properties_khr,
+            "vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut property_count: u32 = crate::len::count_u32(properties.len(), "pPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(property_count).min(properties.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixProperties2EXT")]
@@ -3278,6 +4616,109 @@ impl crate::Instance {
         }
     }
 
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixProperties2EXT")]
+    ///
+    /// Provided by `VK_EXT_cooperative_matrix_maintenance1`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_cooperative_matrix_properties2_ext_into`] fills that many
+    /// elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeMatrixProperties2EXT` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_matrix_properties2_ext_len(
+        &self,
+        physical_device: PhysicalDevice,
+        cooperative_matrix_info: &PhysicalDeviceCooperativeMatrixInfo2EXT<'_>,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_matrix_properties2_ext,
+            "vkGetPhysicalDeviceCooperativeMatrixProperties2EXT",
+        );
+        let mut property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                cooperative_matrix_info,
+                &mut property_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(property_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixProperties2EXT")]
+    ///
+    /// Provided by `VK_EXT_cooperative_matrix_maintenance1`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_cooperative_matrix_properties2_ext_len`] gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeMatrixProperties2EXT` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_matrix_properties2_ext_into(
+        &self,
+        physical_device: PhysicalDevice,
+        cooperative_matrix_info: &PhysicalDeviceCooperativeMatrixInfo2EXT<'_>,
+        properties: &mut [CooperativeMatrixProperties2EXT<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_matrix_properties2_ext,
+            "vkGetPhysicalDeviceCooperativeMatrixProperties2EXT",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut property_count: u32 = crate::len::count_u32(properties.len(), "pPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                cooperative_matrix_info,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(property_count).min(properties.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV")]
     ///
     /// Provided by `VK_NV_cooperative_matrix2`.
@@ -3334,6 +4775,100 @@ impl crate::Instance {
         }
     }
 
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV")]
+    ///
+    /// Provided by `VK_NV_cooperative_matrix2`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_cooperative_matrix_flexible_dimensions_properties_nv_into`]
+    /// fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV` (see the spec link);
+    /// every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_matrix_flexible_dimensions_properties_nv_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_matrix_flexible_dimensions_properties_nv,
+            "vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV",
+        );
+        let mut property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe { f(physical_device, &mut property_count, core::ptr::null_mut()) };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(property_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV")]
+    ///
+    /// Provided by `VK_NV_cooperative_matrix2`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_cooperative_matrix_flexible_dimensions_properties_nv_len`] gives
+    /// the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV` (see the spec link);
+    /// every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_matrix_flexible_dimensions_properties_nv_into(
+        &self,
+        physical_device: PhysicalDevice,
+        properties: &mut [CooperativeMatrixFlexibleDimensionsPropertiesNV<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_matrix_flexible_dimensions_properties_nv,
+            "vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut property_count: u32 = crate::len::count_u32(properties.len(), "pPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(property_count).min(properties.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetPhysicalDeviceCooperativeVectorPropertiesNV")]
     ///
     /// Provided by `VK_NV_cooperative_vector`.
@@ -3387,6 +4922,99 @@ impl crate::Instance {
             properties.truncate(crate::len::to_usize(property_count));
             return Ok(properties);
         }
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeVectorPropertiesNV")]
+    ///
+    /// Provided by `VK_NV_cooperative_vector`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_cooperative_vector_properties_nv_into`] fills that many
+    /// elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeVectorPropertiesNV` (see the spec link); every handle belongs
+    /// to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_vector_properties_nv_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_vector_properties_nv,
+            "vkGetPhysicalDeviceCooperativeVectorPropertiesNV",
+        );
+        let mut property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe { f(physical_device, &mut property_count, core::ptr::null_mut()) };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(property_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceCooperativeVectorPropertiesNV")]
+    ///
+    /// Provided by `VK_NV_cooperative_vector`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_cooperative_vector_properties_nv_len`] gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceCooperativeVectorPropertiesNV` (see the spec link); every handle belongs
+    /// to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_cooperative_vector_properties_nv_into(
+        &self,
+        physical_device: PhysicalDevice,
+        properties: &mut [CooperativeVectorPropertiesNV<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_cooperative_vector_properties_nv,
+            "vkGetPhysicalDeviceCooperativeVectorPropertiesNV",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut property_count: u32 = crate::len::count_u32(properties.len(), "pPropertyCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(property_count).min(properties.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkEnumeratePhysicalDeviceShaderInstrumentationMetricsARM")]
@@ -3449,6 +5077,109 @@ impl crate::Instance {
             descriptions.truncate(crate::len::to_usize(description_count));
             return Ok(descriptions);
         }
+    }
+
+    #[doc = spec!("vkEnumeratePhysicalDeviceShaderInstrumentationMetricsARM")]
+    ///
+    /// Provided by `VK_ARM_shader_instrumentation`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::enumerate_physical_device_shader_instrumentation_metrics_arm_into`] fills that many
+    /// elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_INITIALIZATION_FAILED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkEnumeratePhysicalDeviceShaderInstrumentationMetricsARM` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn enumerate_physical_device_shader_instrumentation_metrics_arm_len(
+        &self,
+        physical_device: PhysicalDevice,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .enumerate_physical_device_shader_instrumentation_metrics_arm,
+            "vkEnumeratePhysicalDeviceShaderInstrumentationMetricsARM",
+        );
+        let mut description_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut description_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(description_count))
+    }
+
+    #[doc = spec!("vkEnumeratePhysicalDeviceShaderInstrumentationMetricsARM")]
+    ///
+    /// Provided by `VK_ARM_shader_instrumentation`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::enumerate_physical_device_shader_instrumentation_metrics_arm_len`] gives the full
+    /// count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_INITIALIZATION_FAILED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkEnumeratePhysicalDeviceShaderInstrumentationMetricsARM` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn enumerate_physical_device_shader_instrumentation_metrics_arm_into(
+        &self,
+        physical_device: PhysicalDevice,
+        descriptions: &mut [ShaderInstrumentationMetricDescriptionARM<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .enumerate_physical_device_shader_instrumentation_metrics_arm,
+            "vkEnumeratePhysicalDeviceShaderInstrumentationMetricsARM",
+        );
+        assert!(
+            !descriptions.is_empty(),
+            "pDescriptions: empty slice; the _len wrapper gives the count"
+        );
+        let mut description_count: u32 =
+            crate::len::count_u32(descriptions.len(), "pDescriptionCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                &mut description_count,
+                descriptions.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(description_count).min(descriptions.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetPhysicalDeviceExternalTensorPropertiesARM")]
@@ -3553,6 +5284,114 @@ impl crate::Instance {
                 .truncate(crate::len::to_usize(queue_family_data_graph_property_count));
             return Ok(queue_family_data_graph_properties);
         }
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceQueueFamilyDataGraphPropertiesARM")]
+    ///
+    /// Provided by `VK_ARM_data_graph`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_queue_family_data_graph_properties_arm_into`] fills that many
+    /// elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceQueueFamilyDataGraphPropertiesARM` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_queue_family_data_graph_properties_arm_len(
+        &self,
+        physical_device: PhysicalDevice,
+        queue_family_index: u32,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_queue_family_data_graph_properties_arm,
+            "vkGetPhysicalDeviceQueueFamilyDataGraphPropertiesARM",
+        );
+        let mut queue_family_data_graph_property_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                queue_family_index,
+                &mut queue_family_data_graph_property_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(queue_family_data_graph_property_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceQueueFamilyDataGraphPropertiesARM")]
+    ///
+    /// Provided by `VK_ARM_data_graph`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_queue_family_data_graph_properties_arm_len`] gives the full
+    /// count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceQueueFamilyDataGraphPropertiesARM` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_queue_family_data_graph_properties_arm_into(
+        &self,
+        physical_device: PhysicalDevice,
+        queue_family_index: u32,
+        queue_family_data_graph_properties: &mut [QueueFamilyDataGraphPropertiesARM<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_queue_family_data_graph_properties_arm,
+            "vkGetPhysicalDeviceQueueFamilyDataGraphPropertiesARM",
+        );
+        assert!(
+            !queue_family_data_graph_properties.is_empty(),
+            "pQueueFamilyDataGraphProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut queue_family_data_graph_property_count: u32 = crate::len::count_u32(
+            queue_family_data_graph_properties.len(),
+            "pQueueFamilyDataGraphPropertyCount",
+        );
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                queue_family_index,
+                &mut queue_family_data_graph_property_count,
+                queue_family_data_graph_properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(queue_family_data_graph_property_count)
+                .min(queue_family_data_graph_properties.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetPhysicalDeviceQueueFamilyDataGraphProcessingEnginePropertiesARM")]
@@ -3660,6 +5499,125 @@ impl crate::Instance {
             counter_descriptions.truncate(crate::len::to_usize(counter_count));
             return Ok((counters, counter_descriptions));
         }
+    }
+
+    #[doc = spec!("vkEnumeratePhysicalDeviceQueueFamilyPerformanceCountersByRegionARM")]
+    ///
+    /// Provided by `VK_ARM_performance_counters_by_region`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::enumerate_physical_device_queue_family_performance_counters_by_region_arm_into`]
+    /// fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_INITIALIZATION_FAILED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkEnumeratePhysicalDeviceQueueFamilyPerformanceCountersByRegionARM` (see the spec link);
+    /// every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn enumerate_physical_device_queue_family_performance_counters_by_region_arm_len(
+        &self,
+        physical_device: PhysicalDevice,
+        queue_family_index: u32,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .enumerate_physical_device_queue_family_performance_counters_by_region_arm,
+            "vkEnumeratePhysicalDeviceQueueFamilyPerformanceCountersByRegionARM",
+        );
+        let mut counter_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                queue_family_index,
+                &mut counter_count,
+                core::ptr::null_mut(),
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(counter_count))
+    }
+
+    #[doc = spec!("vkEnumeratePhysicalDeviceQueueFamilyPerformanceCountersByRegionARM")]
+    ///
+    /// Provided by `VK_ARM_performance_counters_by_region`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::enumerate_physical_device_queue_family_performance_counters_by_region_arm_len`]
+    /// gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_INITIALIZATION_FAILED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkEnumeratePhysicalDeviceQueueFamilyPerformanceCountersByRegionARM` (see the spec link);
+    /// every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when slice lengths disagree with each other or with the
+    /// lengths they must match, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn enumerate_physical_device_queue_family_performance_counters_by_region_arm_into(
+        &self,
+        physical_device: PhysicalDevice,
+        queue_family_index: u32,
+        counters: &mut [PerformanceCounterARM<'_>],
+        counter_descriptions: &mut [PerformanceCounterDescriptionARM<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .enumerate_physical_device_queue_family_performance_counters_by_region_arm,
+            "vkEnumeratePhysicalDeviceQueueFamilyPerformanceCountersByRegionARM",
+        );
+        assert!(
+            !counters.is_empty(),
+            "pCounters: empty slice; the _len wrapper gives the count"
+        );
+        assert!(
+            !counter_descriptions.is_empty(),
+            "pCounterDescriptions: empty slice; the _len wrapper gives the count"
+        );
+        assert_eq!(
+            counter_descriptions.len(),
+            counters.len(),
+            "pCounterCount: arrays differ in length"
+        );
+        let mut counter_count: u32 = crate::len::count_u32(counters.len(), "pCounterCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                queue_family_index,
+                &mut counter_count,
+                counters.as_mut_ptr(),
+                counter_descriptions.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(counter_count).min(counters.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetPhysicalDeviceDescriptorSizeEXT")]
@@ -3804,6 +5762,121 @@ impl crate::Instance {
             image_format_properties.truncate(crate::len::to_usize(format_count));
             return Ok(image_format_properties);
         }
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceQueueFamilyDataGraphOpticalFlowImageFormatsARM")]
+    ///
+    /// Provided by `VK_ARM_data_graph_optical_flow`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_physical_device_queue_family_data_graph_optical_flow_image_formats_arm_into`]
+    /// fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_EXTENSION_NOT_PRESENT`,
+    /// `ERROR_INITIALIZATION_FAILED`, `ERROR_FORMAT_NOT_SUPPORTED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceQueueFamilyDataGraphOpticalFlowImageFormatsARM` (see the spec link);
+    /// every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_queue_family_data_graph_optical_flow_image_formats_arm_len(
+        &self,
+        physical_device: PhysicalDevice,
+        queue_family_index: u32,
+        queue_family_data_graph_properties: &QueueFamilyDataGraphPropertiesARM<'_>,
+        optical_flow_image_format_info: &DataGraphOpticalFlowImageFormatInfoARM<'_>,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_queue_family_data_graph_optical_flow_image_formats_arm,
+            "vkGetPhysicalDeviceQueueFamilyDataGraphOpticalFlowImageFormatsARM",
+        );
+        let mut format_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                queue_family_index,
+                queue_family_data_graph_properties,
+                optical_flow_image_format_info,
+                &mut format_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(format_count))
+    }
+
+    #[doc = spec!("vkGetPhysicalDeviceQueueFamilyDataGraphOpticalFlowImageFormatsARM")]
+    ///
+    /// Provided by `VK_ARM_data_graph_optical_flow`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_physical_device_queue_family_data_graph_optical_flow_image_formats_arm_len`]
+    /// gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_EXTENSION_NOT_PRESENT`,
+    /// `ERROR_INITIALIZATION_FAILED`, `ERROR_FORMAT_NOT_SUPPORTED`, `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPhysicalDeviceQueueFamilyDataGraphOpticalFlowImageFormatsARM` (see the spec link);
+    /// every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_physical_device_queue_family_data_graph_optical_flow_image_formats_arm_into(
+        &self,
+        physical_device: PhysicalDevice,
+        queue_family_index: u32,
+        queue_family_data_graph_properties: &QueueFamilyDataGraphPropertiesARM<'_>,
+        optical_flow_image_format_info: &DataGraphOpticalFlowImageFormatInfoARM<'_>,
+        image_format_properties: &mut [DataGraphOpticalFlowImageFormatPropertiesARM<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_physical_device_queue_family_data_graph_optical_flow_image_formats_arm,
+            "vkGetPhysicalDeviceQueueFamilyDataGraphOpticalFlowImageFormatsARM",
+        );
+        assert!(
+            !image_format_properties.is_empty(),
+            "pImageFormatProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut format_count: u32 =
+            crate::len::count_u32(image_format_properties.len(), "pFormatCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                physical_device,
+                queue_family_index,
+                queue_family_data_graph_properties,
+                optical_flow_image_format_info,
+                &mut format_count,
+                image_format_properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(format_count).min(image_format_properties.len()),
+            code,
+        ))
     }
 }
 
@@ -4800,10 +6873,11 @@ impl crate::Device {
     ///
     /// # Panics
     ///
-    /// When the command is not loaded.
+    /// When the command is not loaded, or when a byte slice's address is not aligned as the command
+    /// requires.
     #[inline]
     #[track_caller]
-    pub unsafe fn get_query_pool_results<T: Copy>(
+    pub unsafe fn get_query_pool_results<T: crate::Plain>(
         &self,
         query_pool: QueryPool,
         first_query: u32,
@@ -4813,6 +6887,17 @@ impl crate::Device {
         flags: QueryResultFlags,
     ) -> crate::Result<Result> {
         let f = crate::loaded(self.table().get_query_pool_results, "vkGetQueryPoolResults");
+        let s = &*data;
+        assert!(
+            s.as_ptr()
+                .addr()
+                .is_multiple_of(if flags.contains(QueryResultFlags::RESULT_64) {
+                    8
+                } else {
+                    4
+                }),
+            "pData: address not aligned to 8 bytes with VK_QUERY_RESULT_64_BIT in flags, 4 without"
+        );
         let data_size_len = core::mem::size_of_val(data);
         let data_size = data_size_len;
         // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
@@ -8048,7 +10133,7 @@ impl crate::Device {
     /// When the command is not loaded.
     #[inline]
     #[track_caller]
-    pub unsafe fn cmd_update_buffer<T: Copy>(
+    pub unsafe fn cmd_update_buffer<T: crate::Plain>(
         &self,
         command_buffer: CommandBuffer,
         dst_buffer: Buffer,
@@ -8745,7 +10830,7 @@ impl crate::Device {
     /// When the command is not loaded.
     #[inline]
     #[track_caller]
-    pub unsafe fn cmd_push_constants<T: Copy>(
+    pub unsafe fn cmd_push_constants<T: crate::Plain>(
         &self,
         command_buffer: CommandBuffer,
         layout: PipelineLayout,
@@ -11064,6 +13149,11 @@ impl crate::Device {
     ///
     /// Provided by `VK_GOOGLE_display_timing`.
     ///
+    /// Fills caller storage with one call to `vkGetPastPresentationTimingGOOGLE`: up to the slice's
+    /// length of records. Each record is returned once: what this call writes is gone from the
+    /// driver, so call again for the rest. Returns the count written and the code (`INCOMPLETE`
+    /// while more remain).
+    ///
     /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
     /// `ERROR_DEVICE_LOST`, `ERROR_OUT_OF_DATE_KHR`, `ERROR_SURFACE_LOST_KHR`, `ERROR_UNKNOWN`,
     /// `ERROR_VALIDATION_FAILED`. Externally synchronized: `swapchain` (swapchain).
@@ -11075,51 +13165,39 @@ impl crate::Device {
     ///
     /// # Panics
     ///
-    /// When the command is not loaded.
+    /// When the command is not loaded, or when an output slice is empty.
     #[inline]
     #[track_caller]
-    pub unsafe fn get_past_presentation_timing_google(
+    pub unsafe fn get_past_presentation_timing_google_into(
         &self,
         swapchain: SwapchainKHR,
-    ) -> crate::Result<Vec<PastPresentationTimingGOOGLE>> {
+        presentation_timings: &mut [PastPresentationTimingGOOGLE],
+    ) -> crate::Result<(usize, Result)> {
         let f = crate::loaded(
             self.table().get_past_presentation_timing_google,
             "vkGetPastPresentationTimingGOOGLE",
         );
-        loop {
-            let mut presentation_timing_count: u32 = 0;
-            // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
-            // reference, slice or local.
-            let code = unsafe {
-                f(
-                    self.handle(),
-                    swapchain,
-                    &mut presentation_timing_count,
-                    core::ptr::null_mut(),
-                )
-            };
-            crate::result::check_code(code)?;
-            let mut presentation_timings: Vec<PastPresentationTimingGOOGLE> = vec![
-                    <PastPresentationTimingGOOGLE>::default();
-                    crate::len::to_usize(presentation_timing_count)
-                ];
-            // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
-            // reference, slice or local.
-            let code = unsafe {
-                f(
-                    self.handle(),
-                    swapchain,
-                    &mut presentation_timing_count,
-                    presentation_timings.as_mut_ptr(),
-                )
-            };
-            if code == Result::INCOMPLETE {
-                continue;
-            }
-            crate::result::check(code)?;
-            presentation_timings.truncate(crate::len::to_usize(presentation_timing_count));
-            return Ok(presentation_timings);
-        }
+        assert!(
+            !presentation_timings.is_empty(),
+            "pPresentationTimings: empty slice; it needs room for at least one record"
+        );
+        let mut presentation_timing_count: u32 =
+            crate::len::count_u32(presentation_timings.len(), "pPresentationTimingCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                swapchain,
+                &mut presentation_timing_count,
+                presentation_timings.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(presentation_timing_count).min(presentation_timings.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkCmdSetViewportWScalingNV")]
@@ -11405,6 +13483,93 @@ impl crate::Device {
         sparse_memory_requirements
     }
 
+    #[doc = spec!("vkGetImageSparseMemoryRequirements2")]
+    ///
+    /// Provided by Vulkan 1.1.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_image_sparse_memory_requirements2_into`] fills that many elements.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetImageSparseMemoryRequirements2` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_image_sparse_memory_requirements2_len(
+        &self,
+        info: &ImageSparseMemoryRequirementsInfo2<'_>,
+    ) -> usize {
+        let f = crate::loaded(
+            self.table().get_image_sparse_memory_requirements2,
+            "vkGetImageSparseMemoryRequirements2",
+        );
+        let mut sparse_memory_requirement_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                self.handle(),
+                info,
+                &mut sparse_memory_requirement_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::len::to_usize(sparse_memory_requirement_count)
+    }
+
+    #[doc = spec!("vkGetImageSparseMemoryRequirements2")]
+    ///
+    /// Provided by Vulkan 1.1.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written;
+    /// [`Self::get_image_sparse_memory_requirements2_len`] gives the full count.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetImageSparseMemoryRequirements2` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_image_sparse_memory_requirements2_into(
+        &self,
+        info: &ImageSparseMemoryRequirementsInfo2<'_>,
+        sparse_memory_requirements: &mut [SparseImageMemoryRequirements2<'_>],
+    ) -> usize {
+        let f = crate::loaded(
+            self.table().get_image_sparse_memory_requirements2,
+            "vkGetImageSparseMemoryRequirements2",
+        );
+        assert!(
+            !sparse_memory_requirements.is_empty(),
+            "pSparseMemoryRequirements: empty slice; the _len wrapper gives the count"
+        );
+        let mut sparse_memory_requirement_count: u32 = crate::len::count_u32(
+            sparse_memory_requirements.len(),
+            "pSparseMemoryRequirementCount",
+        );
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                self.handle(),
+                info,
+                &mut sparse_memory_requirement_count,
+                sparse_memory_requirements.as_mut_ptr(),
+            )
+        };
+        crate::len::to_usize(sparse_memory_requirement_count).min(sparse_memory_requirements.len())
+    }
+
     #[doc = spec!("vkGetDeviceBufferMemoryRequirements")]
     ///
     /// Provided by Vulkan 1.3.
@@ -11510,6 +13675,93 @@ impl crate::Device {
         };
         sparse_memory_requirements.truncate(crate::len::to_usize(sparse_memory_requirement_count));
         sparse_memory_requirements
+    }
+
+    #[doc = spec!("vkGetDeviceImageSparseMemoryRequirements")]
+    ///
+    /// Provided by Vulkan 1.3.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_device_image_sparse_memory_requirements_into`] fills that many elements.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetDeviceImageSparseMemoryRequirements` (see
+    /// the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_device_image_sparse_memory_requirements_len(
+        &self,
+        info: &DeviceImageMemoryRequirements<'_>,
+    ) -> usize {
+        let f = crate::loaded(
+            self.table().get_device_image_sparse_memory_requirements,
+            "vkGetDeviceImageSparseMemoryRequirements",
+        );
+        let mut sparse_memory_requirement_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                self.handle(),
+                info,
+                &mut sparse_memory_requirement_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::len::to_usize(sparse_memory_requirement_count)
+    }
+
+    #[doc = spec!("vkGetDeviceImageSparseMemoryRequirements")]
+    ///
+    /// Provided by Vulkan 1.3.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written;
+    /// [`Self::get_device_image_sparse_memory_requirements_len`] gives the full count.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetDeviceImageSparseMemoryRequirements` (see
+    /// the spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_device_image_sparse_memory_requirements_into(
+        &self,
+        info: &DeviceImageMemoryRequirements<'_>,
+        sparse_memory_requirements: &mut [SparseImageMemoryRequirements2<'_>],
+    ) -> usize {
+        let f = crate::loaded(
+            self.table().get_device_image_sparse_memory_requirements,
+            "vkGetDeviceImageSparseMemoryRequirements",
+        );
+        assert!(
+            !sparse_memory_requirements.is_empty(),
+            "pSparseMemoryRequirements: empty slice; the _len wrapper gives the count"
+        );
+        let mut sparse_memory_requirement_count: u32 = crate::len::count_u32(
+            sparse_memory_requirements.len(),
+            "pSparseMemoryRequirementCount",
+        );
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                self.handle(),
+                info,
+                &mut sparse_memory_requirement_count,
+                sparse_memory_requirements.as_mut_ptr(),
+            )
+        };
+        crate::len::to_usize(sparse_memory_requirement_count).min(sparse_memory_requirements.len())
     }
 
     #[doc = spec!("vkCreateSamplerYcbcrConversion")]
@@ -12663,6 +14915,80 @@ impl crate::Device {
         };
         checkpoint_data.truncate(crate::len::to_usize(checkpoint_data_count));
         checkpoint_data
+    }
+
+    #[doc = spec!("vkGetQueueCheckpointDataNV")]
+    ///
+    /// Provided by `VK_NV_device_diagnostic_checkpoints`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_queue_checkpoint_data_nv_into`] fills that many elements.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetQueueCheckpointDataNV` (see the spec
+    /// link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_queue_checkpoint_data_nv_len(&self, queue: Queue) -> usize {
+        let f = crate::loaded(
+            self.table().get_queue_checkpoint_data_nv,
+            "vkGetQueueCheckpointDataNV",
+        );
+        let mut checkpoint_data_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe { f(queue, &mut checkpoint_data_count, core::ptr::null_mut()) };
+        crate::len::to_usize(checkpoint_data_count)
+    }
+
+    #[doc = spec!("vkGetQueueCheckpointDataNV")]
+    ///
+    /// Provided by `VK_NV_device_diagnostic_checkpoints`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written;
+    /// [`Self::get_queue_checkpoint_data_nv_len`] gives the full count.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetQueueCheckpointDataNV` (see the spec
+    /// link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_queue_checkpoint_data_nv_into(
+        &self,
+        queue: Queue,
+        checkpoint_data: &mut [CheckpointDataNV<'_>],
+    ) -> usize {
+        let f = crate::loaded(
+            self.table().get_queue_checkpoint_data_nv,
+            "vkGetQueueCheckpointDataNV",
+        );
+        assert!(
+            !checkpoint_data.is_empty(),
+            "pCheckpointData: empty slice; the _len wrapper gives the count"
+        );
+        let mut checkpoint_data_count: u32 =
+            crate::len::count_u32(checkpoint_data.len(), "pCheckpointDataCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                queue,
+                &mut checkpoint_data_count,
+                checkpoint_data.as_mut_ptr(),
+            )
+        };
+        crate::len::to_usize(checkpoint_data_count).min(checkpoint_data.len())
     }
 
     #[doc = spec!("vkCmdBindTransformFeedbackBuffersEXT")]
@@ -13982,10 +16308,11 @@ impl crate::Device {
     ///
     /// # Panics
     ///
-    /// When the command is not loaded.
+    /// When the command is not loaded, or when a byte slice's address is not aligned as the command
+    /// requires.
     #[inline]
     #[track_caller]
-    pub unsafe fn write_acceleration_structures_properties_khr<T: Copy>(
+    pub unsafe fn write_acceleration_structures_properties_khr<T: crate::Plain>(
         &self,
         acceleration_structures: &[AccelerationStructureKHR],
         query_type: QueryType,
@@ -13995,6 +16322,11 @@ impl crate::Device {
         let f = crate::loaded(
             self.table().write_acceleration_structures_properties_khr,
             "vkWriteAccelerationStructuresPropertiesKHR",
+        );
+        let s = &*data;
+        assert!(
+            s.as_ptr().addr().is_multiple_of(8),
+            "pData: address not aligned to 8 bytes"
         );
         let acceleration_structure_count_len = acceleration_structures.len();
         let acceleration_structure_count = crate::len::count_u32(
@@ -14140,7 +16472,7 @@ impl crate::Device {
     /// When the command is not loaded.
     #[inline]
     #[track_caller]
-    pub unsafe fn get_ray_tracing_shader_group_handles_khr<T: Copy>(
+    pub unsafe fn get_ray_tracing_shader_group_handles_khr<T: crate::Plain>(
         &self,
         pipeline: Pipeline,
         first_group: u32,
@@ -14186,7 +16518,7 @@ impl crate::Device {
     /// When the command is not loaded.
     #[inline]
     #[track_caller]
-    pub unsafe fn get_ray_tracing_capture_replay_shader_group_handles_khr<T: Copy>(
+    pub unsafe fn get_ray_tracing_capture_replay_shader_group_handles_khr<T: crate::Plain>(
         &self,
         pipeline: Pipeline,
         first_group: u32,
@@ -14232,7 +16564,7 @@ impl crate::Device {
     /// When the command is not loaded.
     #[inline]
     #[track_caller]
-    pub unsafe fn get_acceleration_structure_handle_nv<T: Copy>(
+    pub unsafe fn get_acceleration_structure_handle_nv<T: crate::Plain>(
         &self,
         acceleration_structure: AccelerationStructureNV,
         data: &mut [T],
@@ -15314,6 +17646,102 @@ impl crate::Device {
         }
     }
 
+    #[doc = spec!("vkGetPipelineExecutablePropertiesKHR")]
+    ///
+    /// Provided by `VK_KHR_pipeline_executable_properties`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_pipeline_executable_properties_khr_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPipelineExecutablePropertiesKHR` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_pipeline_executable_properties_khr_len(
+        &self,
+        pipeline_info: &PipelineInfoKHR<'_>,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table().get_pipeline_executable_properties_khr,
+            "vkGetPipelineExecutablePropertiesKHR",
+        );
+        let mut executable_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                pipeline_info,
+                &mut executable_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(executable_count))
+    }
+
+    #[doc = spec!("vkGetPipelineExecutablePropertiesKHR")]
+    ///
+    /// Provided by `VK_KHR_pipeline_executable_properties`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain); [`Self::get_pipeline_executable_properties_khr_len`] gives
+    /// the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPipelineExecutablePropertiesKHR` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_pipeline_executable_properties_khr_into(
+        &self,
+        pipeline_info: &PipelineInfoKHR<'_>,
+        properties: &mut [PipelineExecutablePropertiesKHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table().get_pipeline_executable_properties_khr,
+            "vkGetPipelineExecutablePropertiesKHR",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut executable_count: u32 = crate::len::count_u32(properties.len(), "pExecutableCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                pipeline_info,
+                &mut executable_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(executable_count).min(properties.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetPipelineExecutableStatisticsKHR")]
     ///
     /// Provided by `VK_KHR_pipeline_executable_properties`.
@@ -15373,6 +17801,102 @@ impl crate::Device {
             statistics.truncate(crate::len::to_usize(statistic_count));
             return Ok(statistics);
         }
+    }
+
+    #[doc = spec!("vkGetPipelineExecutableStatisticsKHR")]
+    ///
+    /// Provided by `VK_KHR_pipeline_executable_properties`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_pipeline_executable_statistics_khr_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPipelineExecutableStatisticsKHR` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_pipeline_executable_statistics_khr_len(
+        &self,
+        executable_info: &PipelineExecutableInfoKHR<'_>,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table().get_pipeline_executable_statistics_khr,
+            "vkGetPipelineExecutableStatisticsKHR",
+        );
+        let mut statistic_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                executable_info,
+                &mut statistic_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(statistic_count))
+    }
+
+    #[doc = spec!("vkGetPipelineExecutableStatisticsKHR")]
+    ///
+    /// Provided by `VK_KHR_pipeline_executable_properties`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain); [`Self::get_pipeline_executable_statistics_khr_len`] gives
+    /// the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetPipelineExecutableStatisticsKHR` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_pipeline_executable_statistics_khr_into(
+        &self,
+        executable_info: &PipelineExecutableInfoKHR<'_>,
+        statistics: &mut [PipelineExecutableStatisticKHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table().get_pipeline_executable_statistics_khr,
+            "vkGetPipelineExecutableStatisticsKHR",
+        );
+        assert!(
+            !statistics.is_empty(),
+            "pStatistics: empty slice; the _len wrapper gives the count"
+        );
+        let mut statistic_count: u32 = crate::len::count_u32(statistics.len(), "pStatisticCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                executable_info,
+                &mut statistic_count,
+                statistics.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(statistic_count).min(statistics.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetPipelineExecutableInternalRepresentationsKHR")]
@@ -15438,6 +17962,110 @@ impl crate::Device {
             internal_representations.truncate(crate::len::to_usize(internal_representation_count));
             return Ok(internal_representations);
         }
+    }
+
+    #[doc = spec!("vkGetPipelineExecutableInternalRepresentationsKHR")]
+    ///
+    /// Provided by `VK_KHR_pipeline_executable_properties`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_pipeline_executable_internal_representations_khr_into`] fills that many
+    /// elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPipelineExecutableInternalRepresentationsKHR` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_pipeline_executable_internal_representations_khr_len(
+        &self,
+        executable_info: &PipelineExecutableInfoKHR<'_>,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_pipeline_executable_internal_representations_khr,
+            "vkGetPipelineExecutableInternalRepresentationsKHR",
+        );
+        let mut internal_representation_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                executable_info,
+                &mut internal_representation_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(internal_representation_count))
+    }
+
+    #[doc = spec!("vkGetPipelineExecutableInternalRepresentationsKHR")]
+    ///
+    /// Provided by `VK_KHR_pipeline_executable_properties`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_pipeline_executable_internal_representations_khr_len`] gives the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetPipelineExecutableInternalRepresentationsKHR` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_pipeline_executable_internal_representations_khr_into(
+        &self,
+        executable_info: &PipelineExecutableInfoKHR<'_>,
+        internal_representations: &mut [PipelineExecutableInternalRepresentationKHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_pipeline_executable_internal_representations_khr,
+            "vkGetPipelineExecutableInternalRepresentationsKHR",
+        );
+        assert!(
+            !internal_representations.is_empty(),
+            "pInternalRepresentations: empty slice; the _len wrapper gives the count"
+        );
+        let mut internal_representation_count: u32 = crate::len::count_u32(
+            internal_representations.len(),
+            "pInternalRepresentationCount",
+        );
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                executable_info,
+                &mut internal_representation_count,
+                internal_representations.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(internal_representation_count).min(internal_representations.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkCmdSetLineStipple")]
@@ -18376,6 +21004,80 @@ impl crate::Device {
         checkpoint_data
     }
 
+    #[doc = spec!("vkGetQueueCheckpointData2NV")]
+    ///
+    /// Provided by `VK_NV_device_diagnostic_checkpoints`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_queue_checkpoint_data2_nv_into`] fills that many elements.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetQueueCheckpointData2NV` (see the spec
+    /// link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_queue_checkpoint_data2_nv_len(&self, queue: Queue) -> usize {
+        let f = crate::loaded(
+            self.table().get_queue_checkpoint_data2_nv,
+            "vkGetQueueCheckpointData2NV",
+        );
+        let mut checkpoint_data_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe { f(queue, &mut checkpoint_data_count, core::ptr::null_mut()) };
+        crate::len::to_usize(checkpoint_data_count)
+    }
+
+    #[doc = spec!("vkGetQueueCheckpointData2NV")]
+    ///
+    /// Provided by `VK_NV_device_diagnostic_checkpoints`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written;
+    /// [`Self::get_queue_checkpoint_data2_nv_len`] gives the full count.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetQueueCheckpointData2NV` (see the spec
+    /// link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_queue_checkpoint_data2_nv_into(
+        &self,
+        queue: Queue,
+        checkpoint_data: &mut [CheckpointData2NV<'_>],
+    ) -> usize {
+        let f = crate::loaded(
+            self.table().get_queue_checkpoint_data2_nv,
+            "vkGetQueueCheckpointData2NV",
+        );
+        assert!(
+            !checkpoint_data.is_empty(),
+            "pCheckpointData: empty slice; the _len wrapper gives the count"
+        );
+        let mut checkpoint_data_count: u32 =
+            crate::len::count_u32(checkpoint_data.len(), "pCheckpointDataCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        unsafe {
+            f(
+                queue,
+                &mut checkpoint_data_count,
+                checkpoint_data.as_mut_ptr(),
+            )
+        };
+        crate::len::to_usize(checkpoint_data_count).min(checkpoint_data.len())
+    }
+
     #[doc = spec!("vkCopyMemoryToImage")]
     ///
     /// Provided by Vulkan 1.4.
@@ -18959,7 +21661,7 @@ impl crate::Device {
     /// When the command is not loaded.
     #[inline]
     #[track_caller]
-    pub unsafe fn get_descriptor_ext<T: Copy>(
+    pub unsafe fn get_descriptor_ext<T: crate::Plain>(
         &self,
         descriptor_info: &DescriptorGetInfoEXT<'_>,
         descriptor: &mut [T],
@@ -19884,10 +22586,11 @@ impl crate::Device {
     ///
     /// # Panics
     ///
-    /// When the command is not loaded.
+    /// When the command is not loaded, or when a byte slice's address is not aligned as the command
+    /// requires.
     #[inline]
     #[track_caller]
-    pub unsafe fn write_micromaps_properties_ext<T: Copy>(
+    pub unsafe fn write_micromaps_properties_ext<T: crate::Plain>(
         &self,
         micromaps: &[MicromapEXT],
         query_type: QueryType,
@@ -19897,6 +22600,11 @@ impl crate::Device {
         let f = crate::loaded(
             self.table().write_micromaps_properties_ext,
             "vkWriteMicromapsPropertiesEXT",
+        );
+        let s = &*data;
+        assert!(
+            s.as_ptr().addr().is_multiple_of(8),
+            "pData: address not aligned to 8 bytes"
         );
         let micromap_count_len = micromaps.len();
         let micromap_count = crate::len::count_u32(micromap_count_len, "micromapCount");
@@ -20190,6 +22898,102 @@ impl crate::Device {
         }
     }
 
+    #[doc = spec!("vkGetFramebufferTilePropertiesQCOM")]
+    ///
+    /// Provided by `VK_QCOM_tile_properties`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_framebuffer_tile_properties_qcom_into`] fills that many elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetFramebufferTilePropertiesQCOM` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_framebuffer_tile_properties_qcom_len(
+        &self,
+        framebuffer: Framebuffer,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table().get_framebuffer_tile_properties_qcom,
+            "vkGetFramebufferTilePropertiesQCOM",
+        );
+        let mut properties_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                framebuffer,
+                &mut properties_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(properties_count))
+    }
+
+    #[doc = spec!("vkGetFramebufferTilePropertiesQCOM")]
+    ///
+    /// Provided by `VK_QCOM_tile_properties`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain); [`Self::get_framebuffer_tile_properties_qcom_len`] gives
+    /// the full count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_UNKNOWN`,
+    /// `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of `vkGetFramebufferTilePropertiesQCOM` (see the
+    /// spec link); every handle belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_framebuffer_tile_properties_qcom_into(
+        &self,
+        framebuffer: Framebuffer,
+        properties: &mut [TilePropertiesQCOM<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table().get_framebuffer_tile_properties_qcom,
+            "vkGetFramebufferTilePropertiesQCOM",
+        );
+        assert!(
+            !properties.is_empty(),
+            "pProperties: empty slice; the _len wrapper gives the count"
+        );
+        let mut properties_count: u32 = crate::len::count_u32(properties.len(), "pPropertiesCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                framebuffer,
+                &mut properties_count,
+                properties.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(properties_count).min(properties.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetDynamicRenderingTilePropertiesQCOM")]
     ///
     /// Provided by `VK_QCOM_tile_properties`.
@@ -20404,6 +23208,11 @@ impl crate::Device {
     ///
     /// Provided by `VK_KHR_device_fault`.
     ///
+    /// Fills caller storage with one call to `vkGetDeviceFaultReportsKHR`: up to the slice's length
+    /// of records. Each record is returned once: what this call writes is gone from the driver, so
+    /// call again for the rest. Returns the count written and the code (`INCOMPLETE` while more
+    /// remain). The call waits up to `timeout` once.
+    ///
     /// Success codes: `SUCCESS`, `INCOMPLETE`, `TIMEOUT`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
     /// `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
     ///
@@ -20414,49 +23223,38 @@ impl crate::Device {
     ///
     /// # Panics
     ///
-    /// When the command is not loaded.
+    /// When the command is not loaded, or when an output slice is empty.
     #[inline]
     #[track_caller]
-    pub unsafe fn get_device_fault_reports_khr(
+    pub unsafe fn get_device_fault_reports_khr_into(
         &self,
         timeout: u64,
-    ) -> crate::Result<(Vec<DeviceFaultInfoKHR<'static>>, Result)> {
+        fault_info: &mut [DeviceFaultInfoKHR<'_>],
+    ) -> crate::Result<(usize, Result)> {
         let f = crate::loaded(
             self.table().get_device_fault_reports_khr,
             "vkGetDeviceFaultReportsKHR",
         );
-        loop {
-            let mut fault_counts: u32 = 0;
-            // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
-            // reference, slice or local.
-            let code = unsafe {
-                f(
-                    self.handle(),
-                    timeout,
-                    &mut fault_counts,
-                    core::ptr::null_mut(),
-                )
-            };
-            crate::result::check_code(code)?;
-            let mut fault_info: Vec<DeviceFaultInfoKHR<'static>> =
-                vec![<DeviceFaultInfoKHR<'static>>::default(); crate::len::to_usize(fault_counts)];
-            // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
-            // reference, slice or local.
-            let code = unsafe {
-                f(
-                    self.handle(),
-                    timeout,
-                    &mut fault_counts,
-                    fault_info.as_mut_ptr(),
-                )
-            };
-            if code == Result::INCOMPLETE {
-                continue;
-            }
-            let code = crate::result::check_code(code)?;
-            fault_info.truncate(crate::len::to_usize(fault_counts));
-            return Ok((fault_info, code));
-        }
+        assert!(
+            !fault_info.is_empty(),
+            "pFaultInfo: empty slice; it needs room for at least one record"
+        );
+        let mut fault_counts: u32 = crate::len::count_u32(fault_info.len(), "pFaultCounts");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                timeout,
+                &mut fault_counts,
+                fault_info.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(fault_counts).min(fault_info.len()),
+            code,
+        ))
     }
 
     #[doc = spec!("vkGetDeviceFaultDebugInfoKHR")]
@@ -20736,7 +23534,10 @@ impl crate::Device {
     /// When the command is not loaded.
     #[inline]
     #[track_caller]
-    pub unsafe fn get_shader_binary_data_ext(&self, shader: ShaderEXT) -> crate::Result<Vec<u8>> {
+    pub unsafe fn get_shader_binary_data_ext(
+        &self,
+        shader: ShaderEXT,
+    ) -> crate::Result<crate::AlignedBytes> {
         let f = crate::loaded(
             self.table().get_shader_binary_data_ext,
             "vkGetShaderBinaryDataEXT",
@@ -20747,7 +23548,7 @@ impl crate::Device {
             // reference, slice or local.
             let code = unsafe { f(self.handle(), shader, &mut data_size, core::ptr::null_mut()) };
             crate::result::check_code(code)?;
-            let mut data: Vec<u8> = vec![0u8; data_size];
+            let mut data = crate::AlignedBytes::zeroed(data_size);
             // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
             // reference, slice or local.
             let code = unsafe {
@@ -22948,6 +25749,109 @@ impl crate::Device {
         }
     }
 
+    #[doc = spec!("vkGetDataGraphPipelineSessionBindPointRequirementsARM")]
+    ///
+    /// Provided by `VK_ARM_data_graph`.
+    ///
+    /// The element count alone: one call with null arrays.
+    /// [`Self::get_data_graph_pipeline_session_bind_point_requirements_arm_into`] fills that many
+    /// elements.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetDataGraphPipelineSessionBindPointRequirementsARM` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_data_graph_pipeline_session_bind_point_requirements_arm_len(
+        &self,
+        info: &DataGraphPipelineSessionBindPointRequirementsInfoARM<'_>,
+    ) -> crate::Result<usize> {
+        let f = crate::loaded(
+            self.table()
+                .get_data_graph_pipeline_session_bind_point_requirements_arm,
+            "vkGetDataGraphPipelineSessionBindPointRequirementsARM",
+        );
+        let mut bind_point_requirement_count: u32 = 0;
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                info,
+                &mut bind_point_requirement_count,
+                core::ptr::null_mut(),
+            )
+        };
+        crate::result::check(code)?;
+        Ok(crate::len::to_usize(bind_point_requirement_count))
+    }
+
+    #[doc = spec!("vkGetDataGraphPipelineSessionBindPointRequirementsARM")]
+    ///
+    /// Provided by `VK_ARM_data_graph`.
+    ///
+    /// Fills caller storage with one call: up to the slices' length of elements, keeping the
+    /// `sType` and `pNext` each element was given. Returns the count written and the code
+    /// (`INCOMPLETE` while more remain);
+    /// [`Self::get_data_graph_pipeline_session_bind_point_requirements_arm_len`] gives the full
+    /// count.
+    ///
+    /// Success codes: `SUCCESS`, `INCOMPLETE`. Error codes: `ERROR_OUT_OF_HOST_MEMORY`,
+    /// `ERROR_OUT_OF_DEVICE_MEMORY`, `ERROR_UNKNOWN`, `ERROR_VALIDATION_FAILED`.
+    ///
+    /// # Safety
+    ///
+    /// The caller upholds every valid-usage rule of
+    /// `vkGetDataGraphPipelineSessionBindPointRequirementsARM` (see the spec link); every handle
+    /// belongs to this dispatch object.
+    ///
+    /// # Panics
+    ///
+    /// When the command is not loaded, or when an output slice is empty.
+    #[inline]
+    #[track_caller]
+    pub unsafe fn get_data_graph_pipeline_session_bind_point_requirements_arm_into(
+        &self,
+        info: &DataGraphPipelineSessionBindPointRequirementsInfoARM<'_>,
+        bind_point_requirements: &mut [DataGraphPipelineSessionBindPointRequirementARM<'_>],
+    ) -> crate::Result<(usize, Result)> {
+        let f = crate::loaded(
+            self.table()
+                .get_data_graph_pipeline_session_bind_point_requirements_arm,
+            "vkGetDataGraphPipelineSessionBindPointRequirementsARM",
+        );
+        assert!(
+            !bind_point_requirements.is_empty(),
+            "pBindPointRequirements: empty slice; the _len wrapper gives the count"
+        );
+        let mut bind_point_requirement_count: u32 =
+            crate::len::count_u32(bind_point_requirements.len(), "pBindPointRequirementCount");
+        // SAFETY: the caller upholds the command's valid usage; every pointer comes from a live
+        // reference, slice or local.
+        let code = unsafe {
+            f(
+                self.handle(),
+                info,
+                &mut bind_point_requirement_count,
+                bind_point_requirements.as_mut_ptr(),
+            )
+        };
+        let code = crate::result::check_code(code)?;
+        Ok((
+            crate::len::to_usize(bind_point_requirement_count).min(bind_point_requirements.len()),
+            code,
+        ))
+    }
+
     #[doc = spec!("vkGetDataGraphPipelineSessionMemoryRequirementsARM")]
     ///
     /// Provided by `VK_ARM_data_graph`.
@@ -23716,7 +26620,7 @@ impl crate::Device {
     /// When the command is not loaded.
     #[inline]
     #[track_caller]
-    pub unsafe fn cmd_update_memory_khr<T: Copy>(
+    pub unsafe fn cmd_update_memory_khr<T: crate::Plain>(
         &self,
         command_buffer: CommandBuffer,
         dst_range: &DeviceAddressRangeKHR,
