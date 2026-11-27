@@ -42,9 +42,15 @@ fn seen() -> Vec<u64> {
     SEEN.with(|s| s.borrow().clone())
 }
 
+/// A synthetic dispatchable handle pointer at address `addr`: no provenance, so it is never
+/// dereferenced (the mocks only record it).
+fn token(addr: usize) -> *mut c_void {
+    ptr::without_provenance_mut(addr)
+}
+
 /// A device with handle `0x1000` over `table`.
 fn device(table: DeviceTable) -> Device {
-    Device::from_parts(vk::Device::from_raw(0x1000), table)
+    Device::from_parts(vk::Device::from_raw(token(0x1000)), table)
 }
 
 /// Rule 1: count query, fill, and a repeat of both on `INCOMPLETE`; the result is truncated.
@@ -55,7 +61,7 @@ unsafe extern "system" fn swapchain_images(
     count: *mut u32,
     images: *mut vk::Image,
 ) -> vk::Result {
-    see(device.as_raw() as u64);
+    see(device.as_raw().addr() as u64);
     let n = call();
     // SAFETY: the wrapper passes a live count and, when non-null, an array of `*count` images.
     unsafe {
@@ -324,7 +330,7 @@ fn command_device() -> Device {
 #[test]
 fn counts_are_slice_lengths_and_optional_arrays_null() {
     let d = command_device();
-    let cb = vk::CommandBuffer::from_raw(9);
+    let cb = vk::CommandBuffer::from_raw(token(9));
     let buffers = [vk::Buffer::from_raw(10), vk::Buffer::from_raw(11)];
     // SAFETY: the mocks read only the arrays the wrappers pass.
     unsafe {
@@ -353,7 +359,7 @@ fn arrays_sharing_a_count_must_agree() {
     let d = command_device();
     let buffers = [vk::Buffer::from_raw(10), vk::Buffer::from_raw(11)];
     // SAFETY: the wrapper panics before calling the mock.
-    unsafe { d.cmd_bind_vertex_buffers(vk::CommandBuffer::from_raw(9), 0, &buffers, &[0]) };
+    unsafe { d.cmd_bind_vertex_buffers(vk::CommandBuffer::from_raw(token(9)), 0, &buffers, &[0]) };
 }
 
 /// `vkAllocateCommandBuffers` writing handle 5 into the second entry.
@@ -363,7 +369,7 @@ unsafe extern "system" fn allocate(
     out: *mut vk::CommandBuffer,
 ) -> vk::Result {
     // SAFETY: the wrapper passes `commandBufferCount` handles.
-    unsafe { *out.add(1) = vk::CommandBuffer::from_raw(5) };
+    unsafe { *out.add(1) = vk::CommandBuffer::from_raw(token(5)) };
     vk::Result::SUCCESS
 }
 
@@ -388,8 +394,8 @@ fn lengths_from_struct_members_and_expressions_are_asserted() {
     // SAFETY: the mocks touch only what the wrappers pass.
     unsafe {
         assert_eq!(d.allocate_command_buffers(&info, &mut out), Ok(()));
-        assert_eq!(out[1], vk::CommandBuffer::from_raw(5));
-        let cb = vk::CommandBuffer::from_raw(9);
+        assert_eq!(out[1], vk::CommandBuffer::from_raw(token(5)));
+        let cb = vk::CommandBuffer::from_raw(token(9));
         d.cmd_set_sample_mask_ext(cb, vk::SampleCountFlags::COUNT_64, Some(&[0, 0]));
         d.cmd_set_sample_mask_ext(cb, vk::SampleCountFlags::COUNT_4, None);
     }
@@ -416,7 +422,7 @@ fn an_expression_length_mismatch_panics() {
         cmd_set_sample_mask_ext: Some(sample_mask),
         ..Default::default()
     });
-    let cb = vk::CommandBuffer::from_raw(9);
+    let cb = vk::CommandBuffer::from_raw(token(9));
     // SAFETY: the wrapper panics before calling the mock.
     unsafe { d.cmd_set_sample_mask_ext(cb, vk::SampleCountFlags::COUNT_4, Some(&[0, 0])) };
 }
@@ -463,7 +469,7 @@ unsafe extern "system" fn surface_support(
 #[test]
 fn a_returned_bool32_is_a_bool() {
     let instance = Instance::from_parts(
-        vk::Instance::from_raw(1),
+        vk::Instance::from_raw(token(1)),
         InstanceTable {
             get_physical_device_surface_support_khr: Some(surface_support),
             ..Default::default()
@@ -472,7 +478,7 @@ fn a_returned_bool32_is_a_bool() {
     // SAFETY: the mock writes only the output the wrapper passes.
     let supported = unsafe {
         instance.get_physical_device_surface_support_khr(
-            vk::PhysicalDevice::from_raw(2),
+            vk::PhysicalDevice::from_raw(token(2)),
             0,
             vk::SurfaceKHR::from_raw(3),
         )
@@ -496,20 +502,20 @@ unsafe extern "system" fn void() {}
 #[test]
 fn device_commands_load_through_the_instance_with_alias_fallback() {
     let instance = Instance::from_parts(
-        vk::Instance::from_raw(1),
+        vk::Instance::from_raw(token(1)),
         InstanceTable {
             get_device_proc_addr: Some(device_proc_addr),
             ..Default::default()
         },
     );
     // SAFETY: the mock returns a function only for the alias name.
-    let d = unsafe { Device::load(&instance, vk::Device::from_raw(2)) };
+    let d = unsafe { Device::load(&instance, vk::Device::from_raw(token(2))) };
     assert!(
         d.table().cmd_draw_indirect_count.is_some(),
         "loaded by its KHR alias"
     );
     assert!(d.table().cmd_draw.is_none());
-    assert_eq!(d.handle(), vk::Device::from_raw(2));
+    assert_eq!(d.handle(), vk::Device::from_raw(token(2)));
 }
 
 /// `vkCreateInstance` counting the call and creating instance `0x10`.
@@ -520,7 +526,7 @@ unsafe extern "system" fn create_instance(
 ) -> vk::Result {
     call();
     // SAFETY: the runtime passes a live output.
-    unsafe { *out = vk::Instance::from_raw(0x10) };
+    unsafe { *out = vk::Instance::from_raw(token(0x10)) };
     vk::Result::SUCCESS
 }
 
@@ -533,7 +539,7 @@ unsafe extern "system" fn create_device(
 ) -> vk::Result {
     call();
     // SAFETY: the runtime passes a live output.
-    unsafe { *out = vk::Device::from_raw(0x20) };
+    unsafe { *out = vk::Device::from_raw(token(0x20)) };
     vk::Result::SUCCESS
 }
 
@@ -549,7 +555,7 @@ fn a_missing_loader_panics_before_anything_is_created() {
     }));
     assert!(created.is_err(), "no vkGetInstanceProcAddr: a panic");
     let instance = Instance::from_parts(
-        vk::Instance::from_raw(1),
+        vk::Instance::from_raw(token(1)),
         InstanceTable {
             create_device: Some(create_device),
             ..Default::default()
@@ -558,7 +564,7 @@ fn a_missing_loader_panics_before_anything_is_created() {
     // SAFETY: as above.
     let created = panic::catch_unwind(AssertUnwindSafe(|| unsafe {
         instance.create_device(
-            vk::PhysicalDevice::from_raw(2),
+            vk::PhysicalDevice::from_raw(token(2)),
             &vk::DeviceCreateInfo::default(),
             None,
         )
@@ -572,7 +578,7 @@ fn a_missing_loader_panics_before_anything_is_created() {
 fn an_unloaded_command_panics_with_its_name() {
     let d = device(DeviceTable::default());
     // SAFETY: the wrapper panics before any call.
-    unsafe { d.cmd_draw(vk::CommandBuffer::from_raw(1), 3, 1, 0, 0) };
+    unsafe { d.cmd_draw(vk::CommandBuffer::from_raw(token(1)), 3, 1, 0, 0) };
 }
 
 /// A consuming command (`vkGetPastPresentationTimingGOOGLE`): each call returns the oldest
@@ -697,13 +703,13 @@ unsafe extern "system" fn family_properties(
 #[test]
 fn an_extensible_query_keeps_the_callers_chains() {
     let instance = Instance::from_parts(
-        vk::Instance::from_raw(1),
+        vk::Instance::from_raw(token(1)),
         InstanceTable {
             get_physical_device_queue_family_properties2: Some(family_properties),
             ..Default::default()
         },
     );
-    let gpu = vk::PhysicalDevice::from_raw(2);
+    let gpu = vk::PhysicalDevice::from_raw(token(2));
     // SAFETY: the mock writes only the count.
     let len = unsafe { instance.get_physical_device_queue_family_properties2_len(gpu) };
     assert_eq!(len, 2);
@@ -816,7 +822,7 @@ fn generated_plain_structs_are_byte_data() {
     // SAFETY: the mock reads only the size.
     unsafe {
         d.cmd_update_buffer(
-            vk::CommandBuffer::from_raw(1),
+            vk::CommandBuffer::from_raw(token(1)),
             vk::Buffer::from_raw(2),
             0,
             &draws,

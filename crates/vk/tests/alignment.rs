@@ -113,7 +113,8 @@ fn shader_binaries_are_written_to_aligned_storage() {
         "the allocator misaligns byte buffers"
     );
     let device = Device::from_parts(
-        vk::Device::from_raw(1),
+        // A synthetic handle with no provenance: the mock never dereferences it.
+        vk::Device::from_raw(ptr::without_provenance_mut(1)),
         DeviceTable {
             get_shader_binary_data_ext: Some(shader_binary),
             ..Default::default()

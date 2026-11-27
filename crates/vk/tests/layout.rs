@@ -1,7 +1,8 @@
 //! The layout check: the generated C program (`layout/layout.c`, compiled with MSVC against the
 //! pinned SDK headers) and the generated Rust program (`layout/rust_layout.rs`, compiled with
-//! the bindings) must print the same lines: the header version, every struct and union size and
-//! alignment, every member offset and every packed bitfield's bit pattern.
+//! the bindings) must print the same lines: the header version, every handle's size, alignment
+//! and (dispatchable ones) pointer kind, every struct and union size and alignment, every member
+//! offset and every packed bitfield's bit pattern.
 //!
 //! It needs the Vulkan SDK (`VULKAN_SDK`) and MSVC (found through `vswhere.exe`), and fails
 //! naming whichever is missing.

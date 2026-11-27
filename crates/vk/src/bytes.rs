@@ -7,8 +7,9 @@ use core::{fmt, slice};
 /// `T: Plain`, and driver output written into such a slice is a valid value.
 ///
 /// Implemented for the fixed-width integers, `usize`, `isize`, `f32`, `f64`, arrays of `Plain`
-/// types, and the generated enums, flags, handles and padding-free plain structs. Callers
-/// implement it for their own `#[repr(C)]` types (push constants, buffer contents).
+/// types, and the generated enums, flags, non-dispatchable handles and padding-free plain structs.
+/// Dispatchable handles are pointers and do not qualify. Callers implement it for their own
+/// `#[repr(C)]` types (push constants, buffer contents).
 ///
 /// # Safety
 ///

@@ -9,7 +9,7 @@ use super::{
     scripted, waited,
 };
 use core::ffi::c_void;
-use core::slice;
+use core::{ptr, slice};
 use std::collections::BTreeSet;
 use tessera_vk::vk::{self, Handle};
 use tessera_vk::{Device, DeviceTable, Instance, InstanceTable};
@@ -19,6 +19,12 @@ use tessera_vk_smoke::shader::{SPIRV_MAGIC, Shaders};
 
 /// The error an injected failure returns.
 const FAILED: vk::Result = vk::Result::ERROR_OUT_OF_DEVICE_MEMORY;
+
+/// A synthetic dispatchable handle pointer at address `addr`: no provenance, so it is never
+/// dereferenced (the mocks only record it).
+fn token(addr: usize) -> *mut c_void {
+    ptr::without_provenance_mut(addr)
+}
 
 /// The `count` elements at `ptr`, or none when `count` is 0 (`ptr` may then be null).
 ///
@@ -231,7 +237,7 @@ unsafe extern "system" fn allocate_command_buffers(
     if fails() {
         return FAILED;
     }
-    let cmd = vk::CommandBuffer::from_raw(0x9000);
+    let cmd = vk::CommandBuffer::from_raw(token(0x9000));
     // SAFETY: the wrapper passes a live allocate info and `commandBufferCount` (1) outputs.
     let pool = unsafe {
         *out = cmd;
@@ -244,7 +250,7 @@ unsafe extern "system" fn allocate_command_buffers(
 /// `vkGetDeviceQueue` writing queue `0xa000`.
 unsafe extern "system" fn get_device_queue(_: vk::Device, _: u32, _: u32, out: *mut vk::Queue) {
     // SAFETY: the wrapper passes a live output.
-    unsafe { *out = vk::Queue::from_raw(0xa000) };
+    unsafe { *out = vk::Queue::from_raw(token(0xa000)) };
 }
 
 /// One pipeline per create info; a failure still returns a live handle in entry 0.
@@ -511,7 +517,7 @@ unsafe extern "system" fn destroy_instance(_: vk::Instance, _: *const vk::Alloca
 /// An instance whose table holds the messenger and instance teardown mocks, not yet owned.
 pub fn unowned_instance() -> Instance {
     Instance::from_parts(
-        vk::Instance::from_raw(0x2000),
+        vk::Instance::from_raw(token(0x2000)),
         InstanceTable {
             destroy_debug_utils_messenger_ext: Some(destroy_messenger),
             destroy_instance: Some(destroy_instance),
@@ -546,7 +552,7 @@ fn gpu(instance: &OwnedInstance) -> Gpu<'_> {
     unsafe {
         Gpu::new(
             instance,
-            vk::PhysicalDevice::from_raw(1),
+            vk::PhysicalDevice::from_raw(token(1)),
             "mock".to_string(),
             0,
             memory,
@@ -557,7 +563,7 @@ fn gpu(instance: &OwnedInstance) -> Gpu<'_> {
 /// A device whose table holds every device mock above.
 fn device() -> Device {
     Device::from_parts(
-        vk::Device::from_raw(0x1000),
+        vk::Device::from_raw(token(0x1000)),
         DeviceTable {
             create_buffer: Some(create_buffer),
             destroy_buffer: Some(destroy_buffer),

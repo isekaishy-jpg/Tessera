@@ -1,0 +1,24 @@
+error[E0277]: the trait bound `tessera_vk::vk::Device: Plain` is not satisfied
+  --> tests/compile_fail/plain_rejects_dispatchable_handle.rs:14:13
+   |
+ 9 |         device.cmd_push_constants(
+   |                ------------------ required by a bound introduced by this call
+...
+14 |             &[vk::Device::null()],
+   |             ^^^^^^^^^^^^^^^^^^^^^ the trait `Plain` is not implemented for `tessera_vk::vk::Device`
+   |
+   = help: the following other types implement trait `Plain`:
+             AabbPositionsKHR
+             AccelerationStructureBuildRangeInfoKHR
+             AccelerationStructureBuildTypeKHR
+             AccelerationStructureCompatibilityKHR
+             AccelerationStructureCreateFlagsKHR
+             AccelerationStructureInstanceKHR
+             AccelerationStructureKHR
+             AccelerationStructureMatrixMotionInstanceNV
+           and $N others
+note: required by a bound in `tessera_vk::generated::commands::<impl tessera_vk::Device>::cmd_push_constants`
+  --> src/generated/commands.rs
+   |
+   |     pub unsafe fn cmd_push_constants<T: crate::Plain>(
+   |                                         ^^^^^^^^^^^^ required by this bound in `tessera_vk::generated::commands::<impl Device>::cmd_push_constants`
